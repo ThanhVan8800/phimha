@@ -113,6 +113,22 @@
                 } );
     </script> -->
     <script type="text/javascript">
+        $('.select-year').change(function() {
+            var year = $(this).find(':selected').val();
+            var id_phim = $(this).attr('id');
+            // alert(year + ' - ' + id_phim);
+            // alert(id_phim);
+            $.ajax({
+                url: "{{route('update-year')}}",
+                method: 'GET',
+                data: {year:year, id_phim:id_phim},
+                success: function(){
+                    alert('Thay đổi năm phim theo năm ' + year + ' thành công');
+                }
+            })
+        })
+    </script>
+    <script type="text/javascript">
             $(document).ready( function () {
                 $('#myTable').DataTable();
             } );

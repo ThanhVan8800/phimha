@@ -31,6 +31,22 @@
                                     {!! Form::text('slug', isset($movie) ? $movie->slug : '', ['class' => 'form-control', 'placeholder' =>'điền đi','id' => 'convert_slug']) !!}
                                 </div>
                                 <div class="form-group">
+                                    {!! Form::label('Name_eng', 'Phim tên Tiếng Anh', []) !!}
+                                    {!! Form::text('name_eng', isset($movie) ? $movie->name_eng : '', ['class' => 'form-control', 'placeholder' =>'điền đi','id' => 'name_eng']) !!}
+                                </div>
+                                <div class="form-group">
+                                    {!! Form::label('resolution', 'Resolutions',[]) !!}
+                                    {!! Form::select('resolution', ['0' => 'HD', '1' => 'SD', '2' => 'HDCam','3' => 'Cam','4' => 'FullHD'], isset($movie) ? $movie->resolution :'', ['class' => 'form-control', 'placeholder' =>'điền đi']) !!}
+                                </div>
+                                <div class="form-group">
+                                    {!! Form::label('subtitle', 'Phụ đề',[]) !!}
+                                    {!! Form::select('subtitle', ['0' => 'Vietsub', '1' => 'Thuyết minh'], isset($movie) ? $movie->subtitle :'', ['class' => 'form-control', 'placeholder' =>'điền đi']) !!}
+                                </div>
+                                <div class="form-group">
+                                    {!! Form::label('PhimHot', 'Phim Hot', []) !!}
+                                    {!! Form::select('film_hot', ['1' => 'Hot' , '0' => 'Khong hot'], isset($movie) ? $movie->film_hot : '', ['class' => 'form-control', 'placeholder' =>'điền đi']) !!}
+                                </div>
+                                <div class="form-group">
                                     {!! Form::label('description','Mô tả', []) !!}
                                     {!! Form::textarea('description', isset($movie) ? $movie->description : '', ['style' => 'resize:none','class' => 'form-control', 'placeholder' =>'điền đi','id' => 'content']) !!}
                                 </div>

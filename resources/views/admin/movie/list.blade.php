@@ -4,23 +4,28 @@
 
 @endsection 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card  ">
                 <div class="card-header">{{ __('Dashboard') }}</div>
             
-                    <table class="table-warning" id="myTable">
+                    <table class="table-warning" >
                         <thead>
                             <tr>
                             <th scope="col">ID</th>
                             <th scope="col">Tên phim</th>
+                            <th scope="col">Tên phim English</th>
                             <th scope="col">Slug</th>
-                            <th scope="col">Mô tả</th>
+                            <th scope="col">Phụ đề</th>
+                            <th scope="col">Định dạng</th>
+                            <!-- <th scope="col">Mô tả</th> -->
                             <th scope="col">Hình ảnh</th>
                             <th scope="col">Danh mục</th>
                             <th scope="col">Loại phim</th>
                             <th scope="col">Quốc gia</th>
+                            <th scope="col">Phim hot</th>
+                            <th scope="col">Năm</th>
                             <th scope="col">Trạng thái</th>
                             </tr>
                         </thead>
@@ -29,14 +34,47 @@
                                 <tr>
                                         <th scope="row">{{ $movie->id }}</th>
                                         <td>{{ $movie->title }}</td>
+                                        <td>{{ $movie->name_eng }}</td>
                                         <td>{{ $movie->slug }}</td>
-                                        <td>{!! $movie->description !!}</td>
+                                        <td>
+                                            @if ($movie->subtitle == 0)
+                                                    Vietsub 
+                                                @else
+                                                    Thuyết minh
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($movie->resolution == 0)
+                                                HD
+                                            @elseif ($movie->resolution == 1)
+                                                SD
+                                            @elseif ($movie->resolution == 2)
+                                                HDCam
+                                            @elseif ($movie->resolution == 3)
+                                                Cam
+                                            @else 
+                                                FullHD
+                                            @endif
+                                        </td>
+                                        <!-- <td>{!! $movie->description !!}</td> -->
                                         <td>
                                             <img src="{{asset('uploads/movie/'.$movie->image)}}" style="width:100px;max-height:100px;object-fit:contain" alt="{{asset($movie->image)}}">
                                         </td>
                                         <td>{{ $movie->category->title }}</td>
                                         <td>{{ $movie->genre->title }}</td>
                                         <td>{{ $movie->country->title }}</td>
+                                        <td>
+                                            @if($movie->film_hot == 1)
+                                                Hot
+                                            @else
+                                                No Hot
+                                            @endif
+                                        </td>
+                                        <td>
+                                            {!! Form::selectYear('year', 1995, 2025,
+                                                    isset($movie) ? $movie->year :'', ['class' => 'select-year', 'id'=>$movie->id]) !!}
+                                    
+                                        </td>
                                         <td>
                                             @if($movie -> status )
                                                 Hiển thị

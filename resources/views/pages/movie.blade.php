@@ -7,7 +7,9 @@
                <div class="panel-heading">
                   <div class="row">
                      <div class="col-xs-6">
-                        <div class="yoast_breadcrumb hidden-xs"><span><span><a href="danhmuc.php">Phim hay</a> » <span><a href="danhmuc.php">Mỹ</a> » <span class="breadcrumb_last" aria-current="page">GÓA PHỤ ĐEN</span></span></span></span></div>
+                        <div class="yoast_breadcrumb hidden-xs"><span><span><a href="{{route('cate',[$movie->category->slug])}}">{{$movie->category->title}}</a> » <span>
+                           <a href="{{route('country',[$movie->country->slug])}}">{{$movie->country->title}}</a> » <span class="breadcrumb_last" aria-current="page">{{$movie->title}}</span></span></span></span>
+                        </div>
                      </div>
                   </div>
                </div>
@@ -18,7 +20,7 @@
             <main id="main-contents" class="col-xs-12 col-sm-12 col-md-8">
                <section id="content" class="test">
                   <div class="clearfix wrap-content">
-                    
+                  
                      <div class="halim-movie-wrapper">
                         <div class="title-block">
                            <div id="bookmark" class="bookmark-img-animation primary_ribbon" data-id="38424">
@@ -30,7 +32,7 @@
                         </div>
                         <div class="movie_info col-xs-12">
                            <div class="movie-poster col-md-3">
-                              <img class="movie-thumb" src="https://images2-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&gadget=a&no_expand=1&refresh=604800&url=https://1.bp.blogspot.com/-fL7o9nefEPc/YOk_YIB6QRI/AAAAAAAAJn8/hahCLlgRq4AFc8O4YeKhpb5zncixXAF0wCLcBGAsYHQ/s320/images.jpg" alt="GÓA PHỤ ĐEN">
+                              <img class="movie-thumb" src="{{asset('uploads/movie/'.$movie->image)}}" alt="{{$movie->title}}">
                               <div class="bwa-content">
                                  <div class="loader"></div>
                                  <a href="{{route('watch')}}" class="bwac-btn">
@@ -39,11 +41,31 @@
                               </div>
                            </div>
                            <div class="film-poster col-md-9">
-                              <h1 class="movie-title title-1" style="display:block;line-height:35px;margin-bottom: -14px;color: #ffed4d;text-transform: uppercase;font-size: 18px;">GÓA PHỤ ĐEN</h1>
-                              <h2 class="movie-title title-2" style="font-size: 12px;">Black Widow (2021)</h2>
+                              <h1 class="movie-title title-1" style="display:block;line-height:35px;margin-bottom: -14px;color: #ffed4d;text-transform: uppercase;font-size: 18px;">{{$movie->title}}</h1>
+                              <h2 class="movie-title title-2" style="font-size: 12px;">{{$movie->name_eng}}</h2>
                               <ul class="list-info-group">
-                                 <li class="list-info-group-item"><span>Trạng Thái</span> : <span class="quality">HD</span><span class="episode">Vietsub</span></li>
-                                 <li class="list-info-group-item"><span>Điểm IMDb</span> : <span class="imdb">7.2</span></li>
+                                 <li class="list-info-group-item"><span>Trạng Thái</span> : 
+                                          <span class="quality">
+                                                @if($movie->resolution == 0)
+                                                      HD
+                                                @elseif ($movie->resolution == 1)
+                                                      SD
+                                                @elseif ($movie->resolution == 2)
+                                                      HDCam
+                                                @elseif ($movie->resolution == 3)
+                                                      Cam
+                                                @else 
+                                                      FullHD
+                                                @endif
+                                          </span>
+                                          <span class="episode">
+                                                @if ($movie->subtitle == 0)
+                                                   Vietsub 
+                                                @else
+                                                      Thuyết minh
+                                                @endif
+                                          </span></li>
+                                 <!-- <li class="list-info-group-item"><span>Điểm IMDb</span> : <span class="imdb">7.2</span></li> -->
                                  <li class="list-info-group-item"><span>Thời lượng</span> : 133 Phút</li>
                                  <li class="list-info-group-item"><span>Thể loại</span> : <a href="" rel="category tag">Chiếu Rạp</a>, <a href="" rel="category tag">Hành động</a>, <a href="" rel="category tag">Phiêu Lưu</a>, <a href="" rel="category tag">Viễn Tưởng</a></li>
                                  <li class="list-info-group-item"><span>Quốc gia</span> : <a href="" rel="tag">Mỹ</a></li>
@@ -83,12 +105,13 @@
                      </div>
                   </div>
                </section>
-               <section class="related-movies">
+               <!-- <section class="related-movies">
                   <div id="halim_related_movies-2xx" class="wrap-slider">
                      <div class="section-bar clearfix">
                         <h3 class="section-title"><span>CÓ THỂ BẠN MUỐN XEM</span></h3>
                      </div>
                      <div id="halim_related_movies-2" class="owl-carousel owl-theme related-film">
+                        
                         <article class="thumb grid-item post-38498">
                            <div class="halim-item">
                               <a class="halim-thumb" href="chitiet.php" title="Đại Thánh Vô Song">
@@ -104,11 +127,72 @@
                               </a>
                            </div>
                         </article>
-                          <article class="thumb grid-item post-38498">
+                     </div>
+                     <script>
+                        $(document).ready(function($) {				
+                        var owl = $('#halim_related_movies-2');
+                        owl.owlCarousel({loop: true,margin: 4,autoplay: true,autoplayTimeout: 4000,autoplayHoverPause: true,nav: true,navText: ['<i class="hl-down-open rotate-left"></i>', '<i class="hl-down-open rotate-right"></i>'],responsiveClass: true,responsive: {0: {items:2},480: {items:3}, 600: {items:4},1000: {items: 4}}})});
+                     </script>
+                  </div>
+               </section> -->
+               <section class="related-movies">
+                  <div id="halim_related_movies-2xx" class="wrap-slider">
+                     <div class="section-bar clearfix">
+                        <h3 class="section-title"><span>CÓ THỂ BẠN MUỐN XEM</span></h3>
+                     </div>
+                     <div id="halim_related_movies-2" class="owl-carousel owl-theme related-film">
+                        @foreach($related as $key => $rela)
+                        <article class="thumb grid-item post-38498">
+                           <div class="halim-item">
+                              <a class="halim-thumb" href="{{route('movie',$rela->slug)}}" title="{{$rela->title}}">
+                                 <figure><img class="lazy img-responsive" src="{{asset('uploads/movie/'.$rela->image)}}" alt="{{$rela->title}}" title="{{$rela->title}}"></figure>
+                                 <span class="status">
+                                    @if($movie->resolution == 0)
+                                                   HD
+                                             @elseif ($movie->resolution == 1)
+                                                   SD
+                                             @elseif ($movie->resolution == 2)
+                                                   HDCam
+                                             @elseif ($movie->resolution == 3)
+                                                   Cam
+                                             @else 
+                                                   FullHD
+                                    @endif
+                                 </span>
+                                 <span class="episode"><i class="fa fa-play" aria-hidden="true"></i>
+                              
+                                                @if ($movie->subtitle == 0)
+                                                   Vietsub 
+                                                @else
+                                                      Thuyết minh
+                                                @endif
+                                 </span> 
+                                 <div class="icon_overlay"></div>
+                                 <div class="halim-post-title-box">
+                                    <div class="halim-post-title ">
+                                       <p class="entry-title">{{$rela->title}}</p>
+                                       <p class="original_title">{{$rela->name_eng}}</p>
+                                    </div>
+                                 </div>
+                              </a>
+                           </div>
+                        </article>
+                        @endforeach
+                        <article class="thumb grid-item post-38498">
                            <div class="halim-item">
                               <a class="halim-thumb" href="chitiet.php" title="Đại Thánh Vô Song">
                                  <figure><img class="lazy img-responsive" src="https://images2-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&gadget=a&no_expand=1&refresh=604800&url=https://1.bp.blogspot.com/-w860_-tiHFI/YO7DW5hwmNI/AAAAAAAAJqg/yFXRsVIh70oslGUKU4Fg3NxipcmCiPt3ACLcBGAsYHQ/s320/unnamed.jpg" alt="Đại Thánh Vô Song" title="Đại Thánh Vô Song"></figure>
-                                 <span class="status">HD</span><span class="episode"><i class="fa fa-play" aria-hidden="true"></i>Vietsub</span> 
+                                 <span class="status">
+
+                                 </span>
+                                 <span class="episode"><i class="fa fa-play" aria-hidden="true"></i>
+                              
+                                                @if ($movie->subtitle == 0)
+                                                   Vietsub 
+                                                @else
+                                                      Thuyết minh
+                                                @endif
+                                 </span> 
                                  <div class="icon_overlay"></div>
                                  <div class="halim-post-title-box">
                                     <div class="halim-post-title ">
@@ -164,7 +248,22 @@
                               </a>
                            </div>
                         </article>
-                       
+                          <article class="thumb grid-item post-38498">
+                           <div class="halim-item">
+                              <a class="halim-thumb" href="chitiet.php" title="Đại Thánh Vô Song">
+                                 <figure><img class="lazy img-responsive" src="https://images2-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&gadget=a&no_expand=1&refresh=604800&url=https://1.bp.blogspot.com/-w860_-tiHFI/YO7DW5hwmNI/AAAAAAAAJqg/yFXRsVIh70oslGUKU4Fg3NxipcmCiPt3ACLcBGAsYHQ/s320/unnamed.jpg" alt="Đại Thánh Vô Song" title="Đại Thánh Vô Song"></figure>
+                                 <span class="status">HD</span><span class="episode"><i class="fa fa-play" aria-hidden="true"></i>Vietsub</span> 
+                                 <div class="icon_overlay"></div>
+                                 <div class="halim-post-title-box">
+                                    <div class="halim-post-title ">
+                                       <p class="entry-title">Đại Thánh Vô Song</p>
+                                       <p class="original_title">Monkey King: The One And Only</p>
+                                    </div>
+                                 </div>
+                              </a>
+                           </div>
+                        </article>
+                     
                      </div>
                      <script>
                         jQuery(document).ready(function($) {				

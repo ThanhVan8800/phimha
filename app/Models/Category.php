@@ -12,6 +12,7 @@ class Category extends Model
     // 1 danh mục thì có nhiều phim
     public function movie(){
         return $this->hasMany(Movie::class)->orderBy('id','desc');
+        
         // lấy phim mới nhất load lên cate_home
     }
 }

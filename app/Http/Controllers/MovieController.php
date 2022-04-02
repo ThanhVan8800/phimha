@@ -8,6 +8,7 @@ use App\Models\Movie;
 use App\Models\Category;
 use App\Models\Genre;
 use App\Models\Country;
+use Carbon\Carbon;
 
 class MovieController extends Controller
 {
@@ -56,12 +57,18 @@ class MovieController extends Controller
         $data = $request->all();
         $movie = new Movie();
         $movie -> title = $data['title'];
+        $movie -> film_hot = $data['film_hot'];
+        $movie -> name_eng = $data['name_eng'];
+        $movie -> resolution = $data['resolution'];
+        $movie -> subtitle = $data['subtitle'];
         $movie -> slug = $data['slug'];
         $movie -> description = $data['description'];
         $movie -> category_id = $data['category_id'];
         $movie -> genre_id = $data['genre_id'];
         $movie -> country_id = $data['country_id'];
         $movie -> status = $data['status'];
+        $movie -> date_created = Carbon::now('Asia/Ho_Chi_Minh');
+        $movie -> update_day = Carbon::now('Asia/Ho_Chi_Minh');
         // Thêm hình ảnh
         $get_image = $request->file('image');
         $path = 'public/uploads/movie/';
@@ -124,26 +131,35 @@ class MovieController extends Controller
         $data = $request->all();
         $movie =  Movie::find($id);
         $movie -> title = $data['title'];
+        $movie -> film_hot = $data['film_hot'];
+        $movie -> name_eng = $data['name_eng'];
+        $movie -> resolution = $data['resolution'];
+        $movie -> subtitle = $data['subtitle'];
         $movie -> slug = $data['slug'];
         $movie -> description = $data['description'];
         $movie -> category_id = $data['category_id'];
         $movie -> genre_id = $data['genre_id'];
         $movie -> country_id = $data['country_id'];
         $movie -> status = $data['status'];
+        $movie -> date_created = Carbon::now('Asia/Ho_Chi_Minh');
+        $movie -> update_day = Carbon::now('Asia/Ho_Chi_Minh');
+        
         // Thêm hình ảnh
         $get_image = $request->file('image');
         $path = 'public/uploads/movie/';
         if($get_image)
         {
-            if(!empty($movie->image))
+            // !empty tồn tại link thì xóa || isset
+            if(file_exists('uploads/movie/' . $movie->image))
             {
                 unlink('uploads/movie/' . $movie->image);
+            }else{
+                $get_name_image = $get_image -> getClientOriginalName(); // hinhDaLat.jpg
+                $name_image = current(explode('.',$get_name_image)); //current để lấy phần trước dấu . là lấy hinhDaLat còn để là end thì ngược lại
+                $new_image = $name_image.rand(0,999) .'.' . $get_image->getClientOriginalExtension(); // hinhDaLat789.jpg
+                $get_image -> move('uploads/movie/',$new_image);
+                $movie->image = $new_image;
             }
-            $get_name_image = $get_image -> getClientOriginalName(); // hinhDaLat.jpg
-            $name_image = current(explode('.',$get_name_image)); //current để lấy phần trước dấu . là lấy hinhDaLat còn để là end thì ngược lại
-            $new_image = $name_image.rand(0,999) .'.' . $get_image->getClientOriginalExtension(); // hinhDaLat789.jpg
-            $get_image -> move('uploads/movie/',$new_image);
-            $movie->image = $new_image;
         }
 
         $movie -> save();
@@ -159,11 +175,18 @@ class MovieController extends Controller
     public function destroy($id)
     {
         $movie = Movie::find($id);
-        if(!empty($movie->image))
+        if(file_exists('uploads/movie/' . $movie->image))
         {
             unlink('uploads/movie/' . $movie->image);
         }
         $movie->delete();
         return redirect()->back();
+    }
+    public function update_year(Request $request)
+    {
+        $data = $request->all();
+        $movie = Movie::find($data['id_phim']);
+        $movie -> year = $data['year'];
+        $movie -> save();
     }
 }
