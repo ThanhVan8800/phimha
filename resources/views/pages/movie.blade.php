@@ -54,19 +54,30 @@
                                                       HDCam
                                                 @elseif ($movie->resolution == 3)
                                                       Cam
-                                                @else 
+                                                @elseif($movie->resolution == 4)
                                                       FullHD
+                                                @else 
+                                                      Trailer
                                                 @endif
                                           </span>
-                                          <span class="episode">
-                                                @if ($movie->subtitle == 0)
-                                                   Vietsub 
-                                                @else
-                                                      Thuyết minh
-                                                @endif
-                                          </span></li>
+                                          @if($movie->resolution != 5)
+                                             <span class="episode">
+                                                   @if ($movie->subtitle == 0)
+                                                      Vietsub 
+                                                         @if ($movie->session != 0)
+                                                            -Session-{{$movie->session}}
+                                                         @endif
+                                                   @else
+                                                         Thuyết minh
+                                                         @if ($movie->session != 0)
+                                                            -Session-{{$movie->session}}
+                                                         @endif
+                                                   @endif
+                                             </span>
+                                          @endif
+                                       </li>
                                  <!-- <li class="list-info-group-item"><span>Điểm IMDb</span> : <span class="imdb">7.2</span></li> -->
-                                 <li class="list-info-group-item"><span>Thời lượng</span> : 133 Phút</li>
+                                 <li class="list-info-group-item"><span>Thời lượng</span> : {{$movie->movie_duration}}</li>
                                  <li class="list-info-group-item"><span>Thể loại</span> : <a href="" rel="category tag">Chiếu Rạp</a>, <a href="" rel="category tag">Hành động</a>, <a href="" rel="category tag">Phiêu Lưu</a>, <a href="" rel="category tag">Viễn Tưởng</a></li>
                                  <li class="list-info-group-item"><span>Quốc gia</span> : <a href="" rel="tag">Mỹ</a></li>
                                  <li class="list-info-group-item"><span>Đạo diễn</span> : <a class="director" rel="nofollow" href="https://phimhay.co/dao-dien/cate-shortland" title="Cate Shortland">Cate Shortland</a></li>
@@ -103,6 +114,46 @@
                            </article>
                         </div>
                      </div>
+                     <!-- Tags Phim -->
+                     <div class="section-bar clearfix">
+                        <h2 class="section-title"><span style="color:#ffed4d">Tags phim</span></h2>
+                     </div>
+                     <div class="entry-content htmlwrap clearfix">
+                        <div class="video-item halim-entry-box">
+                           <article id="post-38424" class="item-content">
+                              <!-- print_r($tags); -->
+                              @if($movie->tags != NULL)
+                                 @php
+                                    $tags = array();
+                                    $tags = explode(".", $movie->tags);
+                                 @endphp
+                                 @foreach ($tags as $tag) 
+                                    <a href="{{url('tag/' . $tag)}}">{!!$tag!!}</a>
+                                    
+                                 @endforeach
+                              @else
+                                    {!!$movie->tags!!}
+                              @endif
+                           </article>
+                        </div>
+                     </div>
+                     @if ($movie->trailer != null)
+                        <!-- Trailer Phim -->
+                        <div class="section-bar clearfix">
+                           <h2 class="section-title"><span style="color:#ffed4d">Trailer phim</span></h2>
+                        </div>
+                        <div class="entry-content htmlwrap clearfix">
+                           <div class="video-item halim-entry-box">
+                              <article id="post-38424" class="item-content">
+                                 <iframe width="100%" height="350" src="https://www.youtube.com/embed/{{$movie->trailer}}" 
+                                    title="YouTube video player" frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen>
+                                 </iframe>
+                              </article>
+                           </div>
+                        </div>
+                     @endif
                   </div>
                </section>
                <!-- <section class="related-movies">
@@ -155,18 +206,21 @@
                                                    HDCam
                                              @elseif ($movie->resolution == 3)
                                                    Cam
+                                             @elseif($movie->resolution == 4)
+                                                      FullHD
                                              @else 
-                                                   FullHD
+                                                      Trailer
                                     @endif
                                  </span>
-                                 <span class="episode"><i class="fa fa-play" aria-hidden="true"></i>
-                              
-                                                @if ($movie->subtitle == 0)
-                                                   Vietsub 
-                                                @else
-                                                      Thuyết minh
-                                                @endif
-                                 </span> 
+                                 @if($movie->resolution != 5)
+                                    <span class="episode"><i class="fa fa-play" aria-hidden="true"></i>
+                                                   @if ($movie->subtitle == 0)
+                                                      Vietsub 
+                                                   @else
+                                                         Thuyết minh
+                                                   @endif
+                                    </span> 
+                                 @endif
                                  <div class="icon_overlay"></div>
                                  <div class="halim-post-title-box">
                                     <div class="halim-post-title ">
@@ -203,66 +257,66 @@
                               </a>
                            </div>
                         </article>
-                          <article class="thumb grid-item post-38498">
-                           <div class="halim-item">
-                              <a class="halim-thumb" href="chitiet.php" title="Đại Thánh Vô Song">
-                                 <figure><img class="lazy img-responsive" src="https://images2-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&gadget=a&no_expand=1&refresh=604800&url=https://1.bp.blogspot.com/-w860_-tiHFI/YO7DW5hwmNI/AAAAAAAAJqg/yFXRsVIh70oslGUKU4Fg3NxipcmCiPt3ACLcBGAsYHQ/s320/unnamed.jpg" alt="Đại Thánh Vô Song" title="Đại Thánh Vô Song"></figure>
-                                 <span class="status">HD</span><span class="episode"><i class="fa fa-play" aria-hidden="true"></i>Vietsub</span> 
-                                 <div class="icon_overlay"></div>
-                                 <div class="halim-post-title-box">
-                                    <div class="halim-post-title ">
-                                       <p class="entry-title">Đại Thánh Vô Song</p>
-                                       <p class="original_title">Monkey King: The One And Only</p>
+                           <article class="thumb grid-item post-38498">
+                              <div class="halim-item">
+                                 <a class="halim-thumb" href="chitiet.php" title="Đại Thánh Vô Song">
+                                    <figure><img class="lazy img-responsive" src="https://images2-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&gadget=a&no_expand=1&refresh=604800&url=https://1.bp.blogspot.com/-w860_-tiHFI/YO7DW5hwmNI/AAAAAAAAJqg/yFXRsVIh70oslGUKU4Fg3NxipcmCiPt3ACLcBGAsYHQ/s320/unnamed.jpg" alt="Đại Thánh Vô Song" title="Đại Thánh Vô Song"></figure>
+                                    <span class="status">HD</span><span class="episode"><i class="fa fa-play" aria-hidden="true"></i>Vietsub</span> 
+                                    <div class="icon_overlay"></div>
+                                    <div class="halim-post-title-box">
+                                       <div class="halim-post-title ">
+                                          <p class="entry-title">Đại Thánh Vô Song</p>
+                                          <p class="original_title">Monkey King: The One And Only</p>
+                                       </div>
                                     </div>
-                                 </div>
-                              </a>
-                           </div>
-                        </article>
-                          <article class="thumb grid-item post-38498">
-                           <div class="halim-item">
-                              <a class="halim-thumb" href="chitiet.php" title="Đại Thánh Vô Song">
-                                 <figure><img class="lazy img-responsive" src="https://images2-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&gadget=a&no_expand=1&refresh=604800&url=https://1.bp.blogspot.com/-w860_-tiHFI/YO7DW5hwmNI/AAAAAAAAJqg/yFXRsVIh70oslGUKU4Fg3NxipcmCiPt3ACLcBGAsYHQ/s320/unnamed.jpg" alt="Đại Thánh Vô Song" title="Đại Thánh Vô Song"></figure>
-                                 <span class="status">HD</span><span class="episode"><i class="fa fa-play" aria-hidden="true"></i>Vietsub</span> 
-                                 <div class="icon_overlay"></div>
-                                 <div class="halim-post-title-box">
-                                    <div class="halim-post-title ">
-                                       <p class="entry-title">Đại Thánh Vô Song</p>
-                                       <p class="original_title">Monkey King: The One And Only</p>
+                                 </a>
+                              </div>
+                           </article>
+                           <article class="thumb grid-item post-38498">
+                              <div class="halim-item">
+                                 <a class="halim-thumb" href="chitiet.php" title="Đại Thánh Vô Song">
+                                    <figure><img class="lazy img-responsive" src="https://images2-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&gadget=a&no_expand=1&refresh=604800&url=https://1.bp.blogspot.com/-w860_-tiHFI/YO7DW5hwmNI/AAAAAAAAJqg/yFXRsVIh70oslGUKU4Fg3NxipcmCiPt3ACLcBGAsYHQ/s320/unnamed.jpg" alt="Đại Thánh Vô Song" title="Đại Thánh Vô Song"></figure>
+                                    <span class="status">HD</span><span class="episode"><i class="fa fa-play" aria-hidden="true"></i>Vietsub</span> 
+                                    <div class="icon_overlay"></div>
+                                    <div class="halim-post-title-box">
+                                       <div class="halim-post-title ">
+                                          <p class="entry-title">Đại Thánh Vô Song</p>
+                                          <p class="original_title">Monkey King: The One And Only</p>
+                                       </div>
                                     </div>
-                                 </div>
-                              </a>
-                           </div>
-                        </article>
-                          <article class="thumb grid-item post-38498">
-                           <div class="halim-item">
-                              <a class="halim-thumb" href="chitiet.php" title="Đại Thánh Vô Song">
-                                 <figure><img class="lazy img-responsive" src="https://images2-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&gadget=a&no_expand=1&refresh=604800&url=https://1.bp.blogspot.com/-w860_-tiHFI/YO7DW5hwmNI/AAAAAAAAJqg/yFXRsVIh70oslGUKU4Fg3NxipcmCiPt3ACLcBGAsYHQ/s320/unnamed.jpg" alt="Đại Thánh Vô Song" title="Đại Thánh Vô Song"></figure>
-                                 <span class="status">HD</span><span class="episode"><i class="fa fa-play" aria-hidden="true"></i>Vietsub</span> 
-                                 <div class="icon_overlay"></div>
-                                 <div class="halim-post-title-box">
-                                    <div class="halim-post-title ">
-                                       <p class="entry-title">Đại Thánh Vô Song</p>
-                                       <p class="original_title">Monkey King: The One And Only</p>
+                                 </a>
+                              </div>
+                           </article>
+                           <article class="thumb grid-item post-38498">
+                              <div class="halim-item">
+                                 <a class="halim-thumb" href="chitiet.php" title="Đại Thánh Vô Song">
+                                    <figure><img class="lazy img-responsive" src="https://images2-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&gadget=a&no_expand=1&refresh=604800&url=https://1.bp.blogspot.com/-w860_-tiHFI/YO7DW5hwmNI/AAAAAAAAJqg/yFXRsVIh70oslGUKU4Fg3NxipcmCiPt3ACLcBGAsYHQ/s320/unnamed.jpg" alt="Đại Thánh Vô Song" title="Đại Thánh Vô Song"></figure>
+                                    <span class="status">HD</span><span class="episode"><i class="fa fa-play" aria-hidden="true"></i>Vietsub</span> 
+                                    <div class="icon_overlay"></div>
+                                    <div class="halim-post-title-box">
+                                       <div class="halim-post-title ">
+                                          <p class="entry-title">Đại Thánh Vô Song</p>
+                                          <p class="original_title">Monkey King: The One And Only</p>
+                                       </div>
                                     </div>
-                                 </div>
-                              </a>
-                           </div>
-                        </article>
-                          <article class="thumb grid-item post-38498">
-                           <div class="halim-item">
-                              <a class="halim-thumb" href="chitiet.php" title="Đại Thánh Vô Song">
-                                 <figure><img class="lazy img-responsive" src="https://images2-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&gadget=a&no_expand=1&refresh=604800&url=https://1.bp.blogspot.com/-w860_-tiHFI/YO7DW5hwmNI/AAAAAAAAJqg/yFXRsVIh70oslGUKU4Fg3NxipcmCiPt3ACLcBGAsYHQ/s320/unnamed.jpg" alt="Đại Thánh Vô Song" title="Đại Thánh Vô Song"></figure>
-                                 <span class="status">HD</span><span class="episode"><i class="fa fa-play" aria-hidden="true"></i>Vietsub</span> 
-                                 <div class="icon_overlay"></div>
-                                 <div class="halim-post-title-box">
-                                    <div class="halim-post-title ">
-                                       <p class="entry-title">Đại Thánh Vô Song</p>
-                                       <p class="original_title">Monkey King: The One And Only</p>
+                                 </a>
+                              </div>
+                           </article>
+                           <article class="thumb grid-item post-38498">
+                              <div class="halim-item">
+                                 <a class="halim-thumb" href="chitiet.php" title="Đại Thánh Vô Song">
+                                    <figure><img class="lazy img-responsive" src="https://images2-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&gadget=a&no_expand=1&refresh=604800&url=https://1.bp.blogspot.com/-w860_-tiHFI/YO7DW5hwmNI/AAAAAAAAJqg/yFXRsVIh70oslGUKU4Fg3NxipcmCiPt3ACLcBGAsYHQ/s320/unnamed.jpg" alt="Đại Thánh Vô Song" title="Đại Thánh Vô Song"></figure>
+                                    <span class="status">HD</span><span class="episode"><i class="fa fa-play" aria-hidden="true"></i>Vietsub</span> 
+                                    <div class="icon_overlay"></div>
+                                    <div class="halim-post-title-box">
+                                       <div class="halim-post-title ">
+                                          <p class="entry-title">Đại Thánh Vô Song</p>
+                                          <p class="original_title">Monkey King: The One And Only</p>
+                                       </div>
                                     </div>
-                                 </div>
-                              </a>
-                           </div>
-                        </article>
+                                 </a>
+                              </div>
+                           </article>
                      
                      </div>
                      <script>

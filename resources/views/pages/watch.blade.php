@@ -78,18 +78,18 @@
                         <div role="tabpanel" class="tab-pane active server-1" id="server-0">
                            <div class="halim-server">
                               <ul class="halim-list-eps">
-                                <a href="{{route('episode')}}">
-                                    <li class="halim-episode"><span class="halim-btn halim-btn-2 active halim-info-1-1 box-shadow"
-                                    data-post-id="37976" data-server="1" data-episode="1" data-position="first" data-embed="0" 
-                                    data-title="Xem phim Tôi Và Chúng Ta Ở Bên Nhau - Tập 1 - Be Together - vietsub + Thuyết Minh" 
-                                    data-h1="Tôi Và Chúng Ta Ở Bên Nhau - tập 1">1</span></li></a>
+                                 <a href="{{route('episode')}}">
+                                       <li class="halim-episode"><span class="halim-btn halim-btn-2 active halim-info-1-1 box-shadow"
+                                       data-post-id="37976" data-server="1" data-episode="1" data-position="first" data-embed="0" 
+                                       data-title="Xem phim Tôi Và Chúng Ta Ở Bên Nhau - Tập 1 - Be Together - vietsub + Thuyết Minh" 
+                                       data-h1="Tôi Và Chúng Ta Ở Bên Nhau - tập 1">1</span></li></a>
 
-                                <a href="{{route('episode')}}">
-                                    <li class="halim-episode"><span class="halim-btn halim-btn-2 halim-info-1-2 box-shadow"
-                                    data-post-id="37976" data-server="1" data-episode="2" data-position="" data-embed="0" 
-                                    data-title="Xem phim Tôi Và Chúng Ta Ở Bên Nhau - Tập 2 - Be Together - vietsub + Thuyết Minh" 
-                                    data-h1="Tôi Và Chúng Ta Ở Bên Nhau - tập 2">2</span></li>
-                                </a>
+                                 <a href="{{route('episode')}}">
+                                       <li class="halim-episode"><span class="halim-btn halim-btn-2 halim-info-1-2 box-shadow"
+                                       data-post-id="37976" data-server="1" data-episode="2" data-position="" data-embed="0" 
+                                       data-title="Xem phim Tôi Và Chúng Ta Ở Bên Nhau - Tập 2 - Be Together - vietsub + Thuyết Minh" 
+                                       data-h1="Tôi Và Chúng Ta Ở Bên Nhau - tập 2">2</span></li>
+                                 </a>
                                  
                               </ul>
                               <div class="clearfix"></div>
@@ -183,7 +183,7 @@
             </div>
             </section>
          </main>
-        <aside id="sidebar" class="col-xs-12 col-sm-12 col-md-4">
+         <!-- <aside id="sidebar" class="col-xs-12 col-sm-12 col-md-4">
                <div id="halim_tab_popular_videos-widget-7" class="widget halim_tab_popular_videos-widget">
                   <div class="section-bar clearfix">
                      <div class="section-title">
@@ -320,6 +320,8 @@
                   </section>
                   <div class="clearfix"></div>
                </div>
-            </aside>
+            </aside> -->
+            @include('pages.includes.sidebar')
+
       </div>
 @endsection

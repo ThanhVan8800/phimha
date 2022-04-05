@@ -59,9 +59,13 @@ class MovieController extends Controller
         $movie -> title = $data['title'];
         $movie -> film_hot = $data['film_hot'];
         $movie -> name_eng = $data['name_eng'];
+        $movie -> year = $data['year'];
+        $movie -> trailer = $data['trailer'];
         $movie -> resolution = $data['resolution'];
+        $movie -> movie_duration = $data['movie_duration'];
         $movie -> subtitle = $data['subtitle'];
         $movie -> slug = $data['slug'];
+        $movie -> tags = $data['tags'];
         $movie -> description = $data['description'];
         $movie -> category_id = $data['category_id'];
         $movie -> genre_id = $data['genre_id'];
@@ -133,9 +137,13 @@ class MovieController extends Controller
         $movie -> title = $data['title'];
         $movie -> film_hot = $data['film_hot'];
         $movie -> name_eng = $data['name_eng'];
+        $movie -> year = $data['year'];
+        $movie -> trailer = $data['trailer'];
         $movie -> resolution = $data['resolution'];
+        $movie -> movie_duration = $data['movie_duration'];
         $movie -> subtitle = $data['subtitle'];
         $movie -> slug = $data['slug'];
+        $movie -> tags = $data['tags'];
         $movie -> description = $data['description'];
         $movie -> category_id = $data['category_id'];
         $movie -> genre_id = $data['genre_id'];
@@ -188,5 +196,12 @@ class MovieController extends Controller
         $movie = Movie::find($data['id_phim']);
         $movie -> year = $data['year'];
         $movie -> save();
+    }
+    public function update_session(Request $request)
+    {
+        $data = $request->all();
+        $movie = Movie::find($data['id_session']);
+        $movie -> session = $data['session'];
+        $movie->save();
     }
 }

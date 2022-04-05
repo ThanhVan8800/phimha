@@ -106,9 +106,10 @@
                               <li class="mega dropdown">
                               <a title="Năm" href="#" data-toggle="dropdown" class="dropdown-toggle" aria-haspopup="true">Năm <span class="caret"></span></a>
                               <ul role="menu" class=" dropdown-menu">
-                                 <li><a title="Phim 2020" href="danhmuc.php">Phim 2020</a></li>
-                                 <li><a title="Năm 2019" href="danhmuc.php">Năm 2019</a></li>
-                                 <li><a title="Năm 2018" href="danhmuc.php">Năm 2018</a></li>
+                                 @for($year = 1995 ; $year <= 2025 ; $year++)
+                                    <li><a title="{{$year}}" href="{{url('/year/'.$year)}}">{{$year}}</a></li>
+                                 
+                                 @endfor
                               </ul>
                               </li>
                               <li class="mega dropdown">

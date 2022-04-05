@@ -17,6 +17,8 @@
                             <th scope="col">Tên phim</th>
                             <th scope="col">Tên phim English</th>
                             <th scope="col">Slug</th>
+                            <th scope="col">Tags Phim</th>
+                            <th scope="col">Thời lượng phim</th>
                             <th scope="col">Phụ đề</th>
                             <th scope="col">Định dạng</th>
                             <!-- <th scope="col">Mô tả</th> -->
@@ -26,6 +28,8 @@
                             <th scope="col">Quốc gia</th>
                             <th scope="col">Phim hot</th>
                             <th scope="col">Năm</th>
+                            <th scope="col">Trailer</th>
+                            <th scope="col">Session</th>
                             <th scope="col">Trạng thái</th>
                             </tr>
                         </thead>
@@ -36,6 +40,14 @@
                                         <td>{{ $movie->title }}</td>
                                         <td>{{ $movie->name_eng }}</td>
                                         <td>{{ $movie->slug }}</td>
+                                        <td>
+                                            @if ($movie->tags != NULL)
+                                                {{substr($movie->tags, 0,50)}}...
+                                            @else
+                                                Chưa có từ khóa của phim
+                                            @endif
+                                        </td>
+                                        <td>{{ $movie->movie_duration }}</td>
                                         <td>
                                             @if ($movie->subtitle == 0)
                                                     Vietsub 
@@ -74,6 +86,14 @@
                                             {!! Form::selectYear('year', 1995, 2025,
                                                     isset($movie) ? $movie->year :'', ['class' => 'select-year', 'id'=>$movie->id]) !!}
                                     
+                                        </td>
+                                        <td>{{$movie->trailer}}</td>
+                                        <td>
+                                            <form action="" method="post">
+                                                @csrf
+                                                {!! Form::selectRange('session', 0, 20,
+                                                    isset($movie) ? $movie->session :'', ['class' => 'select-session', 'id'=>$movie->id]) !!}
+                                            </form>
                                         </td>
                                         <td>
                                             @if($movie -> status )

@@ -26,7 +26,10 @@ Route::get('/quoc-gia/{slug}',[IndexController::class,'country'])->name('country
 Route::get('/phim/{slug}',    [IndexController::class,'movie'])->name('movie');
 Route::get('/xem-phim',[IndexController::class,'watch'])->name('watch');
 Route::get('/episode',[IndexController::class,'episode'])->name('episode');
-
+// năm phim
+Route::get('year/{year}',[IndexController::class,'year']);
+//tags phim
+Route::get('tag/{tag}',[IndexController::class,'tag']);
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -38,5 +41,6 @@ Route::resource('genre', GenreController::class);
 Route::resource('country', CountryController::class);
 Route::resource('movie', MovieController::class);
 Route::get('/update-year-film', [MovieController::class,'update_year'])->name('update-year');
+Route::get('/update-session-film', [MovieController::class,'update_session'])->name('update-session');
 Route::resource('watch', WatchController::class);
 Route::resource('episode', App\Http\Controllers\EpisodeController::class);

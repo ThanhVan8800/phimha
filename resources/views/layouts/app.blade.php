@@ -129,6 +129,20 @@
         })
     </script>
     <script type="text/javascript">
+        $('.select-session').change(function() {
+            var session = $(this).find(':selected').val();
+            var id_session = $(this).attr('id');
+            $.ajax({
+                url: "{{route('update-session')}}",
+                method: 'GET',
+                data: {session:session, id_session:id_session},
+                success: function(){
+                    alert('Thay đổi mùa phim ' + session + ' thành công');
+                }
+            })
+        })
+    </script>
+    <script type="text/javascript">
             $(document).ready( function () {
                 $('#myTable').DataTable();
             } );

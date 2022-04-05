@@ -43,11 +43,11 @@
                                 @endif
                             {!! Form::close() !!}
                     </div>
-                    <table class="table-warning" id="myTable">
+                    <table class="table-warning" id="">
                 <thead>
                     <tr>
                     <th scope="col">ID</th>
-                    <th scope="col">Quoocs gia</th>
+                    <th scope="col">Quốc gia</th>
                     <th scope="col">Mô tả</th>
                     <th scope="col">Trạng thái</th>
                     </tr>
