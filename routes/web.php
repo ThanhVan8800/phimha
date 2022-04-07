@@ -30,6 +30,9 @@ Route::get('/episode',[IndexController::class,'episode'])->name('episode');
 Route::get('year/{year}',[IndexController::class,'year']);
 //tags phim
 Route::get('tag/{tag}',[IndexController::class,'tag']);
+
+// search film
+Route::get('search',[IndexController::class,'search'])->name('search');
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

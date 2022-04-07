@@ -33,12 +33,16 @@
                         <div class="movie_info col-xs-12">
                            <div class="movie-poster col-md-3">
                               <img class="movie-thumb" src="{{asset('uploads/movie/'.$movie->image)}}" alt="{{$movie->title}}">
-                              <div class="bwa-content">
-                                 <div class="loader"></div>
-                                 <a href="{{route('watch')}}" class="bwac-btn">
-                                 <i class="fa fa-play"></i>
-                                 </a>
-                              </div>
+                              @if($movie->resolution != 5 )
+                                 <div class="bwa-content">
+                                    <div class="loader"></div>
+                                    <a href="{{route('watch')}}" class="bwac-btn">
+                                    <i class="fa fa-play"></i>
+                                    </a>
+                                 </div>
+                              @else 
+                                 <a href="#watch_trailer" class="btn btn-danger watch_trailer" style="display:block">Xem Trailer</a>
+                              @endif
                            </div>
                            <div class="film-poster col-md-9">
                               <h1 class="movie-title title-1" style="display:block;line-height:35px;margin-bottom: -14px;color: #ffed4d;text-transform: uppercase;font-size: 18px;">{{$movie->title}}</h1>
@@ -137,14 +141,29 @@
                            </article>
                         </div>
                      </div>
+                     <!-- cmt fb Phim -->
+                     <div class="section-bar clearfix">
+                        <h2 class="section-title"><span style="color:#ffed4d">Bình luận</span></h2>
+                     </div>
+                     <div class="entry-content htmlwrap clearfix " style="background: lightyellow !important;" >
+                        @php
+                           $current_url = Request::url();
+                        @endphp
+                        <div class="video-item halim-entry-box">
+                           <article id="post-38424" class="item-content cmt_fb" >
+                              <div class="fb-comments" data-href="{{$current_url}}" data-width="100%" data-numposts="7" data-colorscheme="dark"></div>
+                           </article>
+                        </div>
+                     </div>
                      @if ($movie->trailer != null)
                         <!-- Trailer Phim -->
                         <div class="section-bar clearfix">
                            <h2 class="section-title"><span style="color:#ffed4d">Trailer phim</span></h2>
                         </div>
-                        <div class="entry-content htmlwrap clearfix">
+                        <div class="entry-content htmlwrap clearfix ">
                            <div class="video-item halim-entry-box">
-                              <article id="post-38424" class="item-content">
+                              <!-- ddawtjt id trùng vs cái href -->
+                              <article id="watch_trailer" class="item-content">
                                  <iframe width="100%" height="350" src="https://www.youtube.com/embed/{{$movie->trailer}}" 
                                     title="YouTube video player" frameborder="0" 
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 

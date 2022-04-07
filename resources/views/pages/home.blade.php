@@ -1,5 +1,6 @@
 @extends('layout')
 @section('content')
+
 <div class="row container" id="wrapper">
 <div id="halim_related_movies-2xx" class="wrap-slider">
                         <div class="section-bar clearfix">

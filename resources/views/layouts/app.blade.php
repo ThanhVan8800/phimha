@@ -112,6 +112,7 @@
                     $('#myTable').DataTable();
                 } );
     </script> -->
+    
     <script type="text/javascript">
         $('.select-year').change(function() {
             var year = $(this).find(':selected').val();
@@ -141,6 +142,14 @@
                 }
             })
         })
+    </script>
+    <!-- xem trailer k load lai trang -->
+    <script type="text/javascript">
+        $(".watch_trailer").click(function(event){
+            event.preventDefault();
+            var aid = $(this).attr("href");
+            $('html, body').animate({scrollTop: $(aid).offset().top},'slow');
+        });
     </script>
     <script type="text/javascript">
             $(document).ready( function () {
