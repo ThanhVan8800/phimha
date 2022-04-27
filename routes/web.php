@@ -24,7 +24,7 @@ Route::get('/danh-muc/{slug}',[IndexController::class,'category'])->name('cate')
 Route::get('/the-loai/{slug}',[IndexController::class,'genre'])->name('genre');
 Route::get('/quoc-gia/{slug}',[IndexController::class,'country'])->name('country');
 Route::get('/phim/{slug}',    [IndexController::class,'movie'])->name('movie');
-Route::get('/xem-phim',[IndexController::class,'watch'])->name('watch');
+Route::get('/xem-phim/{slug}', [IndexController::class,'watch'])->name('watch');
 Route::get('/episode',[IndexController::class,'episode'])->name('episode');
 // năm phim
 Route::get('year/{year}',[IndexController::class,'year']);
@@ -46,4 +46,7 @@ Route::resource('movie', MovieController::class);
 Route::get('/update-year-film', [MovieController::class,'update_year'])->name('update-year');
 Route::get('/update-session-film', [MovieController::class,'update_session'])->name('update-session');
 Route::resource('watch', WatchController::class);
+
+// thêm tập phim
 Route::resource('episode', App\Http\Controllers\EpisodeController::class);
+Route::get('episode-option',[App\Http\Controllers\EpisodeController::class,'select_movie'])->name('select-movie');

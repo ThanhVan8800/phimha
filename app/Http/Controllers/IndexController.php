@@ -7,6 +7,8 @@ use App\Models\Category;
 use App\Models\Genre;
 use App\Models\Country;
 use App\Models\Movie;
+use App\Models\Movie_Genre;
+use App\Models\Episode;
 use DB;
 
 class IndexController extends Controller
@@ -75,12 +77,22 @@ class IndexController extends Controller
         $category = Category::orderBy('position','ASC')->where('status', 1)->get();
         $genre = Genre::orderBy('id','desc')->get();
         $country = Country::orderBy('id','desc')->get();
-        $genre_slug = Category::where('slug',$slug)->first();
-        $movie = Movie::where('genre_id',$genre_slug->id)->orderBy('update_day','DESC')->paginate(25);
+        $genre_slug = Genre::where('slug',$slug)->first();
+
+        //Hiển thị phim thuộc nhiều thể loại
+        $movie_genre = Movie_Genre::where('genre_id',$genre_slug -> id) -> get();
+        $many_genre = [];
+        foreach($movie_genre as $key => $movie){
+            $many_genre[] = $movie -> movie_id;
+        }  
+        //return response()->json($many_genre);   
+        $movie = Movie::whereIn('id',$many_genre)->orderBy('update_day','DESC')->paginate(25);
 
         // film cho sidebar
         $film_sidebar = Movie::where('film_hot',1)->where('status',1)->orderBy('update_day','DESC')->take(15)->get();
-        return view('pages.genre', compact('category', 'genre', 'country','movie','film_sidebar','filmhot_trailer'));
+        //film- sidebar trailer
+        $filmhot_trailer = Movie::where('resolution',5)->where('status',1)->orderBy('update_day','DESC')->take(10)->get();
+        return view('pages.genre', compact('category', 'genre', 'country','genre_slug','movie','movie_genre','film_sidebar','filmhot_trailer'));
     }
     public function year($year)
     {
@@ -118,9 +130,9 @@ class IndexController extends Controller
     public function country($slug)
     {
         $category = Category::orderBy('position','ASC')->where('status', 1)->get();
-        $genre = Genre::orderBy('id','desc');
-        $country = Country::orderBy('id','desc');
-        $country_slug = Category::where('slug',$slug)->first();
+        $genre = Genre::orderBy('id','desc')->get();
+        $country = Country::orderBy('id','desc')->get();
+        $country_slug = Country::where('slug',$slug)->first();
         $movie = Movie::where('country_id',$country_slug->id)->orderBy('update_day','DESC')->paginate(25);
 
         // film cho sidebar
@@ -128,23 +140,39 @@ class IndexController extends Controller
         //film- sidebar trailer
         $filmhot_trailer = Movie::where('resolution',5)->where('status',1)->orderBy('update_day','DESC')->take(10)->get();
 
-        return view('pages.country', compact('category', 'genre', 'country','movie','film_sidebar','filmhot_trailer'));
+        return view('pages.country', compact('category', 'genre', 'country','country_slug','movie','film_sidebar','filmhot_trailer'));
     }
     public function movie($slug)
     {
         $category = Category::orderBy('position','ASC')->where('status', 1)->get();
-        $genre = Genre::orderBy('id','desc');
-        $country = Country::orderBy('id','desc');
+        $genre = Genre::orderBy('id','desc')->get();
+        $country = Country::orderBy('id','desc')->get();
         $movie = Movie::with('category','genre','country')->where('slug',$slug)->where('status',1)->first();
         //phim lien quan 
         $related = Movie::with('category','genre','country')->where('category_id',$movie->category->id)->orderBy(DB::raw('RAND()'))->whereNotIn('slug',[$slug])->get();
           //film- sidebar trailer
         $filmhot_trailer = Movie::where('resolution',5)->where('status',1)->orderBy('update_day','DESC')->take(10)->get();
-        return view('pages.movie',compact('category','genre','country','movie','related','filmhot_trailer'));
+
+        //film_hot cho slider
+        $film_hot = Movie::where('film_hot',1)->where('status',1)->orderBy('update_day','DESC')->get();
+        return view('pages.movie',compact('category','genre','country','movie','related','filmhot_trailer','film_hot'));
     }
-    public function watch()
+    public function watch($slug)
     {
-        return view('pages.watch');
+        $category = Category::orderBy('position','ASC')->where('status', 1)->get();
+        $genre = Genre::orderBy('id','desc')->get();
+        $country = Country::orderBy('id','desc')->get();
+        //phim lien quan 
+        //film- sidebar trailer
+        $filmhot_trailer = Movie::where('resolution',5)->where('status',1)->orderBy('update_day','DESC')->take(10)->get();
+        // film cho sidebar
+        $film_sidebar = Movie::where('film_hot',1)->where('status',1)->orderBy('update_day','DESC')->take(15)->get();
+        
+        //film_hot cho slider
+        $film_hot = Movie::where('film_hot',1)->where('status',1)->orderBy('update_day','DESC')->get();
+        $movie = Movie::with('category','genre','country','movie_genre','episode')->where('slug',$slug)->where('status',1)->first();
+        // return response()->json($movie);
+        return view('pages.watch',compact('category','genre','country','movie','film_sidebar','filmhot_trailer','film_hot'));
     }
     public function episode()
     {

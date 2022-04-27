@@ -10,7 +10,7 @@
             <div class="card  ">
                 <div class="card-header">{{ __('Dashboard') }}</div>
             
-                    <table class="table-warning" >
+                    <table class="table-warning " id="myTable" >
                         <thead>
                             <tr>
                             <th scope="col">ID</th>
@@ -27,6 +27,7 @@
                             <th scope="col">Loại phim</th>
                             <th scope="col">Quốc gia</th>
                             <th scope="col">Phim hot</th>
+                            <th scope="col">Tập phim</th>
                             <th scope="col">Năm</th>
                             <th scope="col">Trailer</th>
                             <th scope="col">Session</th>
@@ -73,7 +74,12 @@
                                             <img src="{{asset('uploads/movie/'.$movie->image)}}" style="width:100px;max-height:100px;object-fit:contain" alt="{{asset($movie->image)}}">
                                         </td>
                                         <td>{{ $movie->category->title }}</td>
-                                        <td>{{ $movie->genre->title }}</td>
+                                        <td>
+                                            @foreach($movie -> movie_genre as $key => $mov)
+                                                {{$mov  -> title }} 
+
+                                            @endforeach
+                                        </td>
                                         <td>{{ $movie->country->title }}</td>
                                         <td>
                                             @if($movie->film_hot == 1)
@@ -82,6 +88,7 @@
                                                 No Hot
                                             @endif
                                         </td>
+                                        <td value= "{{$movie->episode_film}}">{{$movie->episode_film}}</td>
                                         <td>
                                             {!! Form::selectYear('year', 1995, 2025,
                                                     isset($movie) ? $movie->year :'', ['class' => 'select-year', 'id'=>$movie->id]) !!}
@@ -126,6 +133,11 @@
                 // instance, using default configuration.
                 CKEDITOR.replace( 'content' );
             </script>
-            
+        
+            <!-- <script type="text/javascript" >
+                $(document).ready( function () {
+                    $('#myTable').DataTable();
+                } );
+            </script> -->
 
 @endsection

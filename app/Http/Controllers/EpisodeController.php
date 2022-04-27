@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Episode;
 use App\Models\Movie;
+use Carbon\Carbon;
 class EpisodeController extends Controller
 {
     /**
@@ -25,7 +26,7 @@ class EpisodeController extends Controller
     public function create()
     {
         $lstEpisode = Episode::all();
-        $movie = Movie::pluck('title', 'id');
+        $movie = Movie::orderBy('id','desc')->pluck('title', 'id');
         return view('admin.episode.form',[
             'lstEpisode' => $lstEpisode,
             'movie' => $movie
@@ -42,9 +43,11 @@ class EpisodeController extends Controller
     {
         $data = $request->all();
         $episode = new Episode();
-        $episode -> linkphim = $data['linkphim'];
+        $episode -> linkfilm = $data['linkfilm'];
         $episode -> episode = $data['episode'];
         $episode -> movie_id = $data['movie_id'];
+        $episode -> created_at = Carbon::now('Asia/Ho_Chi_Minh');
+        $episode -> updated_at = Carbon::now('Asia/Ho_Chi_Minh');
         $episode->save();
         return redirect()->back();
 
@@ -71,7 +74,7 @@ class EpisodeController extends Controller
     {
         $episode = Episode::find($id);
         $movie = Movie::pluck('title','id');
-        $lstEpisode = Episode::with('movie')->orderBy('status',1);
+        $lstEpisode = Episode::all();
         return view('admin.episode.form',compact('movie','lstEpisode','episode'));
     }
 
@@ -86,9 +89,11 @@ class EpisodeController extends Controller
     {
         $data = $request->all();
         $episode = Episode::find($id);
-        $episode -> linkphim = $data['linkphim'];
+        $episode -> linkfilm = $data['linkfilm'];
         $episode -> episode = $data['episode'];
         $episode -> movie_id = $data['movie_id'];
+        $episode -> created_at = Carbon::now('Asia/Ho_Chi_Minh');
+        $episode -> updated_at = Carbon::now('Asia/Ho_Chi_Minh');
         $episode->save();
         return redirect()->back();
     }
@@ -102,5 +107,17 @@ class EpisodeController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function select_movie()
+    {
+        $id = $_GET['id'];
+        $id_movie = Movie::find($id);
+        // echo $id_movie->episode;
+        $output = '<option value="">Chọn tập phim</option>';
+        for($i = 1; $i <= $id_movie->episode_film; $i++)
+        {
+            $output .= '<option value="'.$i.'">'.$i.'</option>';
+        }
+        echo $output;
     }
 }

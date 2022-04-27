@@ -63,6 +63,10 @@
                                     {!! Form::select('film_hot', ['1' => 'Hot' , '0' => 'Khong hot'], isset($movie) ? $movie->film_hot : '', ['class' => 'form-control', 'placeholder' =>'điền đi']) !!}
                                 </div>
                                 <div class="form-group">
+                                    {!! Form::label('Episode', 'Tập Phim', []) !!}
+                                    {!! Form::text('episode_film', isset($movie) ? $movie->episode_film : '', ['class' => 'form-control', 'placeholder' =>'điền đi','id' => 'episode']) !!}
+                                </div>
+                                <div class="form-group">
                                     {!! Form::label('description','Mô tả', []) !!}
                                     {!! Form::textarea('description', isset($movie) ? $movie->description : '', ['style' => 'resize:none','class' => 'form-control', 'placeholder' =>'điền đi','id' => 'content']) !!}
                                 </div>
@@ -78,8 +82,19 @@
                                     {!! Form::select('category_id', $category ,isset($movie) ? $movie->category_id : ''  , ['class' => 'form-control', 'placeholder' =>'điền đi']) !!}
                                 </div>
                                 <div class="form-group">
-                                    {!! Form::label('Genre', 'Loại phim', []) !!}
-                                    {!! Form::select('genre_id', $genre ,isset($movie) ? $movie->genre_id : ''   , ['class' => 'form-control', 'placeholder' =>'điền đi']) !!}
+                                    {!! Form::label('Genre', 'Loại phim', []) !!}<br>
+                                    <!-- {!! Form::select('genre_id', $genre ,isset($movie) ? $movie->genre_id : ''   , ['class' => 'form-control', 'placeholder' =>'điền đi']) !!} -->
+                                    @foreach ($lstGenre as $key => $genre)
+                                        @if(isset($movie))
+                                                    {!! Form::checkbox('genre[]',$genre->id, isset($movie_genre) && $movie_genre -> contains($genre->id) ? true : false)!!}
+                                                    <!-- contains dùng để cho check  phim chứa nhiều loại phim -->
+                                                    {!!Form::label('genre',$genre->title) !!}
+                                        @else
+                                                    {!! Form::checkbox('genre[]',$genre->id, '')!!}
+                                                    {!!Form::label('genre',$genre->title) !!}
+                                        @endif
+                                    @endforeach
+                                    
                                 </div>
                                 <div class="form-group">
                                     {!! Form::label('Country', 'Quốc gia', []) !!}

@@ -64,7 +64,7 @@
                 @foreach($category_home as $key => $cate_home)
                     <section id="halim-advanced-widget-2">
                         <div class="section-heading">
-                            <a href="danhmuc.php" title="Phim Bộ">
+                            <a href="danhmuc.php" title="{{$cate_home->title}}">
                             <span class="h-text">{{$cate_home->title}}</span>
                             </a>
                         </div>

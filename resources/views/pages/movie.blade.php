@@ -7,8 +7,22 @@
                <div class="panel-heading">
                   <div class="row">
                      <div class="col-xs-6">
-                        <div class="yoast_breadcrumb hidden-xs"><span><span><a href="{{route('cate',[$movie->category->slug])}}">{{$movie->category->title}}</a> » <span>
-                           <a href="{{route('country',[$movie->country->slug])}}">{{$movie->country->title}}</a> » <span class="breadcrumb_last" aria-current="page">{{$movie->title}}</span></span></span></span>
+                        <div class="yoast_breadcrumb hidden-xs">
+                           <span>
+                                    <span>
+                                       <a href="{{route('cate',[$movie->category->slug])}}">{{$movie->category->title}}</a> 
+                                             » <span>
+                                                   <a href="{{route('country',[$movie->country->slug])}}">{{$movie->country->title}}</a>
+                                                      » <span class="breadcrumb_last" aria-current="page">{{$movie->title}} 
+                                                            <!-- » @foreach ($movie->movie_genre as $gen )
+                                                                  <span>
+                                                                     <a href="{{route('genre',[$gen->slug])}}">{{$gen->title}}</a> »
+                                                                  </span> 
+                                                            @endforeach -->
+                                                      </span>
+                                                </span>
+                                    </span>
+                           </span>
                         </div>
                      </div>
                   </div>
@@ -36,7 +50,7 @@
                               @if($movie->resolution != 5 )
                                  <div class="bwa-content">
                                     <div class="loader"></div>
-                                    <a href="{{route('watch')}}" class="bwac-btn">
+                                    <a href="{{route('watch',$movie->slug)}}" class="bwac-btn">
                                     <i class="fa fa-play"></i>
                                     </a>
                                  </div>
@@ -82,6 +96,7 @@
                                        </li>
                                  <!-- <li class="list-info-group-item"><span>Điểm IMDb</span> : <span class="imdb">7.2</span></li> -->
                                  <li class="list-info-group-item"><span>Thời lượng</span> : {{$movie->movie_duration}}</li>
+                                 <li class="list-info-group-item"><span>Số tập phim</span> : {{$movie->episode}}</li>
                                  <li class="list-info-group-item"><span>Thể loại</span> : <a href="" rel="category tag">Chiếu Rạp</a>, <a href="" rel="category tag">Hành động</a>, <a href="" rel="category tag">Phiêu Lưu</a>, <a href="" rel="category tag">Viễn Tưởng</a></li>
                                  <li class="list-info-group-item"><span>Quốc gia</span> : <a href="" rel="tag">Mỹ</a></li>
                                  <li class="list-info-group-item"><span>Đạo diễn</span> : <a class="director" rel="nofollow" href="https://phimhay.co/dao-dien/cate-shortland" title="Cate Shortland">Cate Shortland</a></li>
@@ -141,11 +156,11 @@
                            </article>
                         </div>
                      </div>
-                     <!-- cmt fb Phim -->
+                     <!-- COMMENT FB -->
                      <div class="section-bar clearfix">
                         <h2 class="section-title"><span style="color:#ffed4d">Bình luận</span></h2>
                      </div>
-                     <div class="entry-content htmlwrap clearfix " style="background: lightyellow !important;" >
+                     <!-- <div class="entry-content htmlwrap clearfix " style="background: lightyellow !important;" >
                         @php
                            $current_url = Request::url();
                         @endphp
@@ -154,7 +169,7 @@
                               <div class="fb-comments" data-href="{{$current_url}}" data-width="100%" data-numposts="7" data-colorscheme="dark"></div>
                            </article>
                         </div>
-                     </div>
+                     </div> -->
                      @if ($movie->trailer != null)
                         <!-- Trailer Phim -->
                         <div class="section-bar clearfix">
@@ -175,176 +190,57 @@
                      @endif
                   </div>
                </section>
-               <!-- <section class="related-movies">
-                  <div id="halim_related_movies-2xx" class="wrap-slider">
-                     <div class="section-bar clearfix">
-                        <h3 class="section-title"><span>CÓ THỂ BẠN MUỐN XEM</span></h3>
-                     </div>
-                     <div id="halim_related_movies-2" class="owl-carousel owl-theme related-film">
-                        
-                        <article class="thumb grid-item post-38498">
-                           <div class="halim-item">
-                              <a class="halim-thumb" href="chitiet.php" title="Đại Thánh Vô Song">
-                                 <figure><img class="lazy img-responsive" src="https://images2-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&gadget=a&no_expand=1&refresh=604800&url=https://1.bp.blogspot.com/-w860_-tiHFI/YO7DW5hwmNI/AAAAAAAAJqg/yFXRsVIh70oslGUKU4Fg3NxipcmCiPt3ACLcBGAsYHQ/s320/unnamed.jpg" alt="Đại Thánh Vô Song" title="Đại Thánh Vô Song"></figure>
-                                 <span class="status">HD</span><span class="episode"><i class="fa fa-play" aria-hidden="true"></i>Vietsub</span> 
-                                 <div class="icon_overlay"></div>
-                                 <div class="halim-post-title-box">
-                                    <div class="halim-post-title ">
-                                       <p class="entry-title">Đại Thánh Vô Song</p>
-                                       <p class="original_title">Monkey King: The One And Only</p>
-                                    </div>
-                                 </div>
-                              </a>
-                           </div>
-                        </article>
-                     </div>
-                     <script>
-                        $(document).ready(function($) {				
-                        var owl = $('#halim_related_movies-2');
-                        owl.owlCarousel({loop: true,margin: 4,autoplay: true,autoplayTimeout: 4000,autoplayHoverPause: true,nav: true,navText: ['<i class="hl-down-open rotate-left"></i>', '<i class="hl-down-open rotate-right"></i>'],responsiveClass: true,responsive: {0: {items:2},480: {items:3}, 600: {items:4},1000: {items: 4}}})});
-                     </script>
-                  </div>
-               </section> -->
                <section class="related-movies">
                   <div id="halim_related_movies-2xx" class="wrap-slider">
-                     <div class="section-bar clearfix">
-                        <h3 class="section-title"><span>CÓ THỂ BẠN MUỐN XEM</span></h3>
-                     </div>
-                     <div id="halim_related_movies-2" class="owl-carousel owl-theme related-film">
-                        @foreach($related as $key => $rela)
-                        <article class="thumb grid-item post-38498">
-                           <div class="halim-item">
-                              <a class="halim-thumb" href="{{route('movie',$rela->slug)}}" title="{{$rela->title}}">
-                                 <figure><img class="lazy img-responsive" src="{{asset('uploads/movie/'.$rela->image)}}" alt="{{$rela->title}}" title="{{$rela->title}}"></figure>
-                                 <span class="status">
-                                    @if($movie->resolution == 0)
+                  <div class="section-bar clearfix">
+                              <h3 class="section-title"><span>CÓ THỂ BẠN MUỐN XEM</span></h3>
+                           </div>
+                           <div id="halim_related_movies-2" class="owl-carousel owl-theme related-film">
+                              @foreach($film_hot as $key=>$film)
+                              <article class="thumb grid-item post-38498">
+                              <div class="halim-item">
+                                 <a class="halim-thumb" href="{{route('movie',$film->slug)}}" title="{{$film->title}}">
+                                       <figure><img class="lazy img-responsive" src="{{asset('uploads/movie/'.$film->image)}}" alt="{{$film->title}}" title="{{$film->title}}"></figure>
+                                       <span class="status">
+                                             @if($film->resolution == 0)
                                                    HD
-                                             @elseif ($movie->resolution == 1)
+                                             @elseif ($film->resolution == 1)
                                                    SD
-                                             @elseif ($movie->resolution == 2)
+                                             @elseif ($film->resolution == 2)
                                                    HDCam
-                                             @elseif ($movie->resolution == 3)
+                                             @elseif ($film->resolution == 3)
                                                    Cam
-                                             @elseif($movie->resolution == 4)
-                                                      FullHD
                                              @else 
-                                                      Trailer
-                                    @endif
-                                 </span>
-                                 @if($movie->resolution != 5)
-                                    <span class="episode"><i class="fa fa-play" aria-hidden="true"></i>
-                                                   @if ($movie->subtitle == 0)
-                                                      Vietsub 
-                                                   @else
-                                                         Thuyết minh
-                                                   @endif
-                                    </span> 
-                                 @endif
-                                 <div class="icon_overlay"></div>
-                                 <div class="halim-post-title-box">
-                                    <div class="halim-post-title ">
-                                       <p class="entry-title">{{$rela->title}}</p>
-                                       <p class="original_title">{{$rela->name_eng}}</p>
-                                    </div>
-                                 </div>
-                              </a>
+                                                   FullHD
+                                             @endif
+                                       </span>
+                                       <span class="episode"><i class="fa fa-play" aria-hidden="true"></i>
+                                          @if ($film->subtitle == 0)
+                                             Vietsub
+                                          @else
+                                             Thuyết minh
+                                          @endif  
+                                       </span> 
+                                       <div class="icon_overlay"></div>
+                                       <div class="halim-post-title-box">
+                                          <div class="halim-post-title ">
+                                          <p class="entry-title">{{$film->title}}</p>
+                                          <p class="original_title">{{$film->name_eng}}</p>
+                                          </div>
+                                       </div>
+                                 </a>
+                              </div>
+                              </article>     
+                              @endforeach                       
                            </div>
-                        </article>
-                        @endforeach
-                        <article class="thumb grid-item post-38498">
-                           <div class="halim-item">
-                              <a class="halim-thumb" href="chitiet.php" title="Đại Thánh Vô Song">
-                                 <figure><img class="lazy img-responsive" src="https://images2-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&gadget=a&no_expand=1&refresh=604800&url=https://1.bp.blogspot.com/-w860_-tiHFI/YO7DW5hwmNI/AAAAAAAAJqg/yFXRsVIh70oslGUKU4Fg3NxipcmCiPt3ACLcBGAsYHQ/s320/unnamed.jpg" alt="Đại Thánh Vô Song" title="Đại Thánh Vô Song"></figure>
-                                 <span class="status">
-
-                                 </span>
-                                 <span class="episode"><i class="fa fa-play" aria-hidden="true"></i>
-                              
-                                                @if ($movie->subtitle == 0)
-                                                   Vietsub 
-                                                @else
-                                                      Thuyết minh
-                                                @endif
-                                 </span> 
-                                 <div class="icon_overlay"></div>
-                                 <div class="halim-post-title-box">
-                                    <div class="halim-post-title ">
-                                       <p class="entry-title">Đại Thánh Vô Song</p>
-                                       <p class="original_title">Monkey King: The One And Only</p>
-                                    </div>
-                                 </div>
-                              </a>
-                           </div>
-                        </article>
-                           <article class="thumb grid-item post-38498">
-                              <div class="halim-item">
-                                 <a class="halim-thumb" href="chitiet.php" title="Đại Thánh Vô Song">
-                                    <figure><img class="lazy img-responsive" src="https://images2-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&gadget=a&no_expand=1&refresh=604800&url=https://1.bp.blogspot.com/-w860_-tiHFI/YO7DW5hwmNI/AAAAAAAAJqg/yFXRsVIh70oslGUKU4Fg3NxipcmCiPt3ACLcBGAsYHQ/s320/unnamed.jpg" alt="Đại Thánh Vô Song" title="Đại Thánh Vô Song"></figure>
-                                    <span class="status">HD</span><span class="episode"><i class="fa fa-play" aria-hidden="true"></i>Vietsub</span> 
-                                    <div class="icon_overlay"></div>
-                                    <div class="halim-post-title-box">
-                                       <div class="halim-post-title ">
-                                          <p class="entry-title">Đại Thánh Vô Song</p>
-                                          <p class="original_title">Monkey King: The One And Only</p>
-                                       </div>
-                                    </div>
-                                 </a>
-                              </div>
-                           </article>
-                           <article class="thumb grid-item post-38498">
-                              <div class="halim-item">
-                                 <a class="halim-thumb" href="chitiet.php" title="Đại Thánh Vô Song">
-                                    <figure><img class="lazy img-responsive" src="https://images2-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&gadget=a&no_expand=1&refresh=604800&url=https://1.bp.blogspot.com/-w860_-tiHFI/YO7DW5hwmNI/AAAAAAAAJqg/yFXRsVIh70oslGUKU4Fg3NxipcmCiPt3ACLcBGAsYHQ/s320/unnamed.jpg" alt="Đại Thánh Vô Song" title="Đại Thánh Vô Song"></figure>
-                                    <span class="status">HD</span><span class="episode"><i class="fa fa-play" aria-hidden="true"></i>Vietsub</span> 
-                                    <div class="icon_overlay"></div>
-                                    <div class="halim-post-title-box">
-                                       <div class="halim-post-title ">
-                                          <p class="entry-title">Đại Thánh Vô Song</p>
-                                          <p class="original_title">Monkey King: The One And Only</p>
-                                       </div>
-                                    </div>
-                                 </a>
-                              </div>
-                           </article>
-                           <article class="thumb grid-item post-38498">
-                              <div class="halim-item">
-                                 <a class="halim-thumb" href="chitiet.php" title="Đại Thánh Vô Song">
-                                    <figure><img class="lazy img-responsive" src="https://images2-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&gadget=a&no_expand=1&refresh=604800&url=https://1.bp.blogspot.com/-w860_-tiHFI/YO7DW5hwmNI/AAAAAAAAJqg/yFXRsVIh70oslGUKU4Fg3NxipcmCiPt3ACLcBGAsYHQ/s320/unnamed.jpg" alt="Đại Thánh Vô Song" title="Đại Thánh Vô Song"></figure>
-                                    <span class="status">HD</span><span class="episode"><i class="fa fa-play" aria-hidden="true"></i>Vietsub</span> 
-                                    <div class="icon_overlay"></div>
-                                    <div class="halim-post-title-box">
-                                       <div class="halim-post-title ">
-                                          <p class="entry-title">Đại Thánh Vô Song</p>
-                                          <p class="original_title">Monkey King: The One And Only</p>
-                                       </div>
-                                    </div>
-                                 </a>
-                              </div>
-                           </article>
-                           <article class="thumb grid-item post-38498">
-                              <div class="halim-item">
-                                 <a class="halim-thumb" href="chitiet.php" title="Đại Thánh Vô Song">
-                                    <figure><img class="lazy img-responsive" src="https://images2-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&gadget=a&no_expand=1&refresh=604800&url=https://1.bp.blogspot.com/-w860_-tiHFI/YO7DW5hwmNI/AAAAAAAAJqg/yFXRsVIh70oslGUKU4Fg3NxipcmCiPt3ACLcBGAsYHQ/s320/unnamed.jpg" alt="Đại Thánh Vô Song" title="Đại Thánh Vô Song"></figure>
-                                    <span class="status">HD</span><span class="episode"><i class="fa fa-play" aria-hidden="true"></i>Vietsub</span> 
-                                    <div class="icon_overlay"></div>
-                                    <div class="halim-post-title-box">
-                                       <div class="halim-post-title ">
-                                          <p class="entry-title">Đại Thánh Vô Song</p>
-                                          <p class="original_title">Monkey King: The One And Only</p>
-                                       </div>
-                                    </div>
-                                 </a>
-                              </div>
-                           </article>
-                     
-                     </div>
-                     <script>
-                        jQuery(document).ready(function($) {				
-                        var owl = $('#halim_related_movies-2');
-                        owl.owlCarousel({loop: true,margin: 4,autoplay: true,autoplayTimeout: 4000,autoplayHoverPause: true,nav: true,navText: ['<i class="hl-down-open rotate-left"></i>', '<i class="hl-down-open rotate-right"></i>'],responsiveClass: true,responsive: {0: {items:2},480: {items:3}, 600: {items:4},1000: {items: 4}}})});
-                     </script>
+                           <script>
+                              $(document).ready(function($) {				
+                              var owl = $('#halim_related_movies-2');
+                              owl.owlCarousel({loop: true,margin: 4,autoplay: true,autoplayTimeout: 4000,autoplayHoverPause: true,nav: true,navText: ['<i class="hl-down-open rotate-left"></i>', '<i class="hl-down-open rotate-right"></i>'],responsiveClass: true,responsive: {0: {items:2},480: {items:3}, 600: {items:4},1000: {items: 4}}})});
+                           </script>
                   </div>
                </section>
+               
             </main>
             <aside id="sidebar" class="col-xs-12 col-sm-12 col-md-4"></aside>
          </div>

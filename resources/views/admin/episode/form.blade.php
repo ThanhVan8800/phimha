@@ -16,19 +16,25 @@
                     @if(!isset($episode))
                         {!! Form::open(['route' => 'episode.store','method'=>'POST']) !!}
                     @else
-                        {!! Form::open(['route' => 'episode.update','method'=>'PUT']) !!}
+                        {!! Form::open(['route' => ['episode.update', $episode->id],'method'=>'PUT']) !!}
                     @endif
                     <div class="form-group">
-                        {!! Form::label('linkphim', 'Link Phim', []) !!}
-                        {!! Form::text('linkphim', '', ['class' => 'form-control', 'placeholder' =>'điền đi']) !!}
+                        {!! Form::label('linkfilm', 'Link Phim', []) !!}
+                        {!! Form::text('linkfilm', isset($episode) ? $episode->linkfilm : '', ['class' => 'form-control', 'placeholder' =>'điền đi']) !!}
                     </div>
-                    <div class="form-group">
-                        {!! Form::label('episode', 'Tap Phim', []) !!}
-                        {!! Form::text('episode', '', ['class' => 'form-control', 'placeholder' =>'điền đi']) !!}
-                    </div>
+                    
                     <div class="form-group">
                         {!! Form::label('Phim', ' Phim', []) !!}
-                        {!! Form::select('movie_id',[], isset($movie) ? $movie->title : '', ['class' =>'form-control', 'placeholder' =>'điền đi']) !!}
+                        {!! Form::select('movie_id',['0'=> 'Chọn phim', '1'=>$movie], isset($episode) ? $episode->movie_id : '', ['class' =>'form-control  select-episode', 'placeholder' =>'điền đi']) !!}
+                    </div>
+                    <div class="form-group">
+                        <label for="">Tập Phim</label>
+                        <select name="episode" class="form-control " id="show_movie">
+                            <option value="">Chọn tập phim</option>
+                        
+                        </select>
+                        <!-- {!! Form::label('episode', 'Tập Phim', []) !!}
+                        {!! Form::text('episode', '', ['class' => 'form-control', 'placeholder' =>'điền đi']) !!} -->
                     </div>
                     @if(!isset($episode))
                                         {!! Form::submit('Thêm phim', ['class' => 'btn btn-primary']) !!}
@@ -38,24 +44,26 @@
                                 @endif
                     {!! Form::close() !!}
                     </div>
-                    <table class="table-warning" id="myTable">
+                    <table class="table-warning" id="">
                 <thead>
                     <tr>
                     <th scope="col">ID</th>
-                    <th scope="col">Link Phim</th>
+                    <th scope="col">Link Film</th>
                     <th scope="col">Phim</th>
-                    <th scope="col">Tap Phim</th>
+                    <th scope="col">Tập Phim</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($lstEpisode as $key => $movi)
                         <tr>
                                 <th scope="row">{{ $movi->id }}</th>
-                                <td>{{ $movi->linkphim }}</td>
+                                <td>
+                                        {{Illuminate\Support\Str::of($movi->linkfilm)->words(5)}}
+                                </td>
                                 <td>
                                     {{$movi->movie_id}}
                                 </td>
-                                <td>
+                                <td value="{{$movi->episode}}">
                                     {{$movi->episode}}
                                 </td>
                                 <td>
@@ -74,5 +82,22 @@
         </div>
     </div>
 </div>
+
+@endsection
+@section('footer')
+    <script type="text/javascript">
+        $('.select-episode').change(function() {
+            var id = $(this).val();
+            // alert(id);
+            $.ajax({
+                url: "{{route('select-movie')}}",
+                method: 'GET',
+                data: {id: id},
+                success: function(data) {
+                    $('#show_movie').html(data);
+                }
+            })
+        })
+    </script>
 
 @endsection

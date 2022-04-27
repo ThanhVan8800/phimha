@@ -25,16 +25,30 @@
                            <div class="halim-item">
                               <a class="halim-thumb" href="{{route('movie',$mov->slug)}}" title="{{$mov->title}}">
                                  <figure><img class="lazy img-responsive" src="{{asset('uploads/movie/'.$mov->image)}}" alt="VŨNG LẦY PHẦN 1" title="{{$mov->title}}"></figure>
-                                 <span class="status">5/5</span><span class="episode"><i class="fa fa-play" aria-hidden="true"></i>
+                                 <span class="status">
+                                    @if ($mov -> resolution == 0)
+                                          HD
+                                    @elseif($mov -> resolution == 1)
+                                          SD
+                                    @elseif ($mov -> resolution == 2)
+                                          HDCam
+                                    @elseif($mov -> resolution == 3)
+                                          Cam
+                                    @elseif ($mov -> resolution == 4)
+                                          FullHD
+                                    @else
+                                          Trailer
+                                    @endif
+                                 </span><span class="episode"><i class="fa fa-play" aria-hidden="true"></i>
                                                 @if ($mov->subtitle == 0)
                                                    Vietsub 
-                                                         @if ($movie->session != 0)
-                                                            -Session-{{$movie->session}}
+                                                         @if ($mov->session != 0)
+                                                            -Session-{{$mov->session}}
                                                          @endif
                                                 @else
                                                       Thuyết minh
-                                                      @if ($movie->session != 0)
-                                                            -Session-{{$movie->session}}
+                                                      @if ($mov->session != 0)
+                                                            -Session-{{$mov->session}}
                                                          @endif
                                                 @endif
                                  </span> 

@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\Movie;
+use App\Models\Movie_Genre;
 use App\Models\Category;
 use App\Models\Genre;
 use App\Models\Country;
 use Carbon\Carbon;
 use File;
 use Storage;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Contracts\Session\Session;
+use App\Http\Requests\Movie\MovieFormRequest;
+
 
 class MovieController extends Controller
 {
@@ -21,13 +26,15 @@ class MovieController extends Controller
      */
     public function index()
     {
-        $lstMovie = Movie::orderBy('id', 'desc')->get();
-
+        $lstMovie = Movie::with('movie_genre')->orderBy('id', 'desc')->get();
+       // return response()->json($lstMovie);
+        // tạo file movie_json để load tìm kiếm cho nhẹ trang
         $path = public_path()."/json/";
         if(!is_dir($path)){
             mkdir($path, 0777, true);
         }
         File::put($path.'movies.json', json_encode($lstMovie));
+
         return view('admin.movie.list',[
             'lstMovie' => $lstMovie,
             
@@ -45,12 +52,15 @@ class MovieController extends Controller
         // khi dùng pluck muốn select hiện title thì để thứ tự title đứng trước và ngược lại
         $genre = Genre::pluck('title','id');
         $country = Country::pluck('title','id');
+
+        $lstGenre = Genre::all();
         $lstMovie = Movie::with('category','country','genre')->orderBy('id', 'desc')->get();
         return view('admin.movie.form',[
             'lstMovie' => $lstMovie,
             'category' => $category,
             'genre' => $genre,
             'country' => $country,
+            'lstGenre' => $lstGenre,
         ]);
     }
 
@@ -60,8 +70,9 @@ class MovieController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(MovieFormRequest $request)
     {
+        // dd($request->input());
         $data = $request->all();
         $movie = new Movie();
         $movie -> title = $data['title'];
@@ -76,7 +87,16 @@ class MovieController extends Controller
         $movie -> tags = $data['tags'];
         $movie -> description = $data['description'];
         $movie -> category_id = $data['category_id'];
-        $movie -> genre_id = $data['genre_id'];
+        $movie -> episode_film = $data['episode_film'];
+
+
+        // $movie -> genre_id = $data['genre_id'];
+        foreach($data['genre'] as $key => $gen)
+        {
+            $movie -> genre_id = $gen['0'];
+        }
+
+
         $movie -> country_id = $data['country_id'];
         $movie -> status = $data['status'];
         $movie -> date_created = Carbon::now('Asia/Ho_Chi_Minh');
@@ -92,9 +112,11 @@ class MovieController extends Controller
             $get_image -> move('uploads/movie/',$new_image);
             $movie->image = $new_image;
         }
-
+        //thêm nhiều thể loại cho phim
         $movie -> save();
-        return redirect()->back();
+        $movie -> movie_genre() -> attach($data['genre']);
+        //$request -> Session()->flash('error','Email hoặc password không đúng vui lòng đăng nhập lại!');// luu y!
+        return redirect()->route('movie.index');
     }
 
     /**
@@ -116,18 +138,23 @@ class MovieController extends Controller
      */
     public function edit($id)
     {
-        $movie = Movie::find($id);
         $category = Category::pluck('title', 'id');
         // khi dùng pluck muốn select hiện title thì để thứ tự title đứng trước và ngược lại
         $genre = Genre::pluck('title','id');
         $country = Country::pluck('title','id');
+        
+        $lstGenre = Genre::all();
+        $movie = Movie::find($id);
+        $movie_genre = $movie -> movie_genre;
         $lstMovie = Movie::with('category','country','genre')->orderBy('id', 'desc')->get();
         return view('admin.movie.form',[
             'lstMovie' => $lstMovie,
             'category' => $category,
             'genre' => $genre,
             'country' => $country,
-            'movie' => $movie
+            'movie' => $movie,
+            'lstGenre' => $lstGenre,
+            'movie_genre' => $movie_genre,
         ]);
     }
 
@@ -141,6 +168,7 @@ class MovieController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->all();
+        // return response()->json($data['genre']);
         $movie =  Movie::find($id);
         $movie -> title = $data['title'];
         $movie -> film_hot = $data['film_hot'];
@@ -154,9 +182,16 @@ class MovieController extends Controller
         $movie -> tags = $data['tags'];
         $movie -> description = $data['description'];
         $movie -> category_id = $data['category_id'];
-        $movie -> genre_id = $data['genre_id'];
+        // $movie -> genre_id = $data['genre_id'];
+        foreach($data['genre'] as $key => $gen)
+        {
+            $movie -> genre_id = $gen['0'];
+        }
         $movie -> country_id = $data['country_id'];
         $movie -> status = $data['status'];
+        $movie -> episode_film = $data['episode_film'];
+
+
         $movie -> date_created = Carbon::now('Asia/Ho_Chi_Minh');
         $movie -> update_day = Carbon::now('Asia/Ho_Chi_Minh');
         
@@ -172,13 +207,17 @@ class MovieController extends Controller
             }else{
                 $get_name_image = $get_image -> getClientOriginalName(); // hinhDaLat.jpg
                 $name_image = current(explode('.',$get_name_image)); //current để lấy phần trước dấu . là lấy hinhDaLat còn để là end thì ngược lại
-                $new_image = $name_image.rand(0,999) .'.' . $get_image->getClientOriginalExtension(); // hinhDaLat789.jpg
+                $new_image = $name_image.rand(0,9999) .'.' . $get_image->getClientOriginalExtension(); // hinhDaLat789.jpg
                 $get_image -> move('uploads/movie/',$new_image);
                 $movie->image = $new_image;
             }
+
         }
 
         $movie -> save();
+        $movie -> movie_genre() -> sync($data['genre']);
+        //detach , sync đồng bộ cho csdl
+
         return redirect()->back();
     }
 
@@ -195,6 +234,7 @@ class MovieController extends Controller
         {
             unlink('uploads/movie/' . $movie->image);
         }
+        Movie_Genre :: whereIn('movie_id', [$movie->id])->delete();
         $movie->delete();
         return redirect()->back();
     }
@@ -210,6 +250,6 @@ class MovieController extends Controller
         $data = $request->all();
         $movie = Movie::find($data['id_session']);
         $movie -> session = $data['session'];
-        $movie->save();
+        $movie -> save();
     }
 }
