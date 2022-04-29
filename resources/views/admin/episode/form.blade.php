@@ -28,13 +28,21 @@
                         {!! Form::select('movie_id',['0'=> 'Chọn phim', '1'=>$movie], isset($episode) ? $episode->movie_id : '', ['class' =>'form-control  select-episode', 'placeholder' =>'điền đi']) !!}
                     </div>
                     <div class="form-group">
-                        <label for="">Tập Phim</label>
+                        <!-- <label for="">Tập Phim</label>
                         <select name="episode" class="form-control " id="show_movie">
                             <option value="">Chọn tập phim</option>
                         
-                        </select>
-                        <!-- {!! Form::label('episode', 'Tập Phim', []) !!}
-                        {!! Form::text('episode', '', ['class' => 'form-control', 'placeholder' =>'điền đi']) !!} -->
+                        </select> -->
+                        @if(isset($episode))
+                            {!! Form::label('episode', 'Tập Phim', []) !!}
+                            {!! Form::text('episode', isset($episode) ? $episode->episode : '', ['class' => 'form-control', 'placeholder' =>'điền đi', isset($episode) ? 'readonly':'']) !!}
+                        @else 
+                            <label for="">Tập Phim</label>
+                            <select name="episode" class="form-control " id="show_movie">
+                                <option value="">Chọn tập phim</option>
+                            
+                            </select>
+                        @endif
                     </div>
                     @if(!isset($episode))
                                         {!! Form::submit('Thêm phim', ['class' => 'btn btn-primary']) !!}
@@ -48,6 +56,8 @@
                 <thead>
                     <tr>
                     <th scope="col">ID</th>
+                    <th scope="col">Tên phim</th>
+                    <th scope="col">Hình ảnh</th>
                     <th scope="col">Link Film</th>
                     <th scope="col">Phim</th>
                     <th scope="col">Tập Phim</th>
@@ -57,11 +67,16 @@
                     @foreach($lstEpisode as $key => $movi)
                         <tr>
                                 <th scope="row">{{ $movi->id }}</th>
+                                
                                 <td>
-                                        {{Illuminate\Support\Str::of($movi->linkfilm)->words(5)}}
+                                    {{$movi->movie->title}}
                                 </td>
                                 <td>
-                                    {{$movi->movie_id}}
+                                    <img src="{{asset('uploads/movie/'.$movi->movie->image)}}" style="width:100px;max-height:100px;object-fit:contain" alt="{{asset($movi->movie->image)}}">
+                                </td>
+                                <td>
+                                        <!-- {{Illuminate\Support\Str::of($movi->linkfilm)->words(5)}} -->
+                                        {!!$movi->linkfilm!!}
                                 </td>
                                 <td value="{{$movi->episode}}">
                                     {{$movi->episode}}

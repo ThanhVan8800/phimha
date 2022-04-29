@@ -9,6 +9,7 @@ use App\Models\Movie_Genre;
 use App\Models\Category;
 use App\Models\Genre;
 use App\Models\Country;
+use App\Models\Episode;
 use Carbon\Carbon;
 use File;
 use Storage;
@@ -89,7 +90,7 @@ class MovieController extends Controller
         $movie -> category_id = $data['category_id'];
         $movie -> episode_film = $data['episode_film'];
 
-
+        //Thêm nhiều thể loại phim
         // $movie -> genre_id = $data['genre_id'];
         foreach($data['genre'] as $key => $gen)
         {
@@ -235,6 +236,9 @@ class MovieController extends Controller
             unlink('uploads/movie/' . $movie->image);
         }
         Movie_Genre :: whereIn('movie_id', [$movie->id])->delete();
+        Episode :: whereIn('movie_id', [$movie->id])->delete();
+
+        //*whereIn xóa 1 mảng thuộc film đó
         $movie->delete();
         return redirect()->back();
     }

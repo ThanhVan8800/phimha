@@ -25,8 +25,9 @@ class EpisodeController extends Controller
      */
     public function create()
     {
-        $lstEpisode = Episode::all();
+        $lstEpisode = Episode::with('movie')->orderBy('movie_id','desc')->get();
         $movie = Movie::orderBy('id','desc')->pluck('title', 'id');
+        // return response()->json($lstEpisode);
         return view('admin.episode.form',[
             'lstEpisode' => $lstEpisode,
             'movie' => $movie
@@ -106,7 +107,9 @@ class EpisodeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $episode = Episode::find($id);
+        $episode->delete();
+        return redirect()->back();
     }
     public function select_movie()
     {

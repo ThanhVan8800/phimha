@@ -18,10 +18,10 @@
          <main id="main-contents" class="col-xs-12 col-sm-12 col-md-8">
             <section id="content" class="test">
                <div class="clearfix wrap-content">
-                           @foreach ($movie->episode as $epi)
-                              {!! $epi->linkfilm !!}
-                           @endforeach
-                  <div class="button-watch">
+                  {!! $episode->linkfilm !!}
+                  <!-- @foreach ($movie->episode as $epi) -->
+                           <!-- @endforeach -->
+                  <!-- <div class="button-watch">
                      <ul class="halim-social-plugin col-xs-4 hidden-xs">
                         <li class="fb-like" data-href="" data-layout="button_count" data-action="like" data-size="small" data-show-faces="true" data-share="true"></li>
                      </ul>
@@ -44,7 +44,7 @@
                            <a class="visible-xs-inline" data-toggle="collapse" href="#moretool" aria-expanded="false" aria-controls="moretool"><i class="hl-forward"></i> Share</a>
                         </div>
                      </ul>
-                  </div>
+                  </div> -->
                   <div class="collapse" id="moretool">
                      <ul class="nav nav-pills x-nav-justified">
                         <li class="fb-like" data-href="" data-layout="button_count" data-action="like" data-size="small" data-show-faces="true" data-share="true"></li>
@@ -61,7 +61,7 @@
                         </div>
                      </a>
                      <div class="title-wrapper-xem full">
-                        <h1 class="entry-title"><a href="" title="Tôi Và Chúng Ta Ở Bên Nhau" class="tl">{{$movie->title}}</a></h1>
+                        <h1 class="entry-title"><a href="" title="{{$movie->title}}" class="tl">{{$movie->title}}</a></h1>
                      </div>
                   </div>
                   <div class="entry-content htmlwrap clearfix collapse" id="expand-post-content">
@@ -73,12 +73,49 @@
                   </div>
                   <div id="halim-list-server">
                      <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active server-1"><a href="#server-0" aria-controls="server-0" role="tab" data-toggle="tab"><i class="hl-server"></i> Vietsub</a></li>
+                           @if($movie->resolution == 0)
+                                 <li role="presentation" class="active server-1">
+                                    <a href="#server-0" aria-controls="server-0" role="tab" data-toggle="tab">
+                                       <i class="hl-server"></i> HD</a>
+                                 </li> 
+                           @elseif ($movie->resolution == 1)
+                              <li role="presentation" class="active server-1">
+                                 <a href="#server-0" aria-controls="server-0" role="tab" data-toggle="tab">
+                                    <i class="hl-server"></i> SD</a>
+                              </li>
+                           @elseif ($movie->resolution == 2)
+                              <li role="presentation" class="active server-1">
+                                 <a href="#server-0" aria-controls="server-0" role="tab" data-toggle="tab">
+                                    <i class="hl-server"></i> HDCam</a>
+                              </li>
+                           @elseif ($movie->resolution == 3)
+                              <li role="presentation" class="active server-1">
+                                 <a href="#server-0" aria-controls="server-0" role="tab" data-toggle="tab">
+                                    <i class="hl-server"></i> Cam</a>
+                              </li>
+                           @else 
+                              <li role="presentation" class="active server-1">
+                                 <a href="#server-0" aria-controls="server-0" role="tab" data-toggle="tab">
+                                    <i class="hl-server"></i> FullHD</a>
+                              </li>
+                           @endif     
                      </ul>
                      <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active server-1" id="server-0">
                            <div class="halim-server">
                               <ul class="halim-list-eps">
+                                    <li class="halim-episode">
+                                       @foreach ($movie->episode  as  $key => $sotap)
+                                          
+                                          <a href="{{route('so-tap')}}">
+                                             <span class="halim-btn halim-btn-2 {{$key == 0 ? 'active':''}} halim-info-1-1 box-shadow" data-post-id="37976" 
+                                             data-server="1" data-episode="1" data-position="first" data-embed="0" 
+                                             data-title="Xem phim {{$movie->title}} - {{$sotap->episode}} - {{$movie->name_eng}} Vietsub + Thuyết Minh" 
+                                             data-h1=" - {{$movie->title}} tập {{$sotap->episode}}">{{$sotap->episode}}
+                                             </span>
+                                          </a>
+                                       @endforeach
+                                    </li>
                                  
                                  
                               </ul>

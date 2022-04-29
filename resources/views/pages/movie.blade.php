@@ -50,7 +50,7 @@
                               @if($movie->resolution != 5 )
                                  <div class="bwa-content">
                                     <div class="loader"></div>
-                                    <a href="{{route('watch',$movie->slug)}}" class="bwac-btn">
+                                    <a href="{{route('watch',['slug' => $movie->slug,'tap-phim'=>$episode_numfilm->episode])}}" class="bwac-btn">
                                     <i class="fa fa-play"></i>
                                     </a>
                                  </div>
@@ -96,9 +96,15 @@
                                        </li>
                                  <!-- <li class="list-info-group-item"><span>Điểm IMDb</span> : <span class="imdb">7.2</span></li> -->
                                  <li class="list-info-group-item"><span>Thời lượng</span> : {{$movie->movie_duration}}</li>
-                                 <li class="list-info-group-item"><span>Số tập phim</span> : {{$movie->episode}}</li>
+                                 <li class="list-info-group-item"><span>Số tập phim</span> : {{$movie->episode_film}}/{{$movie->episode_film}} Hoàn Thành</li>
                                  <li class="list-info-group-item"><span>Thể loại</span> : <a href="" rel="category tag">Chiếu Rạp</a>, <a href="" rel="category tag">Hành động</a>, <a href="" rel="category tag">Phiêu Lưu</a>, <a href="" rel="category tag">Viễn Tưởng</a></li>
                                  <li class="list-info-group-item"><span>Quốc gia</span> : <a href="" rel="tag">Mỹ</a></li>
+                                 <li class="list-info-group-item">
+                                    <span>Tập phim</span> :    
+                                    @foreach ($episode as $key => $epi )
+                                       <a href="{{route('watch',['slug' => $epi->movie->slug,'tap-phim'=>$episode_numfilm->episode])}}" rel="tag">Tập {{$epi->episode}}</a>
+                                    @endforeach
+                                 </li>
                                  <li class="list-info-group-item"><span>Đạo diễn</span> : <a class="director" rel="nofollow" href="https://phimhay.co/dao-dien/cate-shortland" title="Cate Shortland">Cate Shortland</a></li>
                                  <li class="list-info-group-item last-item" style="-overflow: hidden;-display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-flex: 1;-webkit-box-orient: vertical;"><span>Diễn viên</span> : <a href="" rel="nofollow" title="C.C. Smiff">C.C. Smiff</a>, <a href="" rel="nofollow" title="David Harbour">David Harbour</a>, <a href="" rel="nofollow" title="Erin Jameson">Erin Jameson</a>, <a href="" rel="nofollow" title="Ever Anderson">Ever Anderson</a>, <a href="" rel="nofollow" title="Florence Pugh">Florence Pugh</a>, <a href="" rel="nofollow" title="Lewis Young">Lewis Young</a>, <a href="" rel="nofollow" title="Liani Samuel">Liani Samuel</a>, <a href="" rel="nofollow" title="Michelle Lee">Michelle Lee</a>, <a href="" rel="nofollow" title="Nanna Blondell">Nanna Blondell</a>, <a href="" rel="nofollow" title="O-T Fagbenle">O-T Fagbenle</a></li>
                               </ul>

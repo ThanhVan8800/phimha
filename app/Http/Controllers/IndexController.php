@@ -155,7 +155,12 @@ class IndexController extends Controller
 
         //film_hot cho slider
         $film_hot = Movie::where('film_hot',1)->where('status',1)->orderBy('update_day','DESC')->get();
-        return view('pages.movie',compact('category','genre','country','movie','related','filmhot_trailer','film_hot'));
+
+        // Tập phim d
+        $episode = Episode::with('movie')->where('movie_id',$movie->id)->orderBy('episode','ASC')->take(5)->get();
+        //tạo url slug cho tập phim mặc định là tập 1 khi click vào film
+        $episode_numfilm = Episode::with('movie')->where('movie_id',$movie->id)->orderBy('episode','ASC')->take(1)->first();
+        return view('pages.movie',compact('category','genre','country','movie','related','filmhot_trailer','film_hot','episode','episode_numfilm'));
     }
     public function watch($slug)
     {
@@ -171,6 +176,7 @@ class IndexController extends Controller
         //film_hot cho slider
         $film_hot = Movie::where('film_hot',1)->where('status',1)->orderBy('update_day','DESC')->get();
         $movie = Movie::with('category','genre','country','movie_genre','episode')->where('slug',$slug)->where('status',1)->first();
+        
         // return response()->json($movie);
         return view('pages.watch',compact('category','genre','country','movie','film_sidebar','filmhot_trailer','film_hot'));
     }
