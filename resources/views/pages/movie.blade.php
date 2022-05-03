@@ -48,14 +48,16 @@
                            <div class="movie-poster col-md-3">
                               <img class="movie-thumb" src="{{asset('uploads/movie/'.$movie->image)}}" alt="{{$movie->title}}">
                               @if($movie->resolution != 5 )
-                                 <div class="bwa-content">
-                                    <div class="loader"></div>
-                                    <a href="{{route('watch',['slug' => $movie->slug,'tap-phim'=>$episode_numfilm->episode])}}" class="bwac-btn">
-                                    <i class="fa fa-play"></i>
-                                    </a>
-                                 </div>
+                                    @if($episode_count>0)
+                                       <div class="bwa-content">
+                                          <div class="loader"></div>
+                                          <a href="{{url('xem-phim/'.$movie->slug.'/tap-'.$episode_numfilm->episode)}}" class="bwac-btn">
+                                             <i class="fa fa-play"></i>
+                                          </a>
+                                       </div>
+                                    @endif
                               @else 
-                                 <a href="#watch_trailer" class="btn btn-danger watch_trailer" style="display:block">Xem Trailer</a>
+                                    <a href="#watch_trailer" class="btn btn-danger watch_trailer" style="display:block">Xem Trailer</a>
                               @endif
                            </div>
                            <div class="film-poster col-md-9">
@@ -96,14 +98,39 @@
                                        </li>
                                  <!-- <li class="list-info-group-item"><span>Điểm IMDb</span> : <span class="imdb">7.2</span></li> -->
                                  <li class="list-info-group-item"><span>Thời lượng</span> : {{$movie->movie_duration}}</li>
-                                 <li class="list-info-group-item"><span>Số tập phim</span> : {{$movie->episode_film}}/{{$movie->episode_film}} Hoàn Thành</li>
+                                 <li class="list-info-group-item"><span>Số tập phim</span> : 
+                                    @if ($movie->belonging_movie == 'phimbo')
+                                             {{$episode_count}}/{{$movie->episode_film}} - 
+                                          @if($episode_count == $movie->episode_film)
+                                             Hoàn Thành
+                                             @else   
+                                             Đang cập nhật      
+                                          @endif
+                                    @else
+                                          <a href="" rel="tag">FullHD</a>
+                                          <a href="" rel="tag">HD</a>
+                                    @endif
+
+                                 </li>
                                  <li class="list-info-group-item"><span>Thể loại</span> : <a href="" rel="category tag">Chiếu Rạp</a>, <a href="" rel="category tag">Hành động</a>, <a href="" rel="category tag">Phiêu Lưu</a>, <a href="" rel="category tag">Viễn Tưởng</a></li>
-                                 <li class="list-info-group-item"><span>Quốc gia</span> : <a href="" rel="tag">Mỹ</a></li>
+                                 <li class="list-info-group-item"><span>Quốc gia</span> : <a href="" rel="tag">{{$movie->country->title}}</a></li>
                                  <li class="list-info-group-item">
-                                    <span>Tập phim</span> :    
-                                    @foreach ($episode as $key => $epi )
-                                       <a href="{{route('watch',['slug' => $epi->movie->slug,'tap-phim'=>$episode_numfilm->episode])}}" rel="tag">Tập {{$epi->episode}}</a>
-                                    @endforeach
+                                    <span>Tập phim mới nhất</span> :  
+                                    @if($episode_count>0)
+                                       @if ($movie->belonging_movie == 'phimbo')
+                                                @foreach ($episode as $key => $epi )
+                                                   <a href="{{url('xem-phim/'.$epi->movie->slug .'/tap-'.$epi->episode)}}" rel="tag">Tập {{$epi->episode}}</a>
+                                                   <!-- <a href="{{route('watch',['slug' => $epi->movie->slug,'tap-phim'=>$episode_numfilm->episode])}}" rel="tag">Tập {{$epi->episode}}</a> -->
+                                                @endforeach
+                                       @elseif($movie->belonging_movie == 'phimle')
+                                             @foreach ($episode as $key => $epi_le )
+                                                <a href="{{url('xem-phim/'.$epi_le->slug.'/tap-'.$epi_le->episode)}}" rel="tag">{{$epi_le->episode}} </a>
+                                             @endforeach
+                                       @endif
+                                    @else
+                                          Đang cập nhật
+                                    @endif
+                                    
                                  </li>
                                  <li class="list-info-group-item"><span>Đạo diễn</span> : <a class="director" rel="nofollow" href="https://phimhay.co/dao-dien/cate-shortland" title="Cate Shortland">Cate Shortland</a></li>
                                  <li class="list-info-group-item last-item" style="-overflow: hidden;-display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-flex: 1;-webkit-box-orient: vertical;"><span>Diễn viên</span> : <a href="" rel="nofollow" title="C.C. Smiff">C.C. Smiff</a>, <a href="" rel="nofollow" title="David Harbour">David Harbour</a>, <a href="" rel="nofollow" title="Erin Jameson">Erin Jameson</a>, <a href="" rel="nofollow" title="Ever Anderson">Ever Anderson</a>, <a href="" rel="nofollow" title="Florence Pugh">Florence Pugh</a>, <a href="" rel="nofollow" title="Lewis Young">Lewis Young</a>, <a href="" rel="nofollow" title="Liani Samuel">Liani Samuel</a>, <a href="" rel="nofollow" title="Michelle Lee">Michelle Lee</a>, <a href="" rel="nofollow" title="Nanna Blondell">Nanna Blondell</a>, <a href="" rel="nofollow" title="O-T Fagbenle">O-T Fagbenle</a></li>
@@ -122,7 +149,7 @@
                         <div class="video-item halim-entry-box">
                            <article id="post-38424" class="item-content">
                               Phim <a href="https://phimhay.co/goa-phu-den-38424/">GÓA PHỤ ĐEN</a> - 2021 - Mỹ:
-                              <p>Góa Phụ Đen &#8211; Black Widow 2021: Natasha Romanoff hay còn gọi là Góa phụ đen phải đối mặt với những phần đen tối của mình khi một âm mưu nguy hiểm liên quan đến quá khứ của cô nảy sinh. Bị truy đuổi bởi một thế lực sẽ không có gì có thể hạ gục cô, Natasha phải đối mặt với lịch sử là một điệp viên những mối quan hệ tan vỡ đã để lại trong cô từ lâu trước khi cô trở thành thành viên của biệt đội Avenger.</p>
+                              <p>{!!$movie->description!!}</p>
                               <h5>Từ Khoá Tìm Kiếm:</h5>
                               <ul>
                                  <li>black widow vietsub</li>

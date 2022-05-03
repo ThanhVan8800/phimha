@@ -26,7 +26,9 @@ class CountryController extends Controller
     public function create()
     {
         $lstCountry = Country::all();
-        return view('admin.country.form',compact('lstCountry'));
+        return view('admin.country.form',compact('lstCountry'),[
+            'title'=>'Quốc gia',
+        ]);
     }
 
     /**
@@ -68,7 +70,10 @@ class CountryController extends Controller
     {
         $country = Country::find($id);
         $lstCountry = Country::all();
-        return view('admin.country.form', compact('id', 'lstCountry', 'country'));
+        return view('admin.country.form', compact('id', 'lstCountry', 'country'),[
+            'title'=>'Chỉnh sửa phim theo quốc gia',
+
+        ]);
     }
 
     /**

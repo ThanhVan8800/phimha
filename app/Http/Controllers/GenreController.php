@@ -25,7 +25,7 @@ class GenreController extends Controller
     public function create()
     {
         $lstGenre = Genre::all();
-        return view('admin.genre.form',['lstGenre' => $lstGenre]);
+        return view('admin.genre.form',['title'=>'Thể loại phim','lstGenre' => $lstGenre]);
     }
 
     /**
@@ -67,7 +67,9 @@ class GenreController extends Controller
     {
         $genre = Genre::find($id);
         $lstGenre = Genre::all();
-        return view('admin.genre.form',compact('lstGenre', 'genre'));
+        return view('admin.genre.form',compact('lstGenre', 'genre'),[
+            'title'=>'Chỉnh sửa thể loại phim'
+        ]);
     }
 
     /**

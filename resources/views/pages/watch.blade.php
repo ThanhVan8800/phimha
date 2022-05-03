@@ -18,7 +18,16 @@
          <main id="main-contents" class="col-xs-12 col-sm-12 col-md-8">
             <section id="content" class="test">
                <div class="clearfix wrap-content">
-                  {!! $episode->linkfilm !!}
+                  <style type="text/css">
+                        .iframe-film iframe{
+                           width: 100%;
+                           height: 500px;
+                        }
+                  </style>
+                  <div class="iframe-film">
+                     {!! $episode->linkfilm !!}
+
+                  </div>
                   <!-- @foreach ($movie->episode as $epi) -->
                            <!-- @endforeach -->
                   <!-- <div class="button-watch">
@@ -106,9 +115,9 @@
                               <ul class="halim-list-eps">
                                     <li class="halim-episode">
                                        @foreach ($movie->episode  as  $key => $sotap)
-                                          
-                                          <a href="{{route('so-tap')}}">
-                                             <span class="halim-btn halim-btn-2 {{$key == 0 ? 'active':''}} halim-info-1-1 box-shadow" data-post-id="37976" 
+                                          <!-- Để  chữ tập trong url vì có truyền tham số tap substr để lấy số tập -->
+                                          <a href="{{url('xem-phim/'.$movie->slug.'/tap-'.$sotap->episode)}}">
+                                             <span class="halim-btn halim-btn-2 {{$tapphim == $sotap->episode ? 'active':''}} halim-info-1-1 box-shadow" data-post-id="37976" 
                                              data-server="1" data-episode="1" data-position="first" data-embed="0" 
                                              data-title="Xem phim {{$movie->title}} - {{$sotap->episode}} - {{$movie->name_eng}} Vietsub + Thuyết Minh" 
                                              data-h1=" - {{$movie->title}} tập {{$sotap->episode}}">{{$sotap->episode}}
@@ -116,7 +125,6 @@
                                           </a>
                                        @endforeach
                                     </li>
-                                 
                                  
                               </ul>
                               <div class="clearfix"></div>

@@ -1,62 +1,61 @@
-@extends('layouts.app')
+@extends('layouts.main')
 @section('head')
 <script src="/ckeditor/ckeditor.js"></script>
 
 @endsection 
 @section('content')
-<div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card  ">
-                <div class="card-header">{{ __('Dashboard') }}</div>
-            
-                    <table class="table-warning " id="myTable" >
+
+<div class="row">
+            <div class="col-12">
+                    <table class="table-warning img" id="myTable" >
+                        
                         <thead>
                             <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Tên phim</th>
-                            <th scope="col">Tên phim English</th>
-                            <th scope="col">Slug</th>
-                            <th scope="col">Tags Phim</th>
-                            <th scope="col">Thời lượng phim</th>
-                            <th scope="col">Phụ đề</th>
-                            <th scope="col">Định dạng</th>
-                            <!-- <th scope="col">Mô tả</th> -->
-                            <th scope="col">Hình ảnh</th>
-                            <th scope="col">Danh mục</th>
-                            <th scope="col">Loại phim</th>
-                            <th scope="col">Quốc gia</th>
-                            <th scope="col">Phim hot</th>
-                            <th scope="col">Tập phim</th>
-                            <th scope="col">Năm</th>
-                            <th scope="col">Trailer</th>
-                            <th scope="col">Session</th>
-                            <th scope="col">Trạng thái</th>
+                                <th scope="col" class="text-white">ID</th>
+                                <th scope="col" class="text-white">Tên phim</th>
+                                <th scope="col" class="text-white">Tên phim English</th>
+                                <th scope="col" class="text-white">Slug</th>
+                                <th scope="col" class="text-white">Tags Phim</th>
+                                <th scope="col" class="text-white">Thời lượng phim</th>
+                                <th scope="col" class="text-white">Phụ đề</th>
+                                <th scope="col" class="text-white">Định dạng</th>
+                                <!-- <th scope="col">Mô tả</th> -->
+                                <th scope="col" class="text-white">Hình ảnh</th>
+                                <th scope="col" class="text-white">Phim thuộc</th>
+                                <th scope="col" class="text-white">Danh mục</th>
+                                <th scope="col" class="text-white">Loại phim</th>
+                                <th scope="col" class="text-white">Quốc gia</th>
+                                <th scope="col" class="text-white">Phim hot</th>
+                                <th scope="col" class="text-white">Tập phim</th>
+                                <th scope="col" class="text-white">Năm</th>
+                                <th scope="col" class="text-white">Trailer</th>
+                                <th scope="col" class="text-white">Session</th>
+                                <th scope="col" class="text-white">Trạng thái</th>
                             </tr>
                         </thead>
-                        <tbody  >
+                        <tbody class="order_position" >
                             @foreach($lstMovie as $key => $movie)
                                 <tr>
-                                        <th scope="row">{{ $movie->id }}</th>
-                                        <td>{{ $movie->title }}</td>
-                                        <td>{{ $movie->name_eng }}</td>
-                                        <td>{{ $movie->slug }}</td>
-                                        <td>
+                                        <th scope="row" class="text-white">{{ $movie->id }}</th>
+                                        <td class="text-white">{{ $movie->title }}</td>
+                                        <td class="text-white">{{ $movie->name_eng }}</td>
+                                        <td class="text-white">{{ $movie->slug }}</td>
+                                        <td class="text-white">
                                             @if ($movie->tags != NULL)
                                                 {{substr($movie->tags, 0,50)}}...
                                             @else
                                                 Chưa có từ khóa của phim
                                             @endif
                                         </td>
-                                        <td>{{ $movie->movie_duration }}</td>
-                                        <td>
+                                        <td class="text-white">{{ $movie->movie_duration }}</td>
+                                        <td class="text-white">
                                             @if ($movie->subtitle == 0)
                                                     Vietsub 
                                                 @else
                                                     Thuyết minh
                                             @endif
                                         </td>
-                                        <td>
+                                        <td class="text-white">
                                             @if($movie->resolution == 0)
                                                 HD
                                             @elseif ($movie->resolution == 1)
@@ -73,28 +72,35 @@
                                         <td>
                                             <img src="{{asset('uploads/movie/'.$movie->image)}}" style="width:100px;max-height:100px;object-fit:contain" alt="{{asset($movie->image)}}">
                                         </td>
-                                        <td>{{ $movie->category->title }}</td>
-                                        <td>
+                                        <td class="text-white">
+                                            @if ($movie->belonging_movie == 'phimle')
+                                                Phim lẻ
+                                            @else  
+                                                    Phim bộ
+                                            @endif
+                                        </td>
+                                        <td class="text-white">{{ $movie->category->title }}</td>
+                                        <td class="text-white">
                                             @foreach($movie -> movie_genre as $key => $mov)
                                                 {{$mov  -> title }} 
 
                                             @endforeach
                                         </td>
-                                        <td>{{ $movie->country->title }}</td>
-                                        <td>
+                                        <td class="text-white">{{ $movie->country->title }}</td>
+                                        <td class="text-white">
                                             @if($movie->film_hot == 1)
                                                 Hot
                                             @else
                                                 No Hot
                                             @endif
                                         </td>
-                                        <td value= "{{$movie->episode_film}}">{{$movie->episode_film}}</td>
+                                        <td class="text-white" value= "{{$movie->episode_film}}">{{$movie->episode_film}}</td>
                                         <td>
                                             {!! Form::selectYear('year', 1995, 2025,
                                                     isset($movie) ? $movie->year :'', ['class' => 'select-year', 'id'=>$movie->id]) !!}
                                     
                                         </td>
-                                        <td>{{$movie->trailer}}</td>
+                                        <td class="text-white">{{$movie->trailer}}</td>
                                         <td>
                                             <form action="" method="post">
                                                 @csrf
@@ -102,7 +108,7 @@
                                                     isset($movie) ? $movie->session :'', ['class' => 'select-session', 'id'=>$movie->id]) !!}
                                             </form>
                                         </td>
-                                        <td>
+                                        <td class="text-white">
                                             @if($movie -> status )
                                                 Hiển thị
                                             @else  
@@ -120,12 +126,9 @@
                                 </tr>
                             @endforeach
                         </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-                
+                </table>  
+                                                </div>       
+                                                </div>       
 @endsection
 @section('footer')
             <script>

@@ -30,7 +30,8 @@ class EpisodeController extends Controller
         // return response()->json($lstEpisode);
         return view('admin.episode.form',[
             'lstEpisode' => $lstEpisode,
-            'movie' => $movie
+            'movie' => $movie,
+            'title' => 'Tập phim'
         ]);
     }
 
@@ -76,7 +77,10 @@ class EpisodeController extends Controller
         $episode = Episode::find($id);
         $movie = Movie::pluck('title','id');
         $lstEpisode = Episode::all();
-        return view('admin.episode.form',compact('movie','lstEpisode','episode'));
+        return view('admin.episode.form',compact('movie','lstEpisode','episode'),[
+            'title' => 'Chỉnh sửa tập phim'
+
+        ]);
     }
 
     /**
@@ -117,10 +121,16 @@ class EpisodeController extends Controller
         $id_movie = Movie::find($id);
         // echo $id_movie->episode;
         $output = '<option value="">Chọn tập phim</option>';
-        for($i = 1; $i <= $id_movie->episode_film; $i++)
-        {
-            $output .= '<option value="'.$i.'">'.$i.'</option>';
+        if($id_movie->belonging_movie == 'phimbo'){
+            for($i = 1; $i <= $id_movie->episode_film; $i++)
+            {
+                $output .= '<option value="'.$i.'">'.$i.'</option>';
+            }
+        }else{
+            $output .= '<option value="HD">HD</option>
+                        <option value="FullHD">FullHD</option>';
         }
+        
         echo $output;
     }
 }

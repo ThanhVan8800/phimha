@@ -193,6 +193,15 @@
          <div id="fb-root"></div>
          <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v13.0&appId=514048372971177&autoLogAppEvents=1" 
          nonce="2znNyN6z"></script>
+         <!-- animate có trailer phim khi click xem  -->
+         <!-- xem trailer k load lai trang -->
+            <script type="text/javascript">
+               $(".watch_trailer").click(function(event){
+                     event.preventDefault();
+                     var aid = $(this).attr("href");
+                     $('html, body').animate({scrollTop: $(aid).offset().top},'slow');
+               });
+            </script>
          <!-- // tìm kiếm phim -->
          <script type='text/javascript'>
             $(document).ready(function() {

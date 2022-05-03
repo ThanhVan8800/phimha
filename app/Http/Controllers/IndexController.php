@@ -158,12 +158,31 @@ class IndexController extends Controller
 
         // Tập phim d
         $episode = Episode::with('movie')->where('movie_id',$movie->id)->orderBy('episode','ASC')->take(5)->get();
-        //tạo url slug cho tập phim mặc định là tập 1 khi click vào film
+        //tạo url slug cho tập phim mặc định là tập 1 khi click vào film,
+
         $episode_numfilm = Episode::with('movie')->where('movie_id',$movie->id)->orderBy('episode','ASC')->take(1)->first();
-        return view('pages.movie',compact('category','genre','country','movie','related','filmhot_trailer','film_hot','episode','episode_numfilm'));
+
+        //hiện tổng số tập đã có
+        $episode_current = Episode::with('movie')->where('movie_id',$movie->id)->get();
+
+        $episode_count = $episode_current->count();
+
+        return view('pages.movie',compact('category','genre','country','movie','related','filmhot_trailer','film_hot','episode','episode_numfilm','episode_count'));
     }
-    public function watch($slug)
+    public function watch($slug,$tap)
     {
+        // if(isset($_GET['tap-phim']))
+        //     {
+        //         $tap_phim =$_GET['tap-phim'];
+        //     }
+        // else{
+
+        //     $tap_phim = 1;
+        // }
+        //     $tap_phim = substr($tap_phim,0,9);
+        
+            
+            // dd($tapphim);
         $category = Category::orderBy('position','ASC')->where('status', 1)->get();
         $genre = Genre::orderBy('id','desc')->get();
         $country = Country::orderBy('id','desc')->get();
@@ -176,9 +195,19 @@ class IndexController extends Controller
         //film_hot cho slider
         $film_hot = Movie::where('film_hot',1)->where('status',1)->orderBy('update_day','DESC')->get();
         $movie = Movie::with('category','genre','country','movie_genre','episode')->where('slug',$slug)->where('status',1)->first();
-        
+        // lấy phim theo điều kiện của tập phim theo
+
+        if(isset($tap)){
+            $tapphim = $tap;
+            $tapphim = substr($tap,4,20);
+            $episode = Episode::where('movie_id',$movie->id)->where('episode',$tapphim)->first();
+        }
+        else{
+            $tapphim = 1;
+            $episode = Episode::where('movie_id',$movie->id)->where('episode',$tapphim)->first();
+        }
         // return response()->json($movie);
-        return view('pages.watch',compact('category','genre','country','movie','film_sidebar','filmhot_trailer','film_hot'));
+        return view('pages.watch',compact('category','genre','country','movie','film_sidebar','filmhot_trailer','film_hot','episode','tapphim'));
     }
     public function episode()
     {

@@ -38,7 +38,7 @@ class MovieController extends Controller
 
         return view('admin.movie.list',[
             'lstMovie' => $lstMovie,
-            
+            'title' => 'Danh sách phim'
         ]);
     }
 
@@ -62,6 +62,7 @@ class MovieController extends Controller
             'genre' => $genre,
             'country' => $country,
             'lstGenre' => $lstGenre,
+            'title' => 'Danh sách phim'
         ]);
     }
 
@@ -89,6 +90,8 @@ class MovieController extends Controller
         $movie -> description = $data['description'];
         $movie -> category_id = $data['category_id'];
         $movie -> episode_film = $data['episode_film'];
+        // thuộc phim
+        $movie -> belonging_movie = $data['belonging_movie'];
 
         //Thêm nhiều thể loại phim
         // $movie -> genre_id = $data['genre_id'];
@@ -156,6 +159,8 @@ class MovieController extends Controller
             'movie' => $movie,
             'lstGenre' => $lstGenre,
             'movie_genre' => $movie_genre,
+            'title' => 'Chỉnh sửa phim'
+
         ]);
     }
 
@@ -183,6 +188,7 @@ class MovieController extends Controller
         $movie -> tags = $data['tags'];
         $movie -> description = $data['description'];
         $movie -> category_id = $data['category_id'];
+        $movie -> belonging_movie = $data['belonging_movie'];
         // $movie -> genre_id = $data['genre_id'];
         foreach($data['genre'] as $key => $gen)
         {

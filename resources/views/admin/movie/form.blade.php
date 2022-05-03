@@ -1,14 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.main')
 @section('head')
 <script src="/ckeditor/ckeditor.js"></script>
 
 @endsection 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card  ">
-                <div class="card-header">{{ __('Dashboard') }}</div>
                     <a href="{{route('movie.index')}}"><button>Danh sách phim</button></a>
                     <div class="card-body">
                         @if (session('status'))
@@ -78,6 +73,10 @@
                                     @endif
                                 </div>
                                 <div class="form-group">
+                                    {!! Form::label('belonging_movie', 'Phim thuộc',[]) !!}
+                                    {!! Form::select('belonging_movie', ['phimle' => 'Phim lẻ', 'phimbo' => 'Phim bộ'], isset($movie) ? $movie->belonging_movie :'', ['class' => 'form-control', 'placeholder' =>'điền đi']) !!}
+                                </div>
+                                <div class="form-group">
                                     {!! Form::label('Category', 'Danh mục', []) !!}
                                     {!! Form::select('category_id', $category ,isset($movie) ? $movie->category_id : ''  , ['class' => 'form-control', 'placeholder' =>'điền đi']) !!}
                                 </div>
@@ -112,13 +111,7 @@
                                         {!! Form::submit('Cập nhật phim', ['class' => 'btn btn-primary']) !!}
                                 @endif
                             {!! Form::close() !!}
-                    </div>
-                    
-            </div>
-        </div>
-    </div>
-</div>
-                
+                    </div>           
 @endsection
 @section('footer')
             <script>

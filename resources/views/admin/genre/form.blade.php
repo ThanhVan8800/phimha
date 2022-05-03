@@ -1,12 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.main')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card  ">
-                <div class="card-header">{{ __('Dashboard') }}</div>
-
                     <div class="card-body">
                         @if (session('status'))
                             <div class="alert alert-success" role="alert">
@@ -43,43 +37,39 @@
                                 @endif
                             {!! Form::close() !!}
                     </div>
-                    <table class="table-warning" id="myTable">
-                <thead>
-                    <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Tiêu đề phim</th>
-                    <th scope="col">Mô tả</th>
-                    <th scope="col">Trạng thái</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($lstGenre as $key => $gen)
-                        <tr>
-                                <th scope="row">{{ $gen->id }}</th>
-                                <td>{{ $gen->title }}</td>
-                                <td>{{ $gen->description }}</td>
-                                <td>
-                                    @if($gen -> status )
-                                        Hiển thị
-                                    @else  
-                                        Không hiển thị
-                                    @endif
-                                </td>
-                                <td>
-                                    {!! Form::open(['method'=>'delete','route' => ['genre.destroy', $gen->id], 'onsubmit' => 'return confirm("Bạn có muốn xóa?")']) !!}
-                                        {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-dark btn-sm', 'style' => 'height:40px; width:40px'] )  }}
-                                    {!! Form::close() !!}                                
-                                </td>
-                                <td>
-                                    <a href="{{route('genre.edit', $gen->id)}}" class="btn btn-warning" style = "height:40px; width:40px"><i class="fa-solid fa-pen"></i></a>
-                                </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-                
+                    <input type="text" name="keyword" id="keyword" class="form-control input-lg" placeholder="Enter Country Name" />
+                    <table class="table-warning img" id="myTable">
+                            <thead>
+                                <tr>
+                                <th scope="col" class="text-white">ID</th>
+                                <th scope="col" class="text-white">Tiêu đề phim</th>
+                                <th scope="col" class="text-white">Mô tả</th>
+                                <th scope="col" class="text-white">Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lst">
+                                @foreach($lstGenre as $key => $gen)
+                                    <tr>
+                                            <th scope="row" class="text-white">{{ $gen->id }}</th>
+                                            <td class="text-white">{{ $gen->title }}</td>
+                                            <td class="text-white">{{ $gen->description }}</td>
+                                            <td class="text-white">
+                                                @if($gen -> status )
+                                                    Hiển thị
+                                                @else  
+                                                    Không hiển thị
+                                                @endif
+                                            </td>
+                                            <td>
+                                                {!! Form::open(['method'=>'delete','route' => ['genre.destroy', $gen->id], 'onsubmit' => 'return confirm("Bạn có muốn xóa?")']) !!}
+                                                    {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-dark btn-sm', 'style' => 'height:40px; width:40px'] )  }}
+                                                {!! Form::close() !!}                                
+                                            </td>
+                                            <td>
+                                                <a href="{{route('genre.edit', $gen->id)}}" class="btn btn-warning" style = "height:40px; width:40px"><i class="fa-solid fa-pen"></i></a>
+                                            </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                    </table>           
 @endsection

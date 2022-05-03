@@ -92,12 +92,12 @@
                                             @if ($cate_movie->subtitle == 0)
                                                 Vietsub
                                                     @if ($cate_movie->session != 0)
-                                                        -Session-{{$cate_movie->session}}
+                                                        - Session-{{$cate_movie->session}}
                                                     @endif
                                                 @else
                                                 Thuyết minh
                                                     @if ($cate_movie->session != 0)
-                                                            -Session-{{$cate_movie->session}}
+                                                            Session{{$cate_movie->session}}
                                                         @endif
                                                 @endif
                                         </span> 
