@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Episode;
 use App\Models\Movie;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Session;
+
 class EpisodeController extends Controller
 {
     /**
@@ -43,14 +45,21 @@ class EpisodeController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-        $episode = new Episode();
-        $episode -> linkfilm = $data['linkfilm'];
-        $episode -> episode = $data['episode'];
-        $episode -> movie_id = $data['movie_id'];
-        $episode -> created_at = Carbon::now('Asia/Ho_Chi_Minh');
-        $episode -> updated_at = Carbon::now('Asia/Ho_Chi_Minh');
-        $episode->save();
+        try{
+            $data = $request->all();
+            $episode = new Episode();
+            $episode -> linkfilm = $data['linkfilm'];
+            $episode -> episode = $data['episode'];
+            $episode -> movie_id = $data['movie_id'];
+            $episode -> created_at = Carbon::now('Asia/Ho_Chi_Minh');
+            $episode -> updated_at = Carbon::now('Asia/Ho_Chi_Minh');
+            $episode->save();
+            Session::flash('success','Tạo tập phim thành công');
+        }catch(Exception $err){
+            Session::flash('error',$err->getMessage());
+            return false;
+        }
+        
         return redirect()->back();
 
     }
@@ -92,14 +101,21 @@ class EpisodeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = $request->all();
-        $episode = Episode::find($id);
-        $episode -> linkfilm = $data['linkfilm'];
-        $episode -> episode = $data['episode'];
-        $episode -> movie_id = $data['movie_id'];
-        $episode -> created_at = Carbon::now('Asia/Ho_Chi_Minh');
-        $episode -> updated_at = Carbon::now('Asia/Ho_Chi_Minh');
-        $episode->save();
+        try{
+            $data = $request->all();
+            $episode = Episode::find($id);
+            $episode -> linkfilm = $data['linkfilm'];
+            $episode -> episode = $data['episode'];
+            $episode -> movie_id = $data['movie_id'];
+            $episode -> created_at = Carbon::now('Asia/Ho_Chi_Minh');
+            $episode -> updated_at = Carbon::now('Asia/Ho_Chi_Minh');
+            $episode->save();
+            Session::flash('success','Cập nhật tập phim thành công');
+        }catch(Exception $err){
+            Session::flash('error',$err->getMessage());
+            return false;
+        }
+        
         return redirect()->back();
     }
 

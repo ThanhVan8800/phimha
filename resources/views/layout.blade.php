@@ -66,9 +66,8 @@
                            <div class="form-group form-search">
                               <div class="input-group col-xs-12">
                                     <form action="{{route('search')}}" method="GET">
-                                       <input type="text" name="search" id="timkiem" class="form-control" placeholder="Search">
-                                       
-                                       <button class="btn btn-primary">Search</button>
+                                          <input id="timkiem" type="text" name="search" class="form-control" placeholder="Tìm kiếm..." autocomplete="off" required>
+                                          <button  class="btn btn-info " style="margin-left: 80%;border-radius: 10px;">Tìm phim</button>
                                     </form>
                               </div>
                            </div>

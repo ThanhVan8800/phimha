@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\Genre;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
+
 
 class CategoryController extends Controller
 {
@@ -43,13 +46,19 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-        $category = new Category();
-        $category -> title = $data['title'];
-        $category -> slug = $data['slug'];
-        $category -> description = $data['description'];
-        $category -> status = $data['status'];
-        $category -> save();
+        try{
+            $data = $request->all();
+            $category = new Category();
+            $category -> title = $data['title'];
+            $category -> slug = $data['slug'];
+            $category -> description = $data['description'];
+            $category -> status = $data['status'];
+            $category -> save();
+            Session::flash('success','Thêm danh mục phim thành công');
+        }catch(Exception $err){
+            Session::flash('error',$err->getMessage());
+            return false;
+        }
         return redirect()-> back();
     }
 
@@ -88,13 +97,20 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = $request->all();
-        $category =  Category::find($id);
-        $category -> title = $data['title'];
-        $category -> slug = $data['slug'];
-        $category -> description = $data['description'];
-        $category -> status = $data['status'];
-        $category -> save();
+        try{
+            $data = $request->all();
+            $category =  Category::find($id);
+            $category -> title = $data['title'];
+            $category -> slug = $data['slug'];
+            $category -> description = $data['description'];
+            $category -> status = $data['status'];
+            $category -> save();
+            Session::flash('success','Cập nhật danh mục phim thành công');
+        }catch(Exception $err){
+            Session::flash('error',$err->getMessage());
+            return false;
+        }
+        
         return Redirect::route('category.create');
     }
 
@@ -127,7 +143,7 @@ class CategoryController extends Controller
         $output = '';
         $cate_search = Category::where('title','LIKE','%'.$request->keyword.'%')->get();
         $cate_search1 = Category::where('description','LIKE','%'.$request->keyword.'%')->get();
-
+        $genre_search = Genre::where('title','LIKE','%'.$request->keyword.'%')->get();
         foreach($cate_search as $cate){
                 $output .= '
                                 <tr id="'.$cate->id.'">
@@ -170,6 +186,30 @@ class CategoryController extends Controller
                                             </td>
                                             <td>
                                                 <a href="'.route('category.edit', $cate->id).'" class="btn btn-warning" style = "height:40px; width:40px"><i class="fa-solid fa-pen"></i></a>
+                                            </td>
+                                </tr>';
+            }
+            foreach($genre_search as $genre){
+                $output .= '
+                                <tr id="'.$genre->id.'">
+                                            <th scope="row">'.$genre->id.' </th>
+                                            <td>'. $genre->title .'</td>
+                                            <td>'. $genre->description .'</td>
+                                            <td>'. $genre->slug .'</td>
+                                            <td>'. $genre->status .'</td>
+                                            <td>
+                                                <label>
+                                                    <form method="POST" action="'.route('genre.destroy',$genre->id).'" onsubmit = "return confirm("Bạn có muốn xóa?")">
+                                                        <input type="hidden" name="_method" value="DELETE">
+                                                        <input type="hidden" name="_token" value="'. csrf_token() .'" />
+                                                        <button class="btn btn-dark btn-sm" style = "height:40px; width:40px">
+                                                                        <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <a href="'.route('genre.edit', $genre->id).'" class="btn btn-warning" style = "height:40px; width:40px"><i class="fa-solid fa-pen"></i></a>
                                             </td>
                                 </tr>';
             }

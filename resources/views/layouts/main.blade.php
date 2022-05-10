@@ -41,16 +41,17 @@
             <section class="content">
                 <div class="container-fluid">
 
-                @include('layouts.alert')
+                
                     <div class="row">
                     <!-- left column -->
                     <div class="col-md-12">
                         <!-- jquery validation -->
-                        <div class="card card-primary mt-1">
+                        <div class="card bg-navy color-palette mt-1">
                         <div class="card-header">
                             <h3 class="card-title" style="margin-bottom: -1px;">{{$title}}<!-- <small>jQuery Validation</small>--></h3>
                         </div>
                         <!--NOI DUNG GHI O DAY-->
+                            @include('layouts.alert')
                             @yield('content')
                             
                     <!-- right column -->

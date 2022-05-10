@@ -51,7 +51,7 @@
                     <div class="form-group">
                         <input type="text" name="keyword" id="keyword" class="form-control input-lg" placeholder="Tìm kiếm danh mục phim" />
                     </div>
-                        <table class="table  text-nowrap img" id="myTable">
+                        <table class="table  text-nowrap img" id="">
                             <thead>
                                 <tr>
                                 <th scope="col" class="text-white">ID</th>

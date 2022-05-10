@@ -4,7 +4,7 @@
 <div class="row container" id="wrapper">
 <div id="halim_related_movies-2xx" class="wrap-slider">
                         <div class="section-bar clearfix">
-                            <h3 class="section-title"><span>CÓ THỂ BẠN MUỐN XEM</span></h3>
+                            <h3 class="section-title"><span>HÔM NAY XEM GÌ?</span></h3>
                         </div>
                         <div id="halim_related_movies-2" class="owl-carousel owl-theme related-film">
                             @foreach($film_hot as $key=>$film)

@@ -106,9 +106,10 @@
                                              @else   
                                              Đang cập nhật      
                                           @endif
-                                    @else
-                                          <a href="" rel="tag">FullHD</a>
-                                          <a href="" rel="tag">HD</a>
+                                    @elseif($movie->belonging_movie == 'phimle')
+                                       @foreach ($episode as $key => $epi_le )
+                                          <a href="{{url('xem-phim/'.$epi_le->movie->slug.'/tap-'.$epi_le->episode)}}" rel="tag">{{$epi_le->episode}}</a>
+                                       @endforeach
                                     @endif
 
                                  </li>
@@ -124,7 +125,7 @@
                                                 @endforeach
                                        @elseif($movie->belonging_movie == 'phimle')
                                              @foreach ($episode as $key => $epi_le )
-                                                <a href="{{url('xem-phim/'.$epi_le->slug.'/tap-'.$epi_le->episode)}}" rel="tag">{{$epi_le->episode}} </a>
+                                                <a href="{{url('xem-phim/'.$epi_le->movie->slug.'/tap-'.$epi_le->episode)}}" rel="tag">{{$epi_le->episode}} </a>
                                              @endforeach
                                        @endif
                                     @else
@@ -132,7 +133,7 @@
                                     @endif
                                     
                                  </li>
-                                 <li class="list-info-group-item"><span>Đạo diễn</span> : <a class="director" rel="nofollow" href="https://phimhay.co/dao-dien/cate-shortland" title="Cate Shortland">Cate Shortland</a></li>
+                                 <li class="list-info-group-item"><span>Đạo diễn</span> : <a class="director" rel="nofollow" href="#" title="Cate Shortland">Cate Shortland</a></li>
                                  <li class="list-info-group-item last-item" style="-overflow: hidden;-display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-flex: 1;-webkit-box-orient: vertical;"><span>Diễn viên</span> : <a href="" rel="nofollow" title="C.C. Smiff">C.C. Smiff</a>, <a href="" rel="nofollow" title="David Harbour">David Harbour</a>, <a href="" rel="nofollow" title="Erin Jameson">Erin Jameson</a>, <a href="" rel="nofollow" title="Ever Anderson">Ever Anderson</a>, <a href="" rel="nofollow" title="Florence Pugh">Florence Pugh</a>, <a href="" rel="nofollow" title="Lewis Young">Lewis Young</a>, <a href="" rel="nofollow" title="Liani Samuel">Liani Samuel</a>, <a href="" rel="nofollow" title="Michelle Lee">Michelle Lee</a>, <a href="" rel="nofollow" title="Nanna Blondell">Nanna Blondell</a>, <a href="" rel="nofollow" title="O-T Fagbenle">O-T Fagbenle</a></li>
                               </ul>
                               <div class="movie-trailer hidden"></div>
@@ -193,16 +194,16 @@
                      <div class="section-bar clearfix">
                         <h2 class="section-title"><span style="color:#ffed4d">Bình luận</span></h2>
                      </div>
-                     <!-- <div class="entry-content htmlwrap clearfix " style="background: lightyellow !important;" >
+                     <div class="entry-content htmlwrap clearfix " style="background: lightyellow !important;" >
                         @php
                            $current_url = Request::url();
                         @endphp
                         <div class="video-item halim-entry-box">
                            <article id="post-38424" class="item-content cmt_fb" >
-                              <div class="fb-comments" data-href="{{$current_url}}" data-width="100%" data-numposts="7" data-colorscheme="dark"></div>
+                              <div class="fb-comments" data-href="{{$current_url}}" data-width="100%" data-numposts="9" data-colorscheme="dark"></div>
                            </article>
                         </div>
-                     </div> -->
+                     </div>
                      @if ($movie->trailer != null)
                         <!-- Trailer Phim -->
                         <div class="section-bar clearfix">

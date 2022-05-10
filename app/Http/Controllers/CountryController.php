@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
+
 use App\Models\Country;
 class CountryController extends Controller
 {
@@ -39,13 +41,19 @@ class CountryController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request -> all();
-        $country = new Country();
-        $country -> title = $data['title'];
-        $country -> slug = $data['slug'];
-        $country -> description = $data['description'];
-        $country -> status = $data['status'];
-        $country -> save();
+        try{
+            $data = $request -> all();
+            $country = new Country();
+            $country -> title = $data['title'];
+            $country -> slug = $data['slug'];
+            $country -> description = $data['description'];
+            $country -> status = $data['status'];
+            $country -> save();
+            Session::flash('success','Tạo phim theo quốc gia thành công');
+        }catch(Exception $err){
+            Session::flash('error',$err->getMessage());
+            return false;
+        }
         return redirect()->back();
     }
 
@@ -85,13 +93,20 @@ class CountryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = $request -> all();
-        $country = Country::find($id);
-        $country -> title = $data['title'];
-        $country -> slug = $data['slug'];
-        $country -> description = $data['description'];
-        $country -> status = $data['status'];
-        $country -> save();
+        try{
+            $data = $request -> all();
+            $country = Country::find($id);
+            $country -> title = $data['title'];
+            $country -> slug = $data['slug'];
+            $country -> description = $data['description'];
+            $country -> status = $data['status'];
+            $country -> save();
+            Session::flash('success','Cập nhật phim theo quốc gia thành công');
+        }catch(Exception $err) {
+            Session::flash('error', $err->getMessage());
+            return false;
+        }
+        
         return Redirect::route('country.create');
     }
 

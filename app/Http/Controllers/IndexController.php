@@ -139,7 +139,7 @@ class IndexController extends Controller
         $film_sidebar = Movie::where('film_hot',1)->where('status',1)->orderBy('update_day','DESC')->take(15)->get();
         //film- sidebar trailer
         $filmhot_trailer = Movie::where('resolution',5)->where('status',1)->orderBy('update_day','DESC')->take(10)->get();
-
+        
         return view('pages.country', compact('category', 'genre', 'country','country_slug','movie','film_sidebar','filmhot_trailer'));
     }
     public function movie($slug)
@@ -201,12 +201,15 @@ class IndexController extends Controller
             $tapphim = $tap;
             $tapphim = substr($tap,4,20);
             $episode = Episode::where('movie_id',$movie->id)->where('episode',$tapphim)->first();
+            $episode->increment('views');
         }
         else{
             $tapphim = 1;
             $episode = Episode::where('movie_id',$movie->id)->where('episode',$tapphim)->first();
+            $episode->increment('views');
         }
         // return response()->json($movie);
+        
         return view('pages.watch',compact('category','genre','country','movie','film_sidebar','filmhot_trailer','film_hot','episode','tapphim'));
     }
     public function episode()

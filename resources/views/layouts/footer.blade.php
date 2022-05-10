@@ -45,7 +45,6 @@
                 $(document).ready(function(){
                     $(document).on( 'keyup','#keyword' ,function(){
                         var keyword = $(this).val();
-
                         $.ajax({
                             type: "GET",
                             url:'/search_ad',
@@ -57,7 +56,7 @@
                         })
                     })
                 })
-            </script>
+    </script>
     <script type="text/javascript">
         $('.select-session').change(function() {
             var session = $(this).find(':selected').val();

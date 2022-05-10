@@ -14,7 +14,7 @@ use Carbon\Carbon;
 use File;
 use Storage;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Contracts\Session\Session;
+use Illuminate\Support\Facades\Session;
 use App\Http\Requests\Movie\MovieFormRequest;
 
 
@@ -74,51 +74,58 @@ class MovieController extends Controller
      */
     public function store(MovieFormRequest $request)
     {
-        // dd($request->input());
-        $data = $request->all();
-        $movie = new Movie();
-        $movie -> title = $data['title'];
-        $movie -> film_hot = $data['film_hot'];
-        $movie -> name_eng = $data['name_eng'];
-        $movie -> year = $data['year'];
-        $movie -> trailer = $data['trailer'];
-        $movie -> resolution = $data['resolution'];
-        $movie -> movie_duration = $data['movie_duration'];
-        $movie -> subtitle = $data['subtitle'];
-        $movie -> slug = $data['slug'];
-        $movie -> tags = $data['tags'];
-        $movie -> description = $data['description'];
-        $movie -> category_id = $data['category_id'];
-        $movie -> episode_film = $data['episode_film'];
-        // thuộc phim
-        $movie -> belonging_movie = $data['belonging_movie'];
+        try{
+            // dd($request->input());
+            $data = $request->all();
+            $movie = new Movie();
+            $movie -> title = $data['title'];
+            $movie -> film_hot = $data['film_hot'];
+            $movie -> name_eng = $data['name_eng'];
+            $movie -> year = $data['year'];
+            $movie -> trailer = $data['trailer'];
+            $movie -> resolution = $data['resolution'];
+            $movie -> movie_duration = $data['movie_duration'];
+            $movie -> subtitle = $data['subtitle'];
+            $movie -> slug = $data['slug'];
+            $movie -> tags = $data['tags'];
+            $movie -> description = $data['description'];
+            $movie -> category_id = $data['category_id'];
+            $movie -> episode_film = $data['episode_film'];
+            // thuộc phim
+            $movie -> belonging_movie = $data['belonging_movie'];
 
-        //Thêm nhiều thể loại phim
-        // $movie -> genre_id = $data['genre_id'];
-        foreach($data['genre'] as $key => $gen)
-        {
-            $movie -> genre_id = $gen['0'];
+            //Thêm nhiều thể loại phim
+            // $movie -> genre_id = $data['genre_id'];
+            foreach($data['genre'] as $key => $gen)
+            {
+                $movie -> genre_id = $gen['0'];
+            }
+
+
+            $movie -> country_id = $data['country_id'];
+            $movie -> status = $data['status'];
+            $movie -> date_created = Carbon::now('Asia/Ho_Chi_Minh');
+            $movie -> update_day = Carbon::now('Asia/Ho_Chi_Minh');
+            // Thêm hình ảnh
+            $get_image = $request->file('image');
+            $path = 'public/uploads/movie/';
+            if($get_image)
+            {
+                $get_name_image = $get_image -> getClientOriginalName(); // hinhDaLat.jpg
+                $name_image = current(explode('.',$get_name_image)); //current để lấy phần trước dấu . là lấy hinhDaLat còn để là end thì ngược lại
+                $new_image = $name_image.rand(0,999) .'.' . $get_image->getClientOriginalExtension(); // hinhDaLat789.jpg
+                $get_image -> move('uploads/movie/',$new_image);
+                $movie->image = $new_image;
+            }
+            //thêm nhiều thể loại cho phim
+            $movie -> save();
+            $movie -> movie_genre() -> attach($data['genre']);
+            Sesison::flash('success','Tạo phim thành công');
+        }catch(Exception $err){
+            Session::flash('error',$err->getMessage());
+            return false;
         }
-
-
-        $movie -> country_id = $data['country_id'];
-        $movie -> status = $data['status'];
-        $movie -> date_created = Carbon::now('Asia/Ho_Chi_Minh');
-        $movie -> update_day = Carbon::now('Asia/Ho_Chi_Minh');
-        // Thêm hình ảnh
-        $get_image = $request->file('image');
-        $path = 'public/uploads/movie/';
-        if($get_image)
-        {
-            $get_name_image = $get_image -> getClientOriginalName(); // hinhDaLat.jpg
-            $name_image = current(explode('.',$get_name_image)); //current để lấy phần trước dấu . là lấy hinhDaLat còn để là end thì ngược lại
-            $new_image = $name_image.rand(0,999) .'.' . $get_image->getClientOriginalExtension(); // hinhDaLat789.jpg
-            $get_image -> move('uploads/movie/',$new_image);
-            $movie->image = $new_image;
-        }
-        //thêm nhiều thể loại cho phim
-        $movie -> save();
-        $movie -> movie_genre() -> attach($data['genre']);
+        
         //$request -> Session()->flash('error','Email hoặc password không đúng vui lòng đăng nhập lại!');// luu y!
         return redirect()->route('movie.index');
     }
@@ -173,57 +180,64 @@ class MovieController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = $request->all();
-        // return response()->json($data['genre']);
-        $movie =  Movie::find($id);
-        $movie -> title = $data['title'];
-        $movie -> film_hot = $data['film_hot'];
-        $movie -> name_eng = $data['name_eng'];
-        $movie -> year = $data['year'];
-        $movie -> trailer = $data['trailer'];
-        $movie -> resolution = $data['resolution'];
-        $movie -> movie_duration = $data['movie_duration'];
-        $movie -> subtitle = $data['subtitle'];
-        $movie -> slug = $data['slug'];
-        $movie -> tags = $data['tags'];
-        $movie -> description = $data['description'];
-        $movie -> category_id = $data['category_id'];
-        $movie -> belonging_movie = $data['belonging_movie'];
-        // $movie -> genre_id = $data['genre_id'];
-        foreach($data['genre'] as $key => $gen)
-        {
-            $movie -> genre_id = $gen['0'];
-        }
-        $movie -> country_id = $data['country_id'];
-        $movie -> status = $data['status'];
-        $movie -> episode_film = $data['episode_film'];
-
-
-        $movie -> date_created = Carbon::now('Asia/Ho_Chi_Minh');
-        $movie -> update_day = Carbon::now('Asia/Ho_Chi_Minh');
-        
-        // Thêm hình ảnh
-        $get_image = $request->file('image');
-        $path = 'public/uploads/movie/';
-        if($get_image)
-        {
-            // !empty tồn tại link thì xóa || isset
-            if(file_exists('uploads/movie/' . $movie->image))
+        try{
+            $data = $request->all();
+            // return response()->json($data['genre']);
+            $movie =  Movie::find($id);
+            $movie -> title = $data['title'];
+            $movie -> film_hot = $data['film_hot'];
+            $movie -> name_eng = $data['name_eng'];
+            $movie -> year = $data['year'];
+            $movie -> trailer = $data['trailer'];
+            $movie -> resolution = $data['resolution'];
+            $movie -> movie_duration = $data['movie_duration'];
+            $movie -> subtitle = $data['subtitle'];
+            $movie -> slug = $data['slug'];
+            $movie -> tags = $data['tags'];
+            $movie -> description = $data['description'];
+            $movie -> category_id = $data['category_id'];
+            $movie -> belonging_movie = $data['belonging_movie'];
+            // $movie -> genre_id = $data['genre_id'];
+            foreach($data['genre'] as $key => $gen)
             {
-                unlink('uploads/movie/' . $movie->image);
-            }else{
-                $get_name_image = $get_image -> getClientOriginalName(); // hinhDaLat.jpg
-                $name_image = current(explode('.',$get_name_image)); //current để lấy phần trước dấu . là lấy hinhDaLat còn để là end thì ngược lại
-                $new_image = $name_image.rand(0,9999) .'.' . $get_image->getClientOriginalExtension(); // hinhDaLat789.jpg
-                $get_image -> move('uploads/movie/',$new_image);
-                $movie->image = $new_image;
+                $movie -> genre_id = $gen['0'];
             }
-
+            $movie -> country_id = $data['country_id'];
+            $movie -> status = $data['status'];
+            $movie -> episode_film = $data['episode_film'];
+    
+    
+            $movie -> date_created = Carbon::now('Asia/Ho_Chi_Minh');
+            $movie -> update_day = Carbon::now('Asia/Ho_Chi_Minh');
+            
+            // Thêm hình ảnh
+            $get_image = $request->file('image');
+            $path = 'public/uploads/movie/';
+            if($get_image)
+            {
+                // !empty tồn tại link thì xóa || isset
+                if(file_exists('uploads/movie/' . $movie->image))
+                {
+                    unlink('uploads/movie/' . $movie->image);
+                }else{
+                    $get_name_image = $get_image -> getClientOriginalName(); // hinhDaLat.jpg
+                    $name_image = current(explode('.',$get_name_image)); //current để lấy phần trước dấu . là lấy hinhDaLat còn để là end thì ngược lại
+                    $new_image = $name_image.rand(0,9999) .'.' . $get_image->getClientOriginalExtension(); // hinhDaLat789.jpg
+                    $get_image -> move('uploads/movie/',$new_image);
+                    $movie->image = $new_image;
+                }
+    
+            }
+    
+            $movie -> save();
+            $movie -> movie_genre() -> sync($data['genre']);
+            //detach , sync đồng bộ cho csdl
+            Session::flash('success','Cập nhật phim thành công');
+        }catch(Exception $err){
+            Session::flash('error',$err->getMessage());
+            return false;
         }
-
-        $movie -> save();
-        $movie -> movie_genre() -> sync($data['genre']);
-        //detach , sync đồng bộ cho csdl
+        
 
         return redirect()->back();
     }

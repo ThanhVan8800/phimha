@@ -135,6 +135,21 @@
                   <div class="clearfix"></div>
                   <div class="htmlwrap clearfix">
                      <div id="lightout"></div>
+                     <!-- COMMENT FB -->
+                           <div class="section-bar clearfix">
+                              <h2 class="section-title"><span style="color:#ffed4d">Bình luận</span></h2>
+                           </div>
+                           <div class="entry-content htmlwrap clearfix " style="background: lightyellow !important;" >
+                              @php
+                                 $current_url = Request::url();
+                              @endphp
+                              <div class="video-item halim-entry-box">
+                                 <article id="post-38424" class="item-content cmt_fb" >
+                                    <div class="fb-comments" data-href="{{$current_url}}" data-width="100%" data-numposts="9" data-colorscheme="dark"></div>
+                                 </article>
+                              </div>
+                           </div>
+                     <!-- Cmt Fb -->
                   </div>
             </section>
             <section class="related-movies">

@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('content')
-                    <div class="card-body">
+                    <div class="card-body img">
                         @if (session('status'))
                             <div class="alert alert-success" role="alert">
                                 {{ session('status') }}
@@ -13,19 +13,19 @@
                         @else
                             {!! Form::open(['route'=>['country.update', $country->id],'method'=>'PUT']) !!}
                         @endif
-                                <div class="form-group">
+                                <div class="form-group text-white">
                                     {!! Form::label('title', 'Tên Quốc Gia', []) !!}
                                     {!! Form::text('title', isset($country) ? $country->title : '', ['class' => 'form-control', 'placeholder' =>'Nhập nội dung','id' => 'slug','onkeyup' => 'ChangeToSlug()']) !!}
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group text-white">
                                     {!! Form::label('slug', 'Slug', []) !!}
                                     {!! Form::text('slug', isset($country) ? $country->slug : '', ['class' => 'form-control', 'placeholder' =>'Nhập nội dung','id' => 'convert_slug']) !!}
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group text-white">
                                     {!! Form::label('description','Mô tả', []) !!}
                                     {!! Form::textarea('description', isset($country) ? $country->description : '', ['style' => 'resize:none','class' => 'form-control', 'placeholder' =>'Nhập nội dung','id' => 'description']) !!}
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group text-white">
                                     {!! Form::label('Active','Trạng thái', []) !!}
                                     {!! Form::select('status', ['1' => 'Hiển thị danh mục phim' , '0' => 'Không hiện'], isset($country) ? $country->status : '', ['class' => 'form-control', 'placeholder' =>'Nhập nội dung']) !!}
                                 </div>
