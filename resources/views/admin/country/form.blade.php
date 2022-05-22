@@ -1,5 +1,10 @@
 @extends('layouts.main')
-
+@section('head')
+    <script src="/ckeditor/ckeditor.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.3.1/dt-1.10.24/r-2.2.7/rr-1.2.7/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.3.1/dt-1.10.24/r-2.2.7/rr-1.2.7/datatables.min.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+@endsection 
 @section('content')
                     <div class="card-body img">
                         @if (session('status'))
@@ -23,7 +28,7 @@
                                 </div>
                                 <div class="form-group text-white">
                                     {!! Form::label('description','Mô tả', []) !!}
-                                    {!! Form::textarea('description', isset($country) ? $country->description : '', ['style' => 'resize:none','class' => 'form-control', 'placeholder' =>'Nhập nội dung','id' => 'description']) !!}
+                                    {!! Form::textarea('description', isset($country) ? $country->description : '', ['style' => 'resize:none','class' => 'form-control', 'placeholder' =>'Nhập nội dung','id' => 'content']) !!}
                                 </div>
                                 <div class="form-group text-white">
                                     {!! Form::label('Active','Trạng thái', []) !!}
@@ -51,7 +56,7 @@
                                     <tr>
                                             <th scope="row" class="text-white">{{ $gen->id }}</th>
                                             <td class="text-white">{{ $gen->title }}</td>
-                                            <td class="text-white">{{ $gen->description }}</td>
+                                            <td class="text-white">{!! $gen->description !!}</td>
                                             <td class="text-white">
                                                 @if($gen -> status )
                                                     Hiển thị
@@ -69,6 +74,24 @@
                                             </td>
                                     </tr>
                                 @endforeach
+                                
                             </tbody>
-                    </table>            
+                    </table>      
+                    <form action="{{url('/downloadPDF')}}" method="get">
+                            @csrf
+                            <button class="btn btn-primary">Tải về</button>
+                    </form>     
+                    <div>
+                        {{$lstCountry->links("pagination::bootstrap-5")}}
+                    </div>
+@endsection
+@section('footer')
+@section('footer')
+
+            <script>
+                // Replace the <textarea id="editor1"> with a CKEditor 4
+                // instance, using default configuration.
+                CKEDITOR.replace( 'content' );
+            </script>
+
 @endsection

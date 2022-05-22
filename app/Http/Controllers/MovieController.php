@@ -13,6 +13,9 @@ use App\Models\Episode;
 use Carbon\Carbon;
 use File;
 use Storage;
+use DB;
+use Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use App\Http\Requests\Movie\MovieFormRequest;
@@ -27,14 +30,15 @@ class MovieController extends Controller
      */
     public function index()
     {
-        $lstMovie = Movie::with('movie_genre')->orderBy('id', 'desc')->get();
+        $Movie_Json = Movie::with('category','movie_genre','country','genre')->orderBy('id', 'DESC')->get();
+        $lstMovie = Movie::with('category','movie_genre','country','genre')->orderBy('id', 'DESC')->paginate(8);
        // return response()->json($lstMovie);
         // tạo file movie_json để load tìm kiếm cho nhẹ trang
         $path = public_path()."/json/";
         if(!is_dir($path)){
             mkdir($path, 0777, true);
         }
-        File::put($path.'movies.json', json_encode($lstMovie));
+        File::put($path.'movies.json', json_encode($Movie_Json));
 
         return view('admin.movie.list',[
             'lstMovie' => $lstMovie,
@@ -120,7 +124,7 @@ class MovieController extends Controller
             //thêm nhiều thể loại cho phim
             $movie -> save();
             $movie -> movie_genre() -> attach($data['genre']);
-            Sesison::flash('success','Tạo phim thành công');
+            Session::flash('success','Tạo phim thành công');
         }catch(Exception $err){
             Session::flash('error',$err->getMessage());
             return false;
@@ -197,11 +201,7 @@ class MovieController extends Controller
             $movie -> description = $data['description'];
             $movie -> category_id = $data['category_id'];
             $movie -> belonging_movie = $data['belonging_movie'];
-            // $movie -> genre_id = $data['genre_id'];
-            foreach($data['genre'] as $key => $gen)
-            {
-                $movie -> genre_id = $gen['0'];
-            }
+            
             $movie -> country_id = $data['country_id'];
             $movie -> status = $data['status'];
             $movie -> episode_film = $data['episode_film'];
@@ -212,7 +212,7 @@ class MovieController extends Controller
             
             // Thêm hình ảnh
             $get_image = $request->file('image');
-            $path = 'public/uploads/movie/';
+            // $path = 'public/uploads/movie/';
             if($get_image)
             {
                 // !empty tồn tại link thì xóa || isset
@@ -228,9 +228,34 @@ class MovieController extends Controller
                 }
     
             }
-    
+            // $movie -> genre_id = $data['genre_id'];
+            foreach($data['genre'] as $key => $gen)
+            {
+                $movie -> genre_id = $gen['0'];
+            }
             $movie -> save();
             $movie -> movie_genre() -> sync($data['genre']);
+            //* Nhật ký hoạt động
+            $user = Auth::user();
+            Session()->put('user', $user);
+            $user = Session()->get('user');
+            $dt = Carbon::now('Asia/Ho_Chi_Minh');
+            $todayDate = $dt->toDayDateTimeString();
+            // dd($todayDate);
+            $name = $user->name;
+            $email = $user->email;
+            $address = $user->address;
+            // $date_time = $user->date_time;
+            $activity = [
+                'name' => $name,
+                'email' => $email,
+                'address' => $address,
+                'date_time' => $dt,
+                'modify_user' => $name.' cập nhật phim '.$movie -> title.''
+            ];
+            DB::table('userlog_activities')->insert($activity);
+            
+
             //detach , sync đồng bộ cho csdl
             Session::flash('success','Cập nhật phim thành công');
         }catch(Exception $err){
@@ -250,17 +275,42 @@ class MovieController extends Controller
      */
     public function destroy($id)
     {
-        $movie = Movie::find($id);
-        if(file_exists('uploads/movie/' . $movie->image))
-        {
-            unlink('uploads/movie/' . $movie->image);
-        }
-        Movie_Genre :: whereIn('movie_id', [$movie->id])->delete();
-        Episode :: whereIn('movie_id', [$movie->id])->delete();
+        try{
+            $movie = Movie::find($id);
+            if(file_exists('uploads/movie/' . $movie->image))
+            {
+                unlink('uploads/movie/' . $movie->image);
+            }
+            Movie_Genre :: whereIn('movie_id', [$movie->id])->delete();
+            Episode :: whereIn('movie_id', [$movie->id])->delete();
 
-        //*whereIn xóa 1 mảng thuộc film đó
-        $movie->delete();
-        return redirect()->back();
+            //*whereIn xóa 1 mảng thuộc film đó
+            $movie->delete();
+            return redirect()->back();
+            //* Nhật ký hoạt động
+            $user = Auth::user();
+            Session()->put('user', $user);
+            $user = Session()->get('user');
+            $dt = Carbon::now('Asia/Ho_Chi_Minh');
+            $todayDate = $dt->toDayDateTimeString();
+            // dd($todayDate);
+            $name = $user->name;
+            $email = $user->email;
+            $address = $user->address;
+            // $date_time = $user->date_time;
+            $activity = [
+                'name' => $name,
+                'email' => $email,
+                'address' => $address,
+                'date_time' => $dt,
+                'modify_user' => $name.' cập nhật phim '.$movie -> title.''
+            ];
+            DB::table('userlog_activities')->insert($activity);
+        }catch(Exception $err){
+            Session()->flash('error','Không thể xóa phim này. Vui lòng kiểm tra lại!');
+            Log::info("message");
+            return false;
+        }
     }
     public function update_year(Request $request)
     {
@@ -275,5 +325,32 @@ class MovieController extends Controller
         $movie = Movie::find($data['id_session']);
         $movie -> session = $data['session'];
         $movie -> save();
+    }
+    //Tìm kiếm cho phim 
+    public function searchMovie(Request $request)
+    {
+        $Movie_Json = Movie::with('category','movie_genre','country','genre')->orderBy('id', 'DESC')->get();
+        $lstMovie = Movie::with('category','movie_genre','country','genre')->orderBy('id', 'DESC')->paginate(8);
+        // return response()->json($lstMovie);
+        // tạo file movie_json để load tìm kiếm cho nhẹ trang
+        $path = public_path()."/json/";
+        if(!is_dir($path)){
+            mkdir($path, 0777, true);
+        }
+        File::put($path.'movies.json', json_encode($Movie_Json));
+        $fromDate = $request->input('fromDate');
+        $toDate = $request->input('toDate');
+        $query = Movie::
+                        with('category','movie_genre','country','genre')
+                        ->select()
+                        ->where('date_created','>=',$fromDate)
+                        ->where('date_created','<=',$toDate)
+                        ->get();
+                        // dd($query);
+
+        return view('admin.movie.result_search_movie',[
+            'title' => 'Danh sách phim',
+            'query' => $query
+        ]);
     }
 }

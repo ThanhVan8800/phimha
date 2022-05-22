@@ -55,7 +55,7 @@
                     </div>
                     <div class="form-group">
                         {!! Form::label('PhimHot', 'Phim Hot', []) !!}
-                        {!! Form::select('film_hot', ['1' => 'Hot' , '0' => 'Khong hot'], isset($movie) ? $movie->film_hot : '', ['class' => 'form-control', 'placeholder' =>'điền đi']) !!}
+                        {!! Form::select('film_hot', ['1' => 'Hot' , '0' => 'Không hot'], isset($movie) ? $movie->film_hot : '', ['class' => 'form-control', 'placeholder' =>'điền đi']) !!}
                     </div>
                     <div class="form-group">
                         {!! Form::label('Episode', 'Tập Phim', []) !!}
@@ -74,7 +74,7 @@
                     </div>
                     <div class="form-group">
                         {!! Form::label('belonging_movie', 'Phim thuộc',[]) !!}
-                        {!! Form::select('belonging_movie', ['phimle' => 'Phim lẻ', 'phimbo' => 'Phim bộ'], isset($movie) ? $movie->belonging_movie :'', ['class' => 'form-control', 'placeholder' =>'điền đi']) !!}
+                        {!! Form::select('belonging_movie', ['0' => 'Phim lẻ', '1' => 'Phim bộ'], isset($movie) ? $movie->belonging_movie :'', ['class' => 'form-control', 'placeholder' =>'điền đi']) !!}
                     </div>
                     <div class="form-group">
                         {!! Form::label('Category', 'Danh mục', []) !!}

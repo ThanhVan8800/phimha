@@ -99,17 +99,17 @@
                                  <!-- <li class="list-info-group-item"><span>Điểm IMDb</span> : <span class="imdb">7.2</span></li> -->
                                  <li class="list-info-group-item"><span>Thời lượng</span> : {{$movie->movie_duration}}</li>
                                  <li class="list-info-group-item"><span>Số tập phim</span> : 
-                                    @if ($movie->belonging_movie == 'phimbo')
+                                    @if ($movie->belonging_movie == 1)
                                              {{$episode_count}}/{{$movie->episode_film}} - 
                                           @if($episode_count == $movie->episode_film)
                                              Hoàn Thành
                                              @else   
                                              Đang cập nhật      
                                           @endif
-                                    @elseif($movie->belonging_movie == 'phimle')
-                                       @foreach ($episode as $key => $epi_le )
-                                          <a href="{{url('xem-phim/'.$epi_le->movie->slug.'/tap-'.$epi_le->episode)}}" rel="tag">{{$epi_le->episode}}</a>
-                                       @endforeach
+                                    @elseif($movie->belonging_movie == 0)
+                                             @foreach ($episode as $key => $epi_le )
+                                                <a href="{{url('xem-phim/'.$epi_le->movie->slug.'/tap-'.$epi_le->episode)}}" rel="tag">{{$epi_le->episode}} </a>
+                                             @endforeach
                                     @endif
 
                                  </li>
@@ -118,12 +118,11 @@
                                  <li class="list-info-group-item">
                                     <span>Tập phim mới nhất</span> :  
                                     @if($episode_count>0)
-                                       @if ($movie->belonging_movie == 'phimbo')
+                                       @if ($movie->belonging_movie == 1)
                                                 @foreach ($episode as $key => $epi )
                                                    <a href="{{url('xem-phim/'.$epi->movie->slug .'/tap-'.$epi->episode)}}" rel="tag">Tập {{$epi->episode}}</a>
-                                                   <!-- <a href="{{route('watch',['slug' => $epi->movie->slug,'tap-phim'=>$episode_numfilm->episode])}}" rel="tag">Tập {{$epi->episode}}</a> -->
                                                 @endforeach
-                                       @elseif($movie->belonging_movie == 'phimle')
+                                       @elseif($movie->belonging_movie == 0)
                                              @foreach ($episode as $key => $epi_le )
                                                 <a href="{{url('xem-phim/'.$epi_le->movie->slug.'/tap-'.$epi_le->episode)}}" rel="tag">{{$epi_le->episode}} </a>
                                              @endforeach

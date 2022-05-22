@@ -20,8 +20,8 @@
                                     
                                 </div>
                         </div>
-                            
-                        </form>
+</form>
+<h2>Kết quả tìm được</h2>
 <div class="row">
     <div class="col-12">
                 <div class="card">
@@ -53,7 +53,7 @@
                                             </tr>
                                         </thead>
                                         <tbody class="order_position" >
-                                            @foreach($lstMovie as $key => $movie)
+                                            @foreach($query as $key => $movie)
                                                 <tr>
                                                         <th scope="row" class="text-white">{{ $movie->id }}</th>
                                                         <td class="text-white">{{ $movie->title }}</td>

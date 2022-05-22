@@ -63,11 +63,11 @@
                                  margin:1px;
                               }
                            </style>
-                           <div class="form-group form-search">
+                           <div class="form-group form-timkiem">
                               <div class="input-group col-xs-12">
-                                    <form action="{{route('search')}}" method="GET">
-                                          <input id="timkiem" type="text" name="search" class="form-control" placeholder="Tìm kiếm..." autocomplete="off" required>
-                                          <button  class="btn btn-info " style="margin-left: 80%;border-radius: 10px;">Tìm phim</button>
+                                    <form action="{{route('tim-kiem')}}" method="GET">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                          <input id="timkiem" type="text" name="search" class="form-control" placeholder="Tìm kiếm..." autocomplete="off" >
                                     </form>
                               </div>
                            </div>
@@ -205,31 +205,31 @@
          <script type='text/javascript'>
             $(document).ready(function() {
                $('#timkiem').keyup(function() {
-                  // alert('ss')
+                   //alert('ss')
                   $('#result').html('');
                   var search = $('#timkiem').val();
-                  if(search != ''){
-                     $('#result').css('display', 'inherit');
-                     var expression = new RegExp(search,"i");
-                     // alert(expression);
-                     $.getJSON('/json/movies.json', function(data){
-                        $.each(data, function(key, value){
-                           if(value.title.search(expression) != -1 || value.description.search(expression) != -1){
-                              $('#result').append('<li class="list-group-item" style="cursor:pointer;"><img style=" width:80px; max-height:100px" src="/uploads/movie/' + value.image + '">' + value.title + '</li>');
-                           }
-                        })
-                     })
-                  }else{
-                     $('#reslut').css('display', 'none');
-                  }
+                  if(search!=''){
+                           $('#result').css('display', 'inherit');
+                           var expression = new RegExp(search,"i");
+                           $.getJSON('/json/movies.json', function(data){
+                                    $.each(data, function(key, value){
+                                       if(value.title.search(expression) != -1){
+                                          $('#result').append('<li class="list-group-item" style="cursor:pointer;"><img style=" width:80px; max-height:100px" src="/uploads/movie/' + value.image + '">' + value.title + '</li>');
+                                 }
+                              });
+                           })
+                     }else{
+                           $('#result').css('display', 'none');
+                     }
                })
-            })
-            $('#result').on('click','li',function(){
-               var click_text = $(this).text().split('->'); //ngắt ra title vs description [0] && [1]
-               $('#timkiem').val($.trim(click_text[0]));
-               $('#result').html('');
-               $('#reslut').css('display', 'none');
-            })
+            
+                  $('#result').on('click','li',function(){
+                     var click_text = $(this).text().split('|'); //ngắt ra title vs description [0] && [1]
+                     $('#timkiem').val($.trim(click_text[0]));
+                     $('#result').html('');
+                     $('#result').css('display', 'none');
+                  });
+         })
          </script>
       
       

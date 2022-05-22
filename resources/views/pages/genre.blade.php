@@ -19,20 +19,36 @@
             <main id="main-contents" class="col-xs-12 col-sm-12 col-md-8">
                <section>
                   <div class="section-bar clearfix">
-                     <h1 class="section-title"><span>Phim 2020</span></h1>
+                     <h1 class="section-title"><span>{{$genre_slug->title}}</span></h1>
                   </div>
                   <div class="halim_box">
                   @foreach($movie as $key => $mov)
                         <article class="col-md-3 col-sm-3 col-xs-6 thumb grid-item post-27021">
                            <div class="halim-item">
                               <a class="halim-thumb" href="{{route('movie',$mov->slug)}}" title="{{$mov->title}}">
-                                 <figure><img class="lazy img-responsive" src="{{asset('uploads/movie/'.$mov->image)}}" alt="VŨNG LẦY PHẦN 1" title="{{$mov->title}}"></figure>
-                                 <span class="status">5/5</span>
+                                 <figure><img class="lazy img-responsive" src="{{asset('uploads/movie/'.$mov->image)}}" alt="{{$mov->title}}" title="{{$mov->title}}"></figure>
+                                 <span class="status">
+                                    @if($mov->resolution==0)
+                                                HD
+                                    @elseif($mov->resolution==1)
+                                             SD
+                                    @elseif($mov->resolution==2)
+                                             HDCam
+                                    @elseif($mov->resolution==3)
+                                                Cam
+                                    @elseif($mov->resolution==4)
+                                             FullHD
+                                    @else 
+                                             Trailer
+                                    @endif
+                                 </span>
+                                    
                                  <span class="episode"><i class="fa fa-play" aria-hidden="true"></i>
                                                 @if ($mov->subtitle == 0)
-                                                   Vietsub-Tập1/{{$mov->episode}}
+                                                   
+                                                         Vietsub-Tập 1/{{$mov->episode_film}}
                                                 @else
-                                                      Thuyết minh-Tập1/{{$mov->episode}}
+                                                      Thuyết minh-Tập 1/{{$mov->episode_film}}
                                                 @endif
                                                 
                                  </span> 

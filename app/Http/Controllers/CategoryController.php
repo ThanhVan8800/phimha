@@ -5,8 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Genre;
+use App\Models\Episode;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use DB;
+use Auth;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+
 
 
 class CategoryController extends Controller
@@ -28,7 +34,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $lstCate = Category::orderBy('position','ASC')->get();
+        $lstCate = Category::orderBy('position','ASC')->paginate(8);
         // asc tăng dần 
         return view('admin.category.form',[
             'lstCate' => $lstCate,
@@ -82,7 +88,7 @@ class CategoryController extends Controller
     public function edit($id)
     {
         $category = Category::find($id);
-        $lstCate = Category::all();
+        $lstCate = Category::paginate(8);
         return view('admin.category.form',compact( 'id','lstCate','category'),[
             'title'=>'Chỉnh sửa phim theo danh mục',
         ]);
@@ -105,6 +111,26 @@ class CategoryController extends Controller
             $category -> description = $data['description'];
             $category -> status = $data['status'];
             $category -> save();
+
+            $user = Auth::user();
+            Session()->put('user', $user);
+            $user = Session()->get('user');
+            $dt = Carbon::now('Asia/Ho_Chi_Minh');
+            $todayDate = $dt->toDayDateTimeString();
+            // dd($todayDate);
+            $name = $user->name;
+            $email = $user->email;
+            $address = $user->address;
+            // $date_time = $user->date_time;
+            $activity = [
+                'name' => $name,
+                'email' => $email,
+                'address' => $address,
+                'date_time' => $dt,
+                'modify_user' => $name.' cập nhật danh mục'.$category -> title.''
+            ];
+            DB::table('userlog_activities')->insert($activity);
+            
             Session::flash('success','Cập nhật danh mục phim thành công');
         }catch(Exception $err){
             Session::flash('error',$err->getMessage());
@@ -122,8 +148,39 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        Category::find($id)->delete();
-        return redirect()->back();
+        try{
+            $category =  Category::find($id);
+            
+            //userlog_activities
+            $user = Auth::user();
+            Session()->put('user', $user);
+            $user = Session()->get('user');
+            $dt = Carbon::now('Asia/Ho_Chi_Minh');
+            // $todayDate = $dt->toDayDateTimeString();
+            // dd($todayDate);
+            $name = $user->name;
+            $email = $user->email;
+            $address = $user->address;
+            // $date_time = $user->date_time;
+            $activity = [
+                'name' => $name,
+                'email' => $email,
+                'address' => $address,
+                'date_time' => $dt,
+                'modify_user' => $name.' đã xóa danh mục '.$category->title.''
+            ];
+            DB::table('userlog_activities')->insert($activity);
+
+            Category::find($id)->delete();
+            Session()->flash('success','Bạn đã xóa danh mục phim thành công!');
+            return redirect()->back();
+        }catch(Exception $err)
+        {
+            Session()->flash('error','Không thể xóa được danh mục phim!');
+            Log::info("message");
+            return false;
+        }
+            
     }
     public function resorting(Request  $request)
     {
@@ -144,6 +201,9 @@ class CategoryController extends Controller
         $cate_search = Category::where('title','LIKE','%'.$request->keyword.'%')->get();
         $cate_search1 = Category::where('description','LIKE','%'.$request->keyword.'%')->get();
         $genre_search = Genre::where('title','LIKE','%'.$request->keyword.'%')->get();
+
+        $cate_searchh = Episode::with('movie')->where('episode','LIKE','%'.$request->keyword.'%')->get();
+
         foreach($cate_search as $cate){
                 $output .= '
                                 <tr id="'.$cate->id.'">
@@ -213,8 +273,54 @@ class CategoryController extends Controller
                                             </td>
                                 </tr>';
             }
+        foreach($cate_searchh as $movi){
+                $output .= '
+                    <tr>
+                    <th scope="row" class="text-white">'. $movi->id .'</th>
+                    
+                    <td class="text-white">
+                        '.$movi->movie->title.'
+                    </td>
+                    <td class="text-white">
+                        <img src="'.asset('uploads/movie/'.$movi->movie->image).'" style="width:150px;max-height:300px;object-fit:contain" alt="">
+                    </td>
+                    <td class="text-white">
+                            '.$movi->linkfilm.'
+                    </td>
+                    <td value="'.$movi->episode.'" class="text-white">
+                            '.$movi->episode.'
+                    </td>
+                    
+            </tr>';
+            }
+            
+            
                 return response()->json($output);
                                             
                                             // '. Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-dark btn-sm', 'style' => 'height:40px; width:40px'] )  .'
+    }
+
+    public function filter(Request  $request)
+    {
+        $lstCate = Category::orderBy('position','ASC')->paginate(8);
+
+        $title = DB::table('categories')->get();
+        if($request->title)
+        {
+            // dd($request->title);
+            $result =  DB::table('categories')->where('title','LIKE','%'.$request->title.'%')->get();
+        }
+        if($request->status)
+        {
+            // dd($request->title);
+            $result =  DB::table('categories')->where('status','LIKE','%'.$request->status.'%')->get();
+        }
+        // asc tăng dần 
+
+        
+        return view('admin.category.result_search',compact('result'),[
+            'lstCate' => $lstCate,
+            'title' => 'Danh mục phim'
+        ]);
     }
 }

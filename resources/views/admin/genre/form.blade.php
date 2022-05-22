@@ -1,5 +1,10 @@
 @extends('layouts.main')
-
+@section('head')
+<script src="/ckeditor/ckeditor.js"></script>
+<!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.3.1/dt-1.10.24/r-2.2.7/rr-1.2.7/datatables.min.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.3.1/dt-1.10.24/r-2.2.7/rr-1.2.7/datatables.min.js"></script> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+@endsection 
 @section('content')
                     <div class="card-body img">
                         @if (session('status'))
@@ -23,7 +28,7 @@
                                 </div>
                                 <div class="form-group text-white">
                                     {!! Form::label('description','Mô tả', []) !!}
-                                    {!! Form::textarea('description', isset($genre) ? $genre->description : '', ['style' => 'resize:none','class' => 'form-control', 'placeholder' =>'điền đi','id' => 'description']) !!}
+                                    {!! Form::textarea('description', isset($genre) ? $genre->description : '', ['style' => 'resize:none','class' => 'form-control', 'placeholder' =>'điền đi','id' => 'content']) !!}
                                 </div>
                                 <div class="form-group text-white">
                                     {!! Form::label('Active','Trạng thái', []) !!}
@@ -42,8 +47,8 @@
                             <thead>
                                 <tr>
                                 <th scope="col" class="text-white">ID</th>
-                                <th scope="col" class="text-white">Tiêu đề phim</th>
-                                <th scope="col" class="text-white">Mô tả</th>
+                                <th scope="col" class="text-white" style="width:161px">Tiêu đề phim</th>
+                                <th scope="col" class="text-white" style="width:508px">Mô tả</th>
                                 <th scope="col" class="text-white">Slug</th>
                                 <th scope="col" class="text-white">Trạng thái</th>
                                 </tr>
@@ -53,7 +58,9 @@
                                     <tr>
                                             <th scope="row" class="text-white">{{ $gen->id }}</th>
                                             <td class="text-white">{{ $gen->title }}</td>
-                                            <td class="text-white">{{ $gen->description }}</td>
+                                            <td class="text-white">
+                                                    {!!Illuminate\Support\Str::of($gen->description)->words(15)!!}    
+                                            </td>
                                             <td class="text-white">{{ $gen->slug }}</td>
                                             <td class="text-white">
                                                 @if($gen -> status )
@@ -73,5 +80,15 @@
                                     </tr>
                                 @endforeach
                             </tbody>
-                    </table>           
+                    </table>   
+                    <div>
+                        {{$lstGenre->links("pagination::bootstrap-5")}}
+                    </div>        
+@endsection
+@section('footer')
+            <script>
+                // Replace the <textarea id="editor1"> with a CKEditor 4
+                // instance, using default configuration.
+                CKEDITOR.replace( 'content' );
+            </script>
 @endsection

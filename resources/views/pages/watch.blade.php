@@ -28,9 +28,9 @@
                      {!! $episode->linkfilm !!}
 
                   </div>
-                  <!-- @foreach ($movie->episode as $epi) -->
-                           <!-- @endforeach -->
-                  <!-- <div class="button-watch">
+                  <!-- @foreach ($movie->episode as $epi)
+                            @endforeach -->
+                   <div class="button-watch">
                      <ul class="halim-social-plugin col-xs-4 hidden-xs">
                         <li class="fb-like" data-href="" data-layout="button_count" data-action="like" data-size="small" data-show-faces="true" data-share="true"></li>
                      </ul>
@@ -53,7 +53,7 @@
                            <a class="visible-xs-inline" data-toggle="collapse" href="#moretool" aria-expanded="false" aria-controls="moretool"><i class="hl-forward"></i> Share</a>
                         </div>
                      </ul>
-                  </div> -->
+                  </div>
                   <div class="collapse" id="moretool">
                      <ul class="nav nav-pills x-nav-justified">
                         <li class="fb-like" data-href="" data-layout="button_count" data-action="like" data-size="small" data-show-faces="true" data-share="true"></li>
@@ -70,7 +70,7 @@
                         </div>
                      </a>
                      <div class="title-wrapper-xem full">
-                        <h1 class="entry-title"><a href="" title="{{$movie->title}}" class="tl">{{$movie->title}}</a></h1>
+                        <h2 class="entry-title" ><a href="" title="{{$movie->title}}" class="tl" style="color: #bdbdbd;line-height: 35px;">{{$movie->title}}</a></h2>
                      </div>
                   </div>
                   <div class="entry-content htmlwrap clearfix collapse" id="expand-post-content">
@@ -113,8 +113,8 @@
                         <div role="tabpanel" class="tab-pane active server-1" id="server-0">
                            <div class="halim-server">
                               <ul class="halim-list-eps">
+                                 @foreach ($movie->episode  as  $key => $sotap)
                                     <li class="halim-episode">
-                                       @foreach ($movie->episode  as  $key => $sotap)
                                           <!-- Để  chữ tập trong url vì có truyền tham số tap substr để lấy số tập -->
                                           <a href="{{url('xem-phim/'.$movie->slug.'/tap-'.$sotap->episode)}}">
                                              <span class="halim-btn halim-btn-2 {{$tapphim == $sotap->episode ? 'active':''}} halim-info-1-1 box-shadow" data-post-id="37976" 
@@ -123,8 +123,8 @@
                                              data-h1=" - {{$movie->title}} tập {{$sotap->episode}}">{{$sotap->episode}}
                                              </span>
                                           </a>
-                                       @endforeach
-                                    </li>
+                                       </li>
+                                 @endforeach
                                  
                               </ul>
                               <div class="clearfix"></div>

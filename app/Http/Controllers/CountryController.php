@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
 use App\Models\Country;
+use PDF;
+use DB;
+use Auth;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 class CountryController extends Controller
 {
     /**
@@ -27,7 +32,7 @@ class CountryController extends Controller
      */
     public function create()
     {
-        $lstCountry = Country::all();
+        $lstCountry = Country::paginate(8);
         return view('admin.country.form',compact('lstCountry'),[
             'title'=>'Quốc gia',
         ]);
@@ -77,13 +82,18 @@ class CountryController extends Controller
     public function edit($id)
     {
         $country = Country::find($id);
-        $lstCountry = Country::all();
+        $lstCountry = Country::paginate(8);
         return view('admin.country.form', compact('id', 'lstCountry', 'country'),[
             'title'=>'Chỉnh sửa phim theo quốc gia',
 
         ]);
     }
-
+    public function downloadPDF(){
+        $lstCountry = Country::all();
+        $pdf = PDF::loadView('admin.country.list', compact('lstCountry'),['title'=>'Chỉnh sửa phim theo quốc gia']);
+        return $pdf->download('Danh_Sách_Quốc_Gia.pdf');
+    }
+    
     /**
      * Update the specified resource in storage.
      *
@@ -100,6 +110,26 @@ class CountryController extends Controller
             $country -> slug = $data['slug'];
             $country -> description = $data['description'];
             $country -> status = $data['status'];
+            //* Nhật ký hoạt động
+            $user = Auth::user();
+            Session()->put('user', $user);
+            $user = Session()->get('user');
+            $dt = Carbon::now('Asia/Ho_Chi_Minh');
+            $todayDate = $dt->toDayDateTimeString();
+            // dd($todayDate);
+            $name = $user->name;
+            $email = $user->email;
+            $address = $user->address;
+            // $date_time = $user->date_time;
+            $activity = [
+                'name' => $name,
+                'email' => $email,
+                'address' => $address,
+                'date_time' => $dt,
+                'modify_user' => $name.' cập nhật phim thuộc quốc gia '.$country -> title.''
+            ];
+            DB::table('userlog_activities')->insert($activity);
+
             $country -> save();
             Session::flash('success','Cập nhật phim theo quốc gia thành công');
         }catch(Exception $err) {
@@ -118,7 +148,36 @@ class CountryController extends Controller
      */
     public function destroy($id)
     {
-        Country::find($id)->delete();
+        try{
+            $country = Country::find($id);
+            $user = Auth::user();
+                Session()->put('user', $user);
+                $user = Session()->get('user');
+                $dt = Carbon::now('Asia/Ho_Chi_Minh');
+                $todayDate = $dt->toDayDateTimeString();
+                // dd($todayDate);
+                $name = $user->name;
+                $email = $user->email;
+                $address = $user->address;
+                // $date_time = $user->date_time;
+                $activity = [
+                    'name' => $name,
+                    'email' => $email,
+                    'address' => $address,
+                    'date_time' => $dt,
+                    'modify_user' => $name.' đã xóa phim thuộc quốc gia '.$country -> title.''
+                ];
+                DB::table('userlog_activities')->insert($activity);
+                Country::find($id)->delete();
+                Session()->flash('success','Bạn đã xóa  phim thuộc quốc gia thành công!');
+                return redirect()->back();
+        }catch(Exception $err)
+        {
+            Session()->flash('error','Không thể xóa được phim thuộc quốc gia!');
+            Log::info("message");
+            return false;
+        }
         return redirect()->back();
     }
+    
 }

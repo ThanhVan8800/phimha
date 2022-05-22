@@ -15,12 +15,12 @@
                     @endif
                     <div class="form-group text-white">
                         {!! Form::label('linkfilm', 'Link Phim', []) !!}
-                        {!! Form::text('linkfilm', isset($episode) ? $episode->linkfilm : '', ['class' => 'form-control', 'placeholder' =>'điền đi']) !!}
+                        {!! Form::text('linkfilm', isset($episode) ? $episode->linkfilm : '', ['class' => 'form-control', 'placeholder' =>'Nhập link film vào...']) !!}
                     </div>
                     
                     <div class="form-group text-white">
                         {!! Form::label('Phim', ' Phim', []) !!}
-                        {!! Form::select('movie_id',['0'=> 'Chọn phim', '1'=>$movie], isset($episode) ? $episode->movie_id : '', ['class' =>'form-control  select-episode', 'placeholder' =>'điền đi']) !!}
+                        {!! Form::select('movie_id',['0'=> 'Chọn phim', '1'=>$movie], isset($episode) ? $episode->movie_id : '', ['class' =>'form-control  select-episode', 'placeholder' =>'Chọn phim cần thêm ']) !!}
                     </div>
                     <div class="form-group text-white">
                         <!-- <label for="">Tập Phim</label>
@@ -44,18 +44,32 @@
                                 @endif
                     {!! Form::close() !!}
                     </div>
-                    <table class="table-warning img" id="">
+                    <div class="form-group">
+                        <!-- <form action="{{route('search-episode')}}" method="GET"> -->
+                            <div class="card-body">
+                                
+                            <div class="mb-3">
+                                <input type="text" name="keyword" id="keyword" class="form-control input-lg" placeholder="Tìm kiếm danh mục phim" />
+                            </div>
+                            </div>  
+                        <!-- </form> -->
+                        
+                    </div>
+                    <table class="table-warning img" >
                             <thead>
                                 <tr>
                                 <th scope="col" class="text-white">ID</th>
                                 <th scope="col" class="text-white">Tên phim</th>
                                 <th scope="col" class="text-white">Hình ảnh</th>
                                 <th scope="col" class="text-white">Link Film</th>
-                                <th scope="col" class="text-white">Phim</th>
+                                <!-- <th scope="col" class="text-white">Phim</th> -->
                                 <th scope="col" class="text-white">Tập Phim</th>
+                                <th scope="col" class="text-white">Lượt xem</th>
+                                <th scope="col" class="text-white">Ngày thêm tập phim</th>
+                                <th scope="col" class="text-white">Ngày cập nhật Phim</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="lst">
                                 @foreach($lstEpisode as $key => $movi)
                                     <tr>
                                             <th scope="row" class="text-white">{{ $movi->id }}</th>
@@ -64,15 +78,19 @@
                                                 {{$movi->movie->title}}
                                             </td>
                                             <td class="text-white">
-                                                <img src="{{asset('uploads/movie/'.$movi->movie->image)}}" style="width:100px;max-height:100px;object-fit:contain" alt="{{asset($movi->movie->image)}}">
+                                                <img src="{{asset('uploads/movie/'.$movi->movie->image)}}" style="width:150px;max-height:300px;object-fit:contain" alt="{{asset($movi->movie->image)}}">
                                             </td>
                                             <td class="text-white">
                                                     <!-- {{Illuminate\Support\Str::of($movi->linkfilm)->words(5)}} -->
                                                     {!!$movi->linkfilm!!}
                                             </td>
+                                            
                                             <td value="{{$movi->episode}}" class="text-white">
-                                                {{$movi->episode}}
+                                                    {{$movi->episode}}
                                             </td>
+                                            <td>{{$movi->views}}</td>
+                                            <td>{{$movi->created_at}}</td>
+                                            <td>{{$movi->updated_at}}</td>
                                             <td>
                                                 {!! Form::open(['method'=>'delete','route' => ['episode.destroy', $movi->id], 'onsubmit' => 'return confirm("Bạn có muốn xóa?")']) !!}
                                                     {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-dark btn-sm', 'style' => 'height:40px; width:40px'] )  }}
@@ -85,6 +103,9 @@
                                 @endforeach
                             </tbody>
                     </table>
+                    <div>
+                        {!!$lstEpisode->links("pagination::bootstrap-5")!!}
+                    </div>
 
 @endsection
 @section('footer')

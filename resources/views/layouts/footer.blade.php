@@ -15,13 +15,20 @@
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
     <!-- <script type="text/javascript" src="//cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script> -->
     <!-- <script src="/templates/admin/datatables/js/jquery.dataTables.min.js"></script> -->
-    <!-- <script type="text/javascript">
+    <script type="text/javascript">
         $(document).ready( function () {
         $('#myTable').DataTable();
     } );
-    </script> -->
+    </script>
     
     @yield('footer')
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+            });
+    </script>
     
     
     <script type="text/javascript">
@@ -40,7 +47,35 @@
             })
         })
     </script>
-    <!-- Tìm kiếm  -->
+    <!-- Upload ảnh  -->
+    <script>
+        /*Upload File */
+        $('#upload').change(function() {
+            const form = new FormData();
+            form.append('file', $(this)[0].files[0]);
+
+            $.ajax({
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                dataType: 'JSON',
+                data: form,
+                url: '/admin/upload/services',
+                success: function(results) {
+                    if (results.error === false) {
+                        $('#image_show').html('<a href="' + results.url + '" target="_blank">' +
+                            '<img src="' + results.url + '" width="100px"></a>');
+
+                        $('#thumb').val(results.url);
+                    } else {
+                        alert('Upload File Lỗi');
+                    }
+                }
+            });
+        });
+    </script>
+    
+    <!-- Tìm kiếm Ajax -->
     <script>
                 $(document).ready(function(){
                     $(document).on( 'keyup','#keyword' ,function(){
@@ -57,6 +92,22 @@
                     })
                 })
     </script>
+    <!-- <script>
+                $(document).ready(function(){
+                    $(document).on( 'keyup','#keyword' ,function(){
+                        var keyword = $(this).val();
+                        $.ajax({
+                            type: "GET",
+                            url:'/search_episode',
+                            data:{keyword:keyword},
+                            dataType: "json",
+                            success: function(response) {
+                                    $('#lstt').html(response );
+                            }
+                        })
+                    })
+                })
+    </script> -->
     <script type="text/javascript">
         $('.select-session').change(function() {
             var session = $(this).find(':selected').val();

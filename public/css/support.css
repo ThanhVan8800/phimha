@@ -2,3 +2,82 @@
     background-image: url('http://127.0.0.1:8000/img/stars.jpg');
     /* opacity: 0.9; */
 }
+
+.avatar-user {
+    width: 299px;
+    height: 278px;
+    border-radius: 15%;
+    margin-top: 50px;
+    margin-left: 60px;
+    position: relative;
+}
+
+.avatar-input {
+    position: absolute;
+    top: 250px;
+    right: 95px;
+}
+
+.avatar-input i {
+    font-size: 20px;
+    background-color: #FF7506;
+    padding: 10px;
+    border-radius: 50%;
+    border: 2px solid #FFF;
+    color: #FFF;
+}
+
+.margin-top {
+    margin-top: 50px;
+}
+
+.btn-create {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 24px;
+    margin-left: 5%;
+    /* position: absolute; */
+    width: 147px;
+    height: 48px;
+    left: 179px;
+    top: 0px;
+    /* Orange/$-Orange-400 */
+    background: #FF9138;
+    color: black;
+    /* down */
+    box-shadow: 0px 0px 6px #E7E9F2;
+    border-radius: 8px;
+}
+
+.btn-cancel {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 24px;
+    margin-left: 500px;
+    color: black;
+    /* position: absolute; */
+    width: 147px;
+    height: 48px;
+    left: 0px;
+    top: 0px;
+    /* Orange/$-Orange-50 */
+    background: #FFF2E7;
+    /* Orange/$-Orange-400 */
+    border: 1.5px solid #FF9138;
+    box-sizing: border-box;
+    /* down */
+    box-shadow: 0px 0px 6px #E7E9F2;
+    border-radius: 8px;
+}
+
+.read-more {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+}

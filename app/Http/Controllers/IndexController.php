@@ -13,6 +13,9 @@ use DB;
 
 class IndexController extends Controller
 {
+    public function ui(){
+        return view('index');
+    }
     public function search()
     {
         if(isset($_GET['search'])){
@@ -202,6 +205,7 @@ class IndexController extends Controller
             $tapphim = substr($tap,4,20);
             $episode = Episode::where('movie_id',$movie->id)->where('episode',$tapphim)->first();
             $episode->increment('views');
+            // dd($episode);
         }
         else{
             $tapphim = 1;
