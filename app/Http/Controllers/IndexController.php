@@ -40,6 +40,7 @@ class IndexController extends Controller
     }
     public function index()
     {
+        
         //film_hot cho slider
         $film_hot = Movie::where('film_hot',1)->where('status',1)->orderBy('update_day','DESC')->get();
         // film cho sidebar
@@ -57,6 +58,7 @@ class IndexController extends Controller
             'film_hot' => $film_hot,
             'film_sidebar' => $film_sidebar,
             'filmhot_trailer' => $filmhot_trailer,
+            
         ]);
     }
     public function category($slug)
@@ -213,8 +215,11 @@ class IndexController extends Controller
             $episode->increment('views');
         }
         // return response()->json($movie);
+
+        //*Gợi ý phim 
+        $related = Movie::with('category', 'movie_genre','country','genre')->where('category_id',$movie->category->id)->orderBy(DB::raw('RAND()'))->orderByDesc('status',1)->whereNotIn('slug',[$slug])->get();
         
-        return view('pages.watch',compact('category','genre','country','movie','film_sidebar','filmhot_trailer','film_hot','episode','tapphim'));
+        return view('pages.watch',compact('category','genre','country','movie','film_sidebar','filmhot_trailer','film_hot','episode','tapphim','related'));
     }
     public function episode()
     {

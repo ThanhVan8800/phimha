@@ -31,11 +31,18 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Mật khẩu: <span style="color:#FF4747;">*</span></label>
-                                    <input type="password" name="password" value="{{$user -> password}}" readonly class="form-control" id="" placeholder="Nhập tài khoản">
-                                    @error('password')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                        <label>Tình trạng: <span style="color:#FF4747;">*</span></label>
+                                        <select class="form-control select2" name="status" value="{{$user->status}}" style="width: 100%;">
+                                            <option selected="selected" value="{{$user->status}}" >
+                                                @if ($user->status == 1)
+                                                    Hoạt động
+                                                @else 
+                                                    Ngưng hoạt động    
+                                                @endif    
+                                            </option>
+                                            <option value="1" {{$user->status == '1' ? 'selected' :''}}>Hoạt động</option>
+                                            <option value="0"{{$user->status == '0' ? 'selected' :''}}>Ngưng hoạt động</option>
+                                        </select>
                                 </div>
                             </div>
                         </div>
@@ -44,15 +51,7 @@
                                 <label >Email: <span style="color:#FF4747;">*</span> </label>
                                 <input type="email" name="email" value="{{ $user->email }}" class="form-control" id="exampleInputEmail1" placeholder="Nhập địa chỉ IP">
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Nhập lại mật khẩu : <span style="color:#FF4747;">*</span></label>
-                                    <input type="password" name="password" value="" class="form-control"  >    
-                                    @error('password')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
+                        
                             
                         </div>
                         <div class="row">
@@ -67,28 +66,14 @@
                                     <option value="superadmin" {{$user->role == 'superadmin' ? 'selected' :''}} >superadmin</option>
                                 </select>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Nhập mật khẩu mới: <span style="color:#FF4747;">*</span></label>
-                                    <input type="password" name="new_password" value="" class="form-control">  
-                                    @error('new_password')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror  
-                                </div>
-                                <div class="form-group">
-                                    <label>Nhập lại mật khẩu mới: <span style="color:#FF4747;">*</span></label>
-                                    <input type="password" name="confirm_password" value="" class="form-control">   
-                                    @error('confirm_password')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror 
-                                </div>
-                            </div>
+                        
+                            
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="menu">Tải ảnh lên</label>
                                     
                                     <input type="file"  class="form-control" id="upload">
-                                        <div id="image_show">
+                                        <div id="image_show" style="margin-top:10px">
                                             <a href="{{$user->thumb}}">
                                                 <img src="{{$user->thumb}}" width="100px" alt="">
                                             </a>
@@ -96,20 +81,7 @@
                                     <input type="hidden" name="thumb" id="thumb" value="{{$user->thumb}}">
                                 </div>
                                 
-                                <div class="form-group">
-                                    <label>Tình trạng: <span style="color:#FF4747;">*</span></label>
-                                    <select class="form-control select2" name="status" value="{{$user->status}}" style="width: 100%;">
-                                        <option selected="selected" value="{{$user->status}}" >
-                                            @if ($user->status == 1)
-                                                Hoạt động
-                                            @else 
-                                                Ngưng hoạt động    
-                                            @endif    
-                                        </option>
-                                        <option value="1" {{$user->status == '1' ? 'selected' :''}}>Hoạt động</option>
-                                        <option value="0"{{$user->status == '0' ? 'selected' :''}}>Ngưng hoạt động</option>
-                                    </select>
-                                </div>
+                                
                                 
                             </div>
                         

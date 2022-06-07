@@ -95,6 +95,9 @@ class MovieController extends Controller
             $movie -> description = $data['description'];
             $movie -> category_id = $data['category_id'];
             $movie -> episode_film = $data['episode_film'];
+            //*Tác giả, đạo diễn
+            $movie -> actor = $data['actor'];
+            $movie -> director = $data['director'];
             // thuộc phim
             $movie -> belonging_movie = $data['belonging_movie'];
 
@@ -142,7 +145,13 @@ class MovieController extends Controller
      */
     public function show($id)
     {
-        //
+
+        $movie = Movie::with('category','country','genre')->find($id);
+
+        return view('admin.movie.detail',[
+            'title' => 'Chi tiết phim',
+            'movie' => $movie
+        ]);
     }
 
     /**
@@ -199,6 +208,10 @@ class MovieController extends Controller
             $movie -> slug = $data['slug'];
             $movie -> tags = $data['tags'];
             $movie -> description = $data['description'];
+            //*Tác giả, đạo diễn
+            $movie -> actor = $data['actor'];
+            $movie -> director = $data['director'];
+            
             $movie -> category_id = $data['category_id'];
             $movie -> belonging_movie = $data['belonging_movie'];
             

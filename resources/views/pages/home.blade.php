@@ -11,7 +11,7 @@
                             <article class="thumb grid-item post-38498">
                             <div class="halim-item">
                                 <a class="halim-thumb" href="{{route('movie',$film->slug)}}" title="{{$film->title}}">
-                                    <figure><img class="lazy img-responsive" src="{{asset('uploads/movie/'.$film->image)}}" alt="Đại Thánh Vô Song" title="Đại Thánh Vô Song"></figure>
+                                    <figure><img class="lazy img-responsive" src="{{asset('uploads/movie/'.$film->image)}}" alt="{{$film->title}}" title="{{$film->title}}"></figure>
                                     <span class="status">
                                             @if($film->resolution == 0)
                                                 HD
@@ -47,7 +47,7 @@
                         <script>
                             $(document).ready(function($) {				
                             var owl = $('#halim_related_movies-2');
-                            owl.owlCarousel({loop: true,margin: 4,autoplay: true,autoplayTimeout: 4000,autoplayHoverPause: true,nav: true,navText: ['<i class="hl-down-open rotate-left"></i>', '<i class="hl-down-open rotate-right"></i>'],responsiveClass: true,responsive: {0: {items:2},480: {items:3}, 600: {items:4},1000: {items: 4}}})});
+                            owl.owlCarousel({loop: true,margin: 4,autoplay: true,autoplayTimeout: 4000,autoplayHoverPause: true,nav: true,navText: ['<i class="fa-solid fa-caret-left"></i>', '<i class="fa-solid fa-caret-right"></i>'],responsiveClass: true,responsive: {0: {items:2},480: {items:3}, 600: {items:4},1000: {items: 4}}})});
                         </script>
                     </div>
                 <div class="halim-panel-filter">

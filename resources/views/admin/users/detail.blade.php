@@ -53,7 +53,7 @@
                                     <option value="{{$user->role}}">{{$user->role}}</option>
                                     <option value="manage" {{$user->role == 'manage' ? 'selected' :''}} >manage</option>
                                     <option value="admin" {{$user->role == 'admin' ? 'selected' :''}} >admin</option>
-                                    <option value="superadmin" {{$user->role == 'superadmin' ? 'selected' :''}} >superadmin</option>
+                                    <!-- <option value="superadmin" {{$user->role == 'superadmin' ? 'selected' :''}} >superadmin</option> -->
                                 </select>
                             </div>
                             <div class="col-md-6">

@@ -45,16 +45,18 @@
                     <table class="table-warning img" id="myTable">
                             <thead>
                                 <tr>
-                                <th scope="col" class="text-white">ID</th>
-                                <th scope="col" class="text-white">Quốc gia</th>
-                                <th scope="col" class="text-white">Mô tả</th>
-                                <th scope="col" class="text-white">Trạng thái</th>
+                                    <th scope="col" class="text-white">ID</th>
+                                    <th scope="col" class="text-white">Quốc gia</th>
+                                    <th scope="col" class="text-white">Mô tả</th>
+                                    <th scope="col" class="text-white">Trạng thái</th>
+                                    <th>Quản lý</th>
+                                    <th></th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="order_position">
                                 @foreach($lstCountry as $key => $gen)
                                     <tr>
-                                            <th scope="row" class="text-white">{{ $gen->id }}</th>
+                                            <td scope="row" class="text-white">{{ $gen->id }}</td>
                                             <td class="text-white">{{ $gen->title }}</td>
                                             <td class="text-white">{!! $gen->description !!}</td>
                                             <td class="text-white">

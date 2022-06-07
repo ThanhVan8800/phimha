@@ -57,8 +57,8 @@
                                        </div>
                                     @endif
                               @else 
-                                    <a href="#watch_trailer" class="btn btn-danger watch_trailer" style="display:block">Xem Trailer</a>
                               @endif
+                              <a href="#watch_trailer" class="btn btn-danger watch_trailer" style="display:block">Xem Trailer</a>
                            </div>
                            <div class="film-poster col-md-9">
                               <h1 class="movie-title title-1" style="display:block;line-height:35px;margin-bottom: -14px;color: #ffed4d;text-transform: uppercase;font-size: 18px;">{{$movie->title}}</h1>
@@ -111,7 +111,6 @@
                                                 <a href="{{url('xem-phim/'.$epi_le->movie->slug.'/tap-'.$epi_le->episode)}}" rel="tag">{{$epi_le->episode}} </a>
                                              @endforeach
                                     @endif
-
                                  </li>
                                  <li class="list-info-group-item"><span>Thể loại</span> : <a href="" rel="category tag">Chiếu Rạp</a>, <a href="" rel="category tag">Hành động</a>, <a href="" rel="category tag">Phiêu Lưu</a>, <a href="" rel="category tag">Viễn Tưởng</a></li>
                                  <li class="list-info-group-item"><span>Quốc gia</span> : <a href="" rel="tag">{{$movie->country->title}}</a></li>
@@ -132,8 +131,8 @@
                                     @endif
                                     
                                  </li>
-                                 <li class="list-info-group-item"><span>Đạo diễn</span> : <a class="director" rel="nofollow" href="#" title="Cate Shortland">Cate Shortland</a></li>
-                                 <li class="list-info-group-item last-item" style="-overflow: hidden;-display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-flex: 1;-webkit-box-orient: vertical;"><span>Diễn viên</span> : <a href="" rel="nofollow" title="C.C. Smiff">C.C. Smiff</a>, <a href="" rel="nofollow" title="David Harbour">David Harbour</a>, <a href="" rel="nofollow" title="Erin Jameson">Erin Jameson</a>, <a href="" rel="nofollow" title="Ever Anderson">Ever Anderson</a>, <a href="" rel="nofollow" title="Florence Pugh">Florence Pugh</a>, <a href="" rel="nofollow" title="Lewis Young">Lewis Young</a>, <a href="" rel="nofollow" title="Liani Samuel">Liani Samuel</a>, <a href="" rel="nofollow" title="Michelle Lee">Michelle Lee</a>, <a href="" rel="nofollow" title="Nanna Blondell">Nanna Blondell</a>, <a href="" rel="nofollow" title="O-T Fagbenle">O-T Fagbenle</a></li>
+                                 <li class="list-info-group-item"><span>Đạo diễn</span> : <a class="director" rel="nofollow" href="#" title="Cate Shortland">{{$movie->director}}</a></li>
+                                 <li class="list-info-group-item last-item" style="-overflow: hidden;-display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-flex: 1;-webkit-box-orient: vertical;"><span>Diễn viên</span> : <a href="" rel="nofollow" title="{{$movie->actor}}">{{$movie->actor}}</a></li>
                               </ul>
                               <div class="movie-trailer hidden"></div>
                            </div>
@@ -148,21 +147,8 @@
                      <div class="entry-content htmlwrap clearfix">
                         <div class="video-item halim-entry-box">
                            <article id="post-38424" class="item-content">
-                              Phim <a href="https://phimhay.co/goa-phu-den-38424/">GÓA PHỤ ĐEN</a> - 2021 - Mỹ:
+                              Phim <a href="#">{{$movie->title}}</a> - {{$movie->year}} - {{$movie->country->title}}:
                               <p>{!!$movie->description!!}</p>
-                              <h5>Từ Khoá Tìm Kiếm:</h5>
-                              <ul>
-                                 <li>black widow vietsub</li>
-                                 <li>Black Widow 2021 Vietsub</li>
-                                 <li>phim black windows 2021</li>
-                                 <li>xem phim black windows</li>
-                                 <li>xem phim black widow</li>
-                                 <li>phim black windows</li>
-                                 <li>goa phu den</li>
-                                 <li>xem phim black window</li>
-                                 <li>phim black widow 2021</li>
-                                 <li>xem black widow</li>
-                              </ul>
                            </article>
                         </div>
                      </div>
@@ -269,7 +255,7 @@
                            <script>
                               $(document).ready(function($) {				
                               var owl = $('#halim_related_movies-2');
-                              owl.owlCarousel({loop: true,margin: 4,autoplay: true,autoplayTimeout: 4000,autoplayHoverPause: true,nav: true,navText: ['<i class="hl-down-open rotate-left"></i>', '<i class="hl-down-open rotate-right"></i>'],responsiveClass: true,responsive: {0: {items:2},480: {items:3}, 600: {items:4},1000: {items: 4}}})});
+                              owl.owlCarousel({loop: true,margin: 4,autoplay: true,autoplayTimeout: 4000,autoplayHoverPause: true,nav: true,navText: ['<i class="fa-solid fa-caret-left"></i>', '<i class="fa-solid fa-caret-right"></i>'],responsiveClass: true,responsive: {0: {items:2},480: {items:3}, 600: {items:4},1000: {items: 4}}})});
                            </script>
                   </div>
                </section>

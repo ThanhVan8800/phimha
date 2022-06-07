@@ -13,7 +13,7 @@
          <link rel="shortcut icon" href="https://www.pngkey.com/png/detail/360-3601772_your-logo-here-your-company-logo-here-png.png" type="image/x-icon" />
          <meta name="revisit-after" content="1 days" />
          <meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
-         <title>Phim hay 2021 - Xem phim hay nhất</title>
+         <title>Phim hay CKC - Xem phim hay nhất</title>
          <meta name="description" content="Phim hay 2021 - Xem phim hay nhất, xem phim online miễn phí, phim hot , phim nhanh" />
          <link rel="canonical" href="">
          <link rel="next" href="" />
@@ -26,6 +26,7 @@
          <meta property="og:image:width" content="300" />
          <meta property="og:image:height" content="55" />
          <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
       
          <link rel='dns-prefetch' href='//s.w.org' />
          
@@ -34,6 +35,8 @@
 
          <link rel='stylesheet' id='style-css' href='{{asset('css/style.css?ver=5.7.2')}}' media='all' />
          <link rel='stylesheet' id='wp-block-library-css' href='{{asset('css/style.min.css?ver=5.7.2')}}' media='all' />
+         <!-- Bootstrap -->
+
          <script type='text/javascript' src='{{asset('js/jquery.min.js?ver=5.7.2')}}'' id='halim-jquery-js'></script>
          <style type="text/css" id="wp-custom-css">
             .textwidget p a img {
@@ -66,8 +69,7 @@
                            <div class="form-group form-timkiem">
                               <div class="input-group col-xs-12">
                                     <form action="{{route('tim-kiem')}}" method="GET">
-                                    <i class="fa-solid fa-magnifying-glass"></i>
-                                          <input id="timkiem" type="text" name="search" class="form-control" placeholder="Tìm kiếm..." autocomplete="off" >
+                                       <input id="timkiem" type="text" name="search" class="form-control" placeholder="Tìm kiếm..." autocomplete="off" >
                                     </form>
                               </div>
                            </div>
@@ -77,12 +79,13 @@
                         </div>
                      </div>
                   </div>
-                  <div class="col-md-4 hidden-xs">
+                  <!-- <div class="col-md-4 hidden-xs">
                      <div id="get-bookmark" class="box-shadow"><i class="hl-bookmark"></i><span> Bookmarks</span><span class="count">0</span></div>
                      <div id="bookmark-list" class="hidden bookmark-list-on-pc">
                         <ul style="margin: 0;"></ul>
+                     
                      </div>
-                  </div>
+                  </div> -->
                </div>
             </div>
          </header>
@@ -107,6 +110,7 @@
                      <a href="javascript:;" id="expand-ajax-filter" style="color: #ffed4d;">Lọc <i class="fas fa-filter"></i></a>
                      </button>
                   </div>
+                  
                   <div class="collapse navbar-collapse" id="halim">
                      <div class="menu-menu_1-container">
                            <ul id="menu-menu_1" class="nav navbar-nav navbar-left">
@@ -139,7 +143,6 @@
                               <ul role="menu" class=" dropdown-menu">
                                  @foreach ( $country as $key => $coun)
                                     <li><a title="{{$coun->title}}" href="{{route('country',$coun->slug)}}">{{$coun->title}}</a></li>
-                                    
                                  @endforeach
                                  
                               </ul>
@@ -148,9 +151,27 @@
                            </ul>
                      </div>
                      <ul class="nav navbar-nav navbar-left" style="background:#000;">
-                           <li><a href="#" onclick="locphim()" style="color: #ffed4d;">Lọc Phim</a></li>
+                           <li><a href="#" onclick="locphim()" style="color: #ffed4d;">Lọc Phim </a></li>
                      </ul>
+                     
                   </div>
+                  <!-- Lọc Phim -->
+                  <!-- <form action="{{route('search_allfilm')}}" method="GET" >
+
+                           <div class="select-form">
+                                 <select name="title" id="">
+                                    <option value="">Chọn mục phim</option>
+                                    @foreach ( $category as $key => $cate)
+                                       <option value="{{$cate->title}}">{{$cate->title}}</option>
+                                    @endforeach
+                                 </select>
+                           </div>
+                           <div class="btn__loc">
+                              
+                              <button class="btn btn-primary">Lọc</button>
+                           </div>
+                  </form> -->
+                     
                   </nav>
                   <div class="collapse navbar-collapse" id="search-form">
                   <div id="mobile-search-form" class="halim-search-form"></div>

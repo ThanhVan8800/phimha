@@ -11,6 +11,7 @@ use App\Http\Controllers\WatchController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserActivityController;
+use App\Http\Controllers\FilterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,11 @@ Route::get('tag/{tag}',[IndexController::class,'tag']);
 
 // search film
 Route::get('search',[IndexController::class,'search'])->name('tim-kiem');
+
+//Lọc phim
+
+Route::get('search_allfilm',[FilterController::class,'index'])->name('search_allfilm');
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -56,6 +62,11 @@ Route::middleware(['auth'])->group(function(){
             Route::resource('movie', MovieController::class);
             //* Tìm kiếm cho phim theo Ngày
             Route::get('search-movie', [MovieController::class,'searchMovie'])->name('searchMovie');
+        });
+        //*Quản lí quốc gia 
+        Route::prefix('countries')->group(function(){
+            Route::resource('country', CountryController::class);
+            //* Tìm kiếm cho phim theo Ngày
         });
         //* Quản lí tài khoản user
         // Route::prefix('users')->group(function(){
@@ -85,7 +96,7 @@ Route::middleware(['auth'])->group(function(){
 
 Route::post('resorting',[CategoryController::class,'resorting'])->name('resorting');
 Route::resource('genre', GenreController::class);
-Route::resource('country', CountryController::class);
+
 
 Route::get('pdf', [CountryController::class,'index']);
 Route::get('downloadPDF',[CountryController::class,'downloadPDF']);

@@ -32,9 +32,9 @@
                             <input type="date" class="border border-warning" name="fromDate"> 
                                 <i class="expandable-table-caret fas fa-caret-right fa-fw"></i> 
                             <input type="date" class="border border-warning" name="toDate"> 
-                            <input type="text" name="keyword" id="keyword" class="border" style="margin-left: 54%;" placeholder="Tìm kiếm danh mục phim"/>
-
-                            <button class="btn btn-primary">Tìm</button>
+                            <input type="text" name="keyword" id="keyword" class="border" style="margin-left: 20%;" placeholder="Tìm kiếm danh mục phim"/>
+                            <button type="submit" class="btn btn-info"><i class="fa-solid fa-magnifying-glass" ></i>Tìm</button>
+                            
                         </form>
                         
                         <!-- Tìm kiếm = ajax -->

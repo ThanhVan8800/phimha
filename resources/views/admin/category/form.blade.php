@@ -86,7 +86,7 @@
                         </div>
                             
                     </div>
-                        <table class="table img" id="">
+                        <table class="table img" id="myTable">
                             <thead>
                                 <tr>
                                 <th scope="col" class="text-white">ID</th>
@@ -152,7 +152,7 @@
                     // $(this).text(replaceText);
                 });
             </script> -->
-            <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+            <!-- <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script> -->
     <script>
         $(".xemtoanbo").click(function(e) {
             e.preventDefault()

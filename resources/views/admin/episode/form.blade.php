@@ -55,7 +55,7 @@
                         <!-- </form> -->
                         
                     </div>
-                    <table class="table-warning img" >
+                    <table class="table" >
                             <thead>
                                 <tr>
                                 <th scope="col" class="text-white">ID</th>

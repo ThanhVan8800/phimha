@@ -12,6 +12,7 @@
                             <a href="{{route('user.create')}}" class="btn btn-primary">Thêm tài khoản</a>
                         @endif
                     </div>
+                    
                     <table class="table-dark " id="myTable">
                             <thead>
                                 <tr>
