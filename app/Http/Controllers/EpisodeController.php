@@ -10,6 +10,7 @@ use DB;
 use Illuminate\Support\Facades\Session;
 use Auth;
 use Illuminate\Support\Facades\Log;
+use App\Http\Requests\Episode\EpisodeFormRequest;
 
 class EpisodeController extends Controller
 {
@@ -56,6 +57,25 @@ class EpisodeController extends Controller
             $episode -> movie_id = $data['movie_id'];
             $episode -> created_at = Carbon::now('Asia/Ho_Chi_Minh');
             $episode -> updated_at = Carbon::now('Asia/Ho_Chi_Minh');
+            //* Nhật ký hoạt động
+            $user = Auth::user();
+            Session()->put('user', $user);
+            $user = Session()->get('user');
+            $dt = Carbon::now('Asia/Ho_Chi_Minh');
+            $todayDate = $dt->toDayDateTimeString();
+            // dd($todayDate);
+            $name = $user->name;
+            $email = $user->email;
+            $address = $user->address;
+            // $date_time = $user->date_time;
+            $activity = [
+                'name' => $name,
+                'email' => $email,
+                'address' => $address,
+                'date_time' => $dt,
+                'modify_user' => $name.' tạo tập phim '.$episode -> episode.' '
+            ];
+            DB::table('userlog_activities')->insert($activity);
             $episode->save();
             Session::flash('success','Tạo tập phim thành công');
         }catch(Exception $err){

@@ -12,6 +12,8 @@ use DB;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use App\Http\Requests\Category\CategoryFormRequest;
+
 
 
 
@@ -50,7 +52,7 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryFormRequest $request)
     {
         try{
             $data = $request->all();
@@ -59,6 +61,27 @@ class CategoryController extends Controller
             $category -> slug = $data['slug'];
             $category -> description = $data['description'];
             $category -> status = $data['status'];
+
+            // dd($category);
+            //* Nhật ký hoạt động
+            $user = Auth::user();
+            Session()->put('user', $user);
+            $user = Session()->get('user');
+            $dt = Carbon::now('Asia/Ho_Chi_Minh');
+            $todayDate = $dt->toDayDateTimeString();
+            // dd($todayDate);
+            $name = $user->name;
+            $email = $user->email;
+            $address = $user->address;
+            // $date_time = $user->date_time;
+            $activity = [
+                'name' => $name,
+                'email' => $email,
+                'address' => $address,
+                'date_time' => $dt,
+                'modify_user' => $name.' tạo danh mục '.$category -> title.''
+            ];
+            DB::table('userlog_activities')->insert($activity);
             $category -> save();
             Session::flash('success','Thêm danh mục phim thành công');
         }catch(Exception $err){
@@ -305,22 +328,25 @@ class CategoryController extends Controller
         $lstCate = Category::orderBy('position','ASC')->paginate(8);
 
         $title = DB::table('categories')->get();
-        if($request->title)
+        if(!empty($request->title))
         {
             // dd($request->title);
             $result =  DB::table('categories')->where('title','LIKE','%'.$request->title.'%')->get();
         }
-        if($request->status)
+        if(!empty($request->status))
         {
             // dd($request->title);
             $result =  DB::table('categories')->where('status','LIKE','%'.$request->status.'%')->get();
+        }else{
+            $result = Category::all();
         }
         // asc tăng dần 
 
         
-        return view('admin.category.result_search',compact('result'),[
+        return view('admin.category.result_search',[
             'lstCate' => $lstCate,
-            'title' => 'Danh mục phim'
+            'title' => 'Danh mục phim',
+            'result' => $result
         ]);
     }
 }

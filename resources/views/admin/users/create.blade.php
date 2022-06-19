@@ -5,6 +5,11 @@
         
     <div class="card card-primary mt-3">
         <div class="card-body img">
+            @if(Session::has('success'))
+                <div class="alert alert-success">
+                    {{Session::get('success')}}
+                </div>
+            @endif
                         <div class="col-md-3">
                                 <div class="form-group">
                                                 <label style="color:#FF7506;">Thêm mới tài khoản</label>

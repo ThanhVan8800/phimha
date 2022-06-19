@@ -12,6 +12,11 @@
                                 {{ session('status') }}
                             </div>
                         @endif
+                        @if(Session::has('success'))
+                            <div class="alert alert-success">
+                                {{Session::get('success')}}
+                            </div>
+                        @endif
                         <!-- kiểm tra nếu không tồn tại dùng form store -->
                         @if(!isset($genre))
                             {!! Form::open(['route'=>'genre.store','method'=>'POST']) !!}
@@ -34,11 +39,13 @@
                                     {!! Form::label('Active','Trạng thái', []) !!}
                                     {!! Form::select('status', ['1' => 'Hiển thị danh mục phim' , '0' => 'Không hiện'], isset($genre) ? $genre->status : '', ['class' => 'form-control', 'placeholder' =>'điền đi']) !!}
                                 </div>
-                                @if(!isset($genre))
-                                        {!! Form::submit('Thêm dữ liệu', ['class' => 'btn btn-primary']) !!}
-                                @else
-                                
-                                        {!! Form::submit('Cập nhật dữ liệu', ['class' => 'btn btn-primary']) !!}
+                                @if(Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin' || Auth::user()->role == 'manage' && Auth::user()->status == '1')
+                                    @if(!isset($genre))
+                                            {!! Form::submit('Thêm dữ liệu', ['class' => 'btn btn-primary']) !!}
+                                    @else
+                                    
+                                            {!! Form::submit('Cập nhật dữ liệu', ['class' => 'btn btn-primary']) !!}
+                                    @endif
                                 @endif
                             {!! Form::close() !!}
                     </div>
@@ -53,7 +60,7 @@
                                 <th scope="col" class="text-white">Trạng thái</th>
                                 </tr>
                             </thead>
-                            <tbody id="lst">
+                            <tbody id="lst" class="order_position">
                                 @foreach($lstGenre as $key => $gen)
                                     <tr>
                                             <th scope="row" class="text-white">{{ $gen->id }}</th>
@@ -69,14 +76,16 @@
                                                     Không hiển thị
                                                 @endif
                                             </td>
-                                            <td>
-                                                {!! Form::open(['method'=>'delete','route' => ['genre.destroy', $gen->id], 'onsubmit' => 'return confirm("Bạn có muốn xóa?")']) !!}
-                                                    {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-dark btn-sm', 'style' => 'height:40px; width:40px'] )  }}
-                                                {!! Form::close() !!}                                
-                                            </td>
-                                            <td>
-                                                <a href="{{route('genre.edit', $gen->id)}}" class="btn btn-warning" style = "height:40px; width:40px"><i class="fa-solid fa-pen"></i></a>
-                                            </td>
+                                            @if(Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin' || Auth::user()->role == 'manage' && Auth::user()->status == '1')
+                                                <td>
+                                                    {!! Form::open(['method'=>'delete','route' => ['genre.destroy', $gen->id], 'onsubmit' => 'return confirm("Bạn có muốn xóa?")']) !!}
+                                                        {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-dark btn-sm', 'style' => 'height:40px; width:40px'] )  }}
+                                                    {!! Form::close() !!}                                
+                                                </td>
+                                                <td>
+                                                    <a href="{{route('genre.edit', $gen->id)}}" class="btn btn-warning" style = "height:40px; width:40px"><i class="fa-solid fa-pen"></i></a>
+                                                </td>
+                                            @endif
                                     </tr>
                                 @endforeach
                             </tbody>

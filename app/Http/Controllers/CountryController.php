@@ -13,6 +13,9 @@ use DB;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use App\Http\Requests\Country\CountryFormRequest;
+
+
 class CountryController extends Controller
 {
     /**
@@ -44,7 +47,7 @@ class CountryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CountryFormRequest $request)
     {
         try{
             $data = $request -> all();
@@ -53,6 +56,25 @@ class CountryController extends Controller
             $country -> slug = $data['slug'];
             $country -> description = $data['description'];
             $country -> status = $data['status'];
+            //* Nhật ký hoạt động
+            $user = Auth::user();
+            Session()->put('user', $user);
+            $user = Session()->get('user');
+            $dt = Carbon::now('Asia/Ho_Chi_Minh');
+            $todayDate = $dt->toDayDateTimeString();
+            // dd($todayDate);
+            $name = $user->name;
+            $email = $user->email;
+            $address = $user->address;
+            // $date_time = $user->date_time;
+            $activity = [
+                'name' => $name,
+                'email' => $email,
+                'address' => $address,
+                'date_time' => $dt,
+                'modify_user' => $name.' tạo tên quốc gia '.$country -> title.' cho phim'
+            ];
+            DB::table('userlog_activities')->insert($activity);
             $country -> save();
             Session::flash('success','Tạo phim theo quốc gia thành công');
         }catch(Exception $err){

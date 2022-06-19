@@ -82,7 +82,6 @@
                                     <i class="nav-icon fa-solid fa-book-medical"></i>
                                         Nhật ký hoạt động
                                 </a>
-                                
                                 @auth
                                     <label for="" class="nav-link text-white">{{Auth::user()->name}} |</label>    
                                     <form method="post" action="{{route('logout_ad')}}">

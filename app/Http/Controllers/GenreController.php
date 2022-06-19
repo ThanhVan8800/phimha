@@ -9,6 +9,7 @@ use DB;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use App\Http\Requests\Genre\GenreFormRequest;
 
 class GenreController extends Controller
 {
@@ -39,7 +40,7 @@ class GenreController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(GenreFormRequest $request)
     {
         try{
             $data =  $request->all();
@@ -48,6 +49,25 @@ class GenreController extends Controller
             $genre -> slug = $data['slug'];
             $genre -> description = $data['description'];
             $genre -> status = $data['status'];
+            //* Nhật ký hoạt động
+            $user = Auth::user();
+            Session()->put('user', $user);
+            $user = Session()->get('user');
+            $dt = Carbon::now('Asia/Ho_Chi_Minh');
+            $todayDate = $dt->toDayDateTimeString();
+            // dd($todayDate);
+            $name = $user->name;
+            $email = $user->email;
+            $address = $user->address;
+            // $date_time = $user->date_time;
+            $activity = [
+                'name' => $name,
+                'email' => $email,
+                'address' => $address,
+                'date_time' => $dt,
+                'modify_user' => $name.' tạo thể loại phim '.$genre -> title.' '
+            ];
+            DB::table('userlog_activities')->insert($activity);
             $genre -> save();
             Session::flash('success','Thể loại phim được tạo thành công');
         }catch(Exception $err){

@@ -8,6 +8,11 @@
                                 {{ session('status') }}
                             </div>
                         @endif
+                        @if(Session::has('success'))
+                            <div class="alert alert-success">
+                                {{Session::get('success')}}
+                            </div>
+                        @endif
                     @if(!isset($episode))
                         {!! Form::open(['route' => 'episode.store','method'=>'POST']) !!}
                     @else
@@ -36,13 +41,15 @@
                             <select name="episode" class="form-control " id="show_movie"> </select>
                         @endif
                     </div>
-                    @if(!isset($episode))
-                                        {!! Form::submit('Thêm phim', ['class' => 'btn btn-primary']) !!}
-                                @else
-                                
-                                        {!! Form::submit('Cập nhật phim', ['class' => 'btn btn-primary']) !!}
-                                @endif
-                    {!! Form::close() !!}
+                    @if(Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin' || Auth::user()->role == 'manage' && Auth::user()->status == '1')
+                        @if(!isset($episode))
+                                            {!! Form::submit('Thêm phim', ['class' => 'btn btn-primary']) !!}
+                        @else
+                                    
+                                            {!! Form::submit('Cập nhật phim', ['class' => 'btn btn-primary']) !!}
+                                    @endif
+                        {!! Form::close() !!}
+                    @endif
                     </div>
                     <div class="form-group">
                         <!-- <form action="{{route('search-episode')}}" method="GET"> -->
@@ -55,7 +62,11 @@
                         <!-- </form> -->
                         
                     </div>
-                    <table class="table" >
+                    <div class="row">
+    <div class="col-12">
+            <div class="card">
+                <div class="card-body table-responsive p-0">
+                    <table class="table img" >
                             <thead>
                                 <tr>
                                 <th scope="col" class="text-white">ID</th>
@@ -91,14 +102,16 @@
                                             <td>{{$movi->views}}</td>
                                             <td>{{$movi->created_at}}</td>
                                             <td>{{$movi->updated_at}}</td>
-                                            <td>
-                                                {!! Form::open(['method'=>'delete','route' => ['episode.destroy', $movi->id], 'onsubmit' => 'return confirm("Bạn có muốn xóa?")']) !!}
-                                                    {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-dark btn-sm', 'style' => 'height:40px; width:40px'] )  }}
-                                                {!! Form::close() !!}                                
-                                            </td>
-                                            <td>
-                                                <a href="{{route('episode.edit', $movi->id)}}" class="btn btn-warning" style = "height:40px; width:40px"><i class="fa-solid fa-pen"></i></a>
-                                            </td>
+                                            @if(Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin' || Auth::user()->role == 'manage' && Auth::user()->status == '1')
+                                                <td>
+                                                    {!! Form::open(['method'=>'delete','route' => ['episode.destroy', $movi->id], 'onsubmit' => 'return confirm("Bạn có muốn xóa?")']) !!}
+                                                        {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-dark btn-sm', 'style' => 'height:40px; width:40px'] )  }}
+                                                    {!! Form::close() !!}                                
+                                                </td>
+                                                <td>
+                                                    <a href="{{route('episode.edit', $movi->id)}}" class="btn btn-warning" style = "height:40px; width:40px"><i class="fa-solid fa-pen"></i></a>
+                                                </td>
+                                            @endif
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -106,6 +119,9 @@
                     <div>
                         {!!$lstEpisode->links("pagination::bootstrap-5")!!}
                     </div>
+</div>
+</div>
+</div>
 
 @endsection
 @section('footer')

@@ -8,41 +8,55 @@
                             </div>
                         @endif
                         <!-- kiểm tra nếu không tồn tại dùng form store -->
-                        @if(Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin')
+                        @if(Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin' && Auth::user()->status == '1')
                             <a href="{{route('user.create')}}" class="btn btn-primary">Thêm tài khoản</a>
                         @endif
                     </div>
                     
-                    <table class="table-dark " id="myTable">
+                    <table class="table-dark " id="">
                             <thead>
                                 <tr>
-                                <th scope="col" class="text-white">ID</th>
-                                <th scope="col" class="text-white">Name</th>
-                                <th scope="col" class="text-white">Email</th>
-                                <th scope="col" class="text-white">Thumb</th>
-                                <th scope="col" class="text-white">Vai trò</th>
-                                <th scope="col" class="text-white">Address</th>
-                                <th scope="col" class="text-white">Phone Number</th>
-                                <th scope="col" class="text-white">Trạng thái </th>
-                                <th scope="col" class="text-white">Ngày tạo</th>
+                                    <th scope="col" class="text-white">ID</th>
+                                    <th scope="col" class="text-white">Name</th>
+                                    <th scope="col" class="text-white">Email</th>
+                                    <th scope="col" class="text-white">Thumb</th>
+                                    <th scope="col" class="text-white">Vai trò</th>
+                                    <th scope="col" class="text-white">Address</th>
+                                    <th scope="col" class="text-white">Phone Number</th>
+                                    <th scope="col" class="text-white">Trạng thái </th>
+                                    <th scope="col" class="text-white">Ngày tạo</th>
+                                    <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($lstUser as $user)
                                     <tr>
-                                            <th scope="row" class="text-white">{{$user->id}}</th>
+                                            <td scope="row" class="text-white">{{$user->id}}</td>
                                             <td class="text-white">{{$user->name}}</td>
                                             <td class="text-white">{{$user->email}}</td>
                                             <td class="text-white">
                                                 @if ($user->thumb)
-                                                    <img src="{{$user->thumb}}" alt="" style="width:125px; max-height:250px"> 
+                                                    <img src="{{$user->thumb}}" alt="" style="width:125px; max-height:250px; border-radius:20px"> 
                                                 @else
-                                                    <img src="http://127.0.0.1:8000/storage/user_none.jpg" alt="" style="width:125px; max-height:250px"> 
+                                                    <img src="http://127.0.0.1:8000/storage/user_none.jpg" alt="" style="width:125px; max-height:250px;border-radius:20px"> 
                                                 @endif
                                             </td>
                                             <td class="text-white">{{$user->role}}</td>
-                                            <td class="text-white">{{$user->address}}</td>
-                                            <td class="text-white">{{$user->phone_number}}</td>
+                                            <td class="text-white">
+                                                @if ($user->address)
+                                                    {{$user->address}}
+                                                @else
+                                                    Đang cập nhật
+                                                @endif
+                                            </td>
+                                            <td class="text-white">
+                                                @if ($user->phone_number)
+                                                    {{$user->phone_number}}
+                                                @else
+                                                    Đang cập nhật
+                                                @endif
+                                            </td>
                                             <td class="text-white">
                                                 @if ($user->status == '1')
                                                     Hoạt động
@@ -52,7 +66,7 @@
                                             </td>
                                             <td class="text-white">{{$user->created_at}}</td>
                                             <td>
-                                                @if(Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin')
+                                                @if(Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin' && Auth::user()->status == '1')
                                                     <a href="#"  class="btn btn-outline-danger"
                                                         onclick="removeRow( {{ $user -> id }} , '/admin/users/user/destroy' )" >
                                                         <i class="far fa-trash-alt"></i> Xóa 

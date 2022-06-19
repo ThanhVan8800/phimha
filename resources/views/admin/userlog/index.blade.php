@@ -22,6 +22,11 @@
                                 {{ session('status') }}
                             </div>
                         @endif
+                        @if(Session::has('success'))
+                            <div class="alert alert-success">
+                                {{Session::get('success')}}
+                            </div>
+                        @endif
                         <!-- kiểm tra nếu không tồn tại dùng form store -->
                         
                     </div>
@@ -53,7 +58,7 @@
                             <tbody class="" id="">
                                 @foreach($lstUserlog_Ac as $key => $usLog)
                                     <tr id="{{$usLog->id}}">
-                                            <td scope="row" class="text-white">{{$key}} </td>
+                                            <td scope="row" class="text-white">{{$usLog->id}} </td>
                                             <td class="text-white">{{ $usLog->name }}</td>
                                             <td class="text-white">{{ $usLog->email }}</td>
                                             <!-- !! để thực thi đọc html -->

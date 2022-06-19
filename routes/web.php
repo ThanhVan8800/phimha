@@ -12,6 +12,12 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserActivityController;
 use App\Http\Controllers\FilterController;
+use App\Http\Controllers\ChatRealTimeController;
+use App\Http\Controllers\UserViewController;
+use App\Http\Controllers\RegisterUserController;
+use App\Http\Controllers\RatingController;
+
+use App\Events\ChatEvent;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +29,18 @@ use App\Http\Controllers\FilterController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+
+//Đăng ký đăng nhập cho người xem
+Route::get('/login-user',[UserViewController::class,'index'])->name('loginUser');
+Route::post('login-user',[UserViewController::class,'loginAuth'])->name('loginUser');
+Route::get('/register-user',[RegisterUserController::class,'index'])->name('registerUser');
+Route::post('/register-user',[RegisterUserController::class,'store']);
+
+Route::post('/logout-user',[UserViewController::class,'logout'])->name('logoutUser');
+
+
+
 
 Route::get('/',[IndexController::class,'index'])->name('homepage');
 Route::get('/danh-muc/{slug}',[IndexController::class,'category'])->name('cate');
@@ -36,7 +54,6 @@ Route::get('/episode',[IndexController::class,'episode'])->name('episode');
 Route::get('year/{year}',[IndexController::class,'year']);
 //tags phim
 Route::get('tag/{tag}',[IndexController::class,'tag']);
-
 // search film
 Route::get('search',[IndexController::class,'search'])->name('tim-kiem');
 
@@ -81,6 +98,12 @@ Route::middleware(['auth'])->group(function(){
             Route::get('changePassword/{user}',[UserController::class,'changePassword']);
             Route::post('changePassword/{user}',[UserController::class,'pass']);
         });
+
+        //*Chat realtime
+        Route::prefix('chat')->group(function(){
+            Route::get('index',[ChatRealTimeController::class,'index']);
+            Route::post('store',[ChatRealTimeController::class,'store'])->name('chat.store');
+        });
         //* Nhật ký hoạt động
         Route::get('userlog-activities',[UserActivityController::class,'index']);
         Route::get('search-userlog',[UserActivityController::class,'searchUserlog'])->name('searchUserlog');
@@ -114,4 +137,16 @@ Route::get('episode-option',[App\Http\Controllers\EpisodeController::class,'sele
 Route::get('filter-search-episode',[App\Http\Controllers\EpisodeController::class,'search_episode'])->name('search-episode');
 // Tìm kiếm cho admin
 Route::get('search_ad', [CategoryController::class,'search'])->name('search_admin');
+
+//* Đánh giá sao cho phim
+// Route::post('rating', [RatingController::class,'rating'])->name('rate');
+    Route::post('/insert-rating',[RatingController::class, 'insert_rating']);
+
+    Route::get('/update-year-phim', [MovieController::class, 'update_year']);
+    Route::get('/update-topview-phim', [MovieController::class, 'update_topview']);
+    Route::get('/filter-topview-phim', [MovieController::class, 'filter_topview']);
+    Route::get('/filter-topview-default', [MovieController::class, 'filter_default']);
+    
+
+
 Route::get('ui', [IndexController::class,'ui']);

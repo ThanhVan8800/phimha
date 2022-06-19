@@ -9,6 +9,7 @@ use App\Models\Country;
 use App\Models\Movie;
 use App\Models\Movie_Genre;
 use App\Models\Episode;
+use App\Models\Rating;
 use DB;
 
 class IndexController extends Controller
@@ -207,19 +208,26 @@ class IndexController extends Controller
             $tapphim = substr($tap,4,20);
             $episode = Episode::where('movie_id',$movie->id)->where('episode',$tapphim)->first();
             $episode->increment('views');
-            // dd($episode);
+            $ratingAvg = Rating::where('episode_id',$episode->id)->avg('rating_star');
+            $ratingAvg = round($ratingAvg);
+            $count = Rating::where('episode_id',$episode->id)->count();
+            // dd($ratingAvg);
         }
         else{
             $tapphim = 1;
             $episode = Episode::where('movie_id',$movie->id)->where('episode',$tapphim)->first();
+            $ratingAvg = Rating::where('episode_id',$tapphim)->avg('rating_star');
+            $ratingAvg = round($ratingAvg);
             $episode->increment('views');
+            $count = Rating::where('episode_id',$episode->id)->count();
         }
         // return response()->json($movie);
 
         //*Gợi ý phim 
         $related = Movie::with('category', 'movie_genre','country','genre')->where('category_id',$movie->category->id)->orderBy(DB::raw('RAND()'))->orderByDesc('status',1)->whereNotIn('slug',[$slug])->get();
         
-        return view('pages.watch',compact('category','genre','country','movie','film_sidebar','filmhot_trailer','film_hot','episode','tapphim','related'));
+        
+        return view('pages.watch',compact('category','genre','country','movie','film_sidebar','filmhot_trailer','film_hot','episode','tapphim','related','ratingAvg','count'));
     }
     public function episode()
     {

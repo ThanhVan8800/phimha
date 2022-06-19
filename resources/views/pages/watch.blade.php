@@ -1,4 +1,8 @@
 @extends('layout')
+@section('head')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
+
+@endsection
 @section('content')
 
 <div class="row container" id="wrapper">
@@ -31,9 +35,9 @@
                   <!-- @foreach ($movie->episode as $epi)
                         @endforeach -->
                   <div class="button-watch">
-                     <ul class="halim-social-plugin col-xs-4 hidden-xs">
+                     <!-- <ul class="halim-social-plugin col-xs-4 hidden-xs">
                         <li class="fb-like" data-href=""  data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></li>
-                     </ul>
+                     </ul> -->
                      <ul class="col-xs-12 col-md-8">
                         <div id="autonext" class="btn-cs autonext">
                            <i class="icon-autonext-sm"></i>
@@ -46,7 +50,7 @@
                            Light Off 
                         </div>
                         <div id="report" class="halim-switch"><i class="hl-attention"></i> Report</div>
-                        <div class="luotxem"><i class="hl-eye"></i>
+                        <div class="luotxem"><i class="fa-solid fa-eye"></i>
                            <span>{{$episode->views}}</span> lượt xem 
                         </div>
                         <div class="luotxem">
@@ -68,6 +72,46 @@
                      <h2 class="entry-title" ><a href="" title="{{$movie->title}}" class="tl" style="color: #bdbdbd;line-height: 35px;">{{$movie->title}}</a></h2>
                      <!-- <div class="title-wrapper-xem full">
                      </div> -->
+                     <div class="height-100 container d-flex justify-content-center align-items-center">
+                        
+                        @if(auth()->check())
+                           <p>Đánh giá phim(Có {{$count}} đánh giá) </p>
+                           <div class="rating-review">
+                              <div class="rating__s">
+
+                                 <ul class="list-inline" style="display: flex;">
+                                    
+                                    @for($count=1;$count<=5;$count++)
+                                    @php
+                                    if($count<=$ratingAvg){
+                                             $color = 'color:#ffcc00;';
+                                          }else{
+                                             $color = 'color:#ccc;';
+                                          }
+                                       @endphp
+                                       <li title="Đánh giá sao"
+                                          id="{{$episode->id}}-{{$count}}"
+                                          data-index="{{$count}}"
+                                          data-episode_id="{{$episode->id}}"
+                                          data-user_id="{{auth()->user()->id}}"
+                                          data-rating="{{$ratingAvg}}"
+                                          class="rating" 
+                                          style="cursor: pointer;{{$color}} font-size:45px">
+                                                   &#9733;
+                                       </li>
+                                    @endfor
+                                 </ul> 
+                              </div>
+                           </div>
+                           
+                        @else
+                              <span>Đăng nhập để đánh giá cho phim</span>
+                        @endif
+                        
+                  <div class="card p-3">
+                     
+               
+               </div>
                   </div>
                   <div class="entry-content htmlwrap clearfix collapse" id="expand-post-content">
                      <article id="post-37976" class="item-content post-37976"></article>
@@ -81,27 +125,27 @@
                            @if($movie->resolution == 0)
                                  <li role="presentation" class="active server-1">
                                     <a href="#server-0" aria-controls="server-0" role="tab" data-toggle="tab">
-                                       <i class="hl-server"></i> HD</a>
+                                       HD</a>
                                  </li> 
                            @elseif ($movie->resolution == 1)
                               <li role="presentation" class="active server-1">
                                  <a href="#server-0" aria-controls="server-0" role="tab" data-toggle="tab">
-                                    <i class="hl-server"></i> SD</a>
+                                    SD</a>
                               </li>
                            @elseif ($movie->resolution == 2)
                               <li role="presentation" class="active server-1">
                                  <a href="#server-0" aria-controls="server-0" role="tab" data-toggle="tab">
-                                    <i class="hl-server"></i> HDCam</a>
+                                    HDCam</a>
                               </li>
                            @elseif ($movie->resolution == 3)
                               <li role="presentation" class="active server-1">
                                  <a href="#server-0" aria-controls="server-0" role="tab" data-toggle="tab">
-                                    <i class="hl-server"></i> Cam</a>
+                                    Cam</a>
                               </li>
                            @else 
                               <li role="presentation" class="active server-1">
                                  <a href="#server-0" aria-controls="server-0" role="tab" data-toggle="tab">
-                                    <i class="hl-server"></i> FullHD</a>
+                                    FullHD</a>
                               </li>
                            @endif     
                      </ul>
@@ -132,7 +176,7 @@
                   <div class="htmlwrap clearfix">
                      <div id="lightout"></div>
                      <!-- COMMENT FB -->
-                           <!-- <div class="section-bar clearfix">
+                           <div class="section-bar clearfix">
                               <h2 class="section-title"><span style="color:#ffed4d">Bình luận</span></h2>
                            </div>
                            <div class="entry-content htmlwrap clearfix " style="background: lightyellow !important;" >
@@ -144,7 +188,7 @@
                                     <div class="fb-comments" data-href="{{$current_url}}" data-width="100%" data-numposts="9" data-colorscheme="dark"></div>
                                  </article>
                               </div>
-                           </div> -->
+                           </div>
                      <!-- Cmt Fb -->
                   </div>
             </section>
@@ -157,8 +201,8 @@
                @foreach($related as $key=>$movie)
                   <article class="thumb grid-item post-38494">
                               <div class="halim-item">
-                                 <a class="halim-thumb" href="chitiet.php" title="">
-                                 <figure><img class="lazy img-responsive" src="{{asset('uploads/movie/'.$movie->image)}}" alt="" title=""></figure>
+                                 <a class="halim-thumb" href="{{route('movie',$movie->slug)}}" title="{{$movie->title}}">
+                                 <figure><img class="lazy img-responsive" src="{{asset('uploads/movie/'.$movie->image)}}" alt="{{$movie->title}}" title="{{$movie->title}}"></figure>
                                     <span class="status">
                                           @if($movie->resolution == 0)
                                                 HD
@@ -194,7 +238,7 @@
             <script>
                jQuery(document).ready(function($) {				
                var owl = $('#halim_related_movies-2');
-               owl.owlCarousel({loop: true,margin: 4,autoplay: true,autoplayTimeout: 4000,autoplayHoverPause: true,nav: true,navText: ['<i class="hl-down-open rotate-left"></i>', '<i class="hl-down-open rotate-right"></i>'],responsiveClass: true,responsive: {0: {items:2},480: {items:3}, 600: {items:4},1000: {items: 4}}})});
+               owl.owlCarousel({loop: true,margin: 4,autoplay: true,autoplayTimeout: 4000,autoplayHoverPause: true,nav: true,navText: ['<i class="fa-solid fa-caret-left"></i>', '<i class="fa-solid fa-caret-right"></i>'],responsiveClass: true,responsive: {0: {items:2},480: {items:3}, 600: {items:4},1000: {items: 4}}})});
             </script>
             </div>
             </section>
@@ -340,4 +384,101 @@
             @include('pages.includes.sidebar')
 
       </div>
+
+@endsection
+
+@section('footer')
+<!-- ratings -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.4/jquery.rateyo.min.css" integrity="sha512-JEUoTOcC35/ovhE1389S9NxeGcVLIqOAEzlpcJujvyUaxvIXJN9VxPX0x1TwSo22jCxz2fHQPS1de8NgUyg+nA==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+<script>
+      $.ajaxSetup({
+            headers: {
+               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+            });
+</script>
+<script>
+	function remove_background(episode_id) {
+		for(var count = 1; count <= 5 ; count++) {
+			$('#' + episode_id + '-' + count).css('color','#ccc');
+		}
+	}
+   //hover chuột đánh giá sao
+// 	$(document).on('mouseenter','.rating',function(){
+// 		var index = $(this).data('index');
+// 		var episode_id = $(this).data('episode_id');
+// 		var user_id = $(this).data('user_id');
+// //       		alert(index);
+// // alert(user_id);
+// 		remove_background(episode_id);
+// 		for(var count = 1; count<= index; count++)
+// 		{
+// 			$('#' + episode_id + '-' + count).css('color','#ffcc00');
+// 		}
+// 	});
+// 	$(document).on('mouseleave','.rating',function(){
+// 		var index = $(this).data('index');
+// 		var episode_id = $(this).data('episode_id');
+//       var ratingAvg = $(this).data('ratingAvg');
+//       var user_id = $(this).data('user_id');
+// // 		alert(index);
+// // alert(product_id);
+// 		remove_background(episode_id);
+// 		for(var count = 1; count<= ratingAvg; count++)
+// 		{
+// 			$('#' + episode_id + '-' + count).css('color','#ffcc00');
+// 		}
+// 	});
+	$(document).on('click','.rating', function() {
+		var index = $(this).data('index');
+		var episode_id = $(this).data('episode_id');
+      var user_id = $(this).data('user_id');
+		var _token = $('input[name="_token]').val();
+		$.ajax({
+			url:"{{url('insert-rating')}}",
+			method:"post",
+			data:{index:index,episode_id:episode_id,user_id:user_id,_token:'{{csrf_token()}}'},
+			success:function(data){
+            console.log(data);
+				if(data == 'done')
+				{
+					alert('Bạn đã đánh giá ' + index + " trên 5 sao");
+				}else{
+					alert('Bạn đã đánh giá phim này rồi!');
+				}
+			}
+		})
+	})
+</script>
+<!-- <script>
+   $(function () {
+   
+   $("#rateYo").rateYo({
+      rating: {{$ratingAvg}}
+   });
+
+   });
+</script>
+
+<script>
+   $(function(){
+      $("#rateYo").rateYo({
+         rating:{{$ratingAvg}},
+         normalFill:"#AOAOAO",
+         ratedFill:"#ffff00"
+      }).on("rateyo.set", function(e, data){
+         $('#rating_star').val(data.rating);
+         $('#formRating').submit();
+      });
+
+      $("#rateYo1").rateYo({
+         rating:{{$ratingAvg}},
+         normalFill:"#AOAOAO",
+         ratedFill:"#ffff00"
+      }).on("rateyo.set", function(e, data){
+         alert('Bạn chưa đăng nhập')
+      })
+   })
+</script> -->
 @endsection

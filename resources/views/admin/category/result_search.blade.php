@@ -84,7 +84,10 @@
                                     <tr id="{{$cate->id}}">
                                             <td scope="row" class="text-white">{{$key}} </td>
                                             <td class="text-white">{{ $cate->title }}</td>
-                                            <td class="text-white">{!! $cate->description !!}</td>
+                                            <td class="text-white">
+                                                <!-- {!! $cate->description !!} -->
+                                                {!!\Illuminate\Support\Str::of($cate->description)->words(20,'....')!!}
+                                            </td>
                                             <!-- !! để thực thi đọc html -->
                                             <td class="text-white">{{ $cate->slug }}</td>
                                             <td class="text-white">

@@ -67,7 +67,7 @@
                             <h3 class="card-title" style="margin-bottom: -1px;">{{$title}}<!-- <small>jQuery Validation</small>--></h3>
                         </div>
                         <!--NOI DUNG GHI O DAY-->
-                            @include('layouts.alert')
+                            <!-- @include('layouts.alert') -->
                             @yield('content')
                             
                     <!-- right column -->

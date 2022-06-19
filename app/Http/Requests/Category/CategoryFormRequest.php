@@ -13,7 +13,7 @@ class CategoryFormRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,17 @@ class CategoryFormRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => 'required',
+            'description' => 'required|min:30',
+            'status' => 'required',
+        ];
+    }
+    public function messages():array
+    {
+        return [
+            'title.required' => 'Bạn chưa nhập tên danh mục phim',
+            'description.required' => 'Mô tả không dưới 30 ký tự',
+            'status.required' => 'Trạng thái hiển thị danh mục'
         ];
     }
 }

@@ -33,6 +33,7 @@ $('#upload').change(function() {
         type: 'POST',
         dataType: 'JSON',
         data: form,
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
         url: '/admin/upload/services',
         success: function(results) {
             if (results.error === false) {

@@ -64,7 +64,7 @@
                               <h1 class="movie-title title-1" style="display:block;line-height:35px;margin-bottom: -14px;color: #ffed4d;text-transform: uppercase;font-size: 18px;">{{$movie->title}}</h1>
                               <h2 class="movie-title title-2" style="font-size: 12px;">{{$movie->name_eng}}</h2>
                               <ul class="list-info-group">
-                                 <li class="list-info-group-item"><span>Trạng Thái</span> : 
+                                 <li class="list-info-group-item"><span>Chất lượng phim</span> : 
                                           <span class="quality">
                                                 @if($movie->resolution == 0)
                                                       HD

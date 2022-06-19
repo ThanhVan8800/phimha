@@ -28,6 +28,98 @@ class MovieController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function update_topview(Request $request){
+        $data = $request->all();
+        $movie = Movie::find($data['id_phim']);
+        $movie->topview = $data['topview'];
+        $movie->save();
+    }
+    public function filter_topview(Request $request){
+        $data = $request->all();
+        // dd($data);
+        $movie = Movie::where('topview',$data['value'])->orderBy('update_day','DESC')->take(10)->get();
+        $output = '';
+        foreach($movie as $key => $mov){
+            if($mov->resolution==0){
+                                    $text = 'HD';
+                                }elseif($mov->resolution==1){
+                                    $text = 'SD';
+                                }
+                                elseif($mov->resolution==2){
+                                    $text = 'HDCam';
+                                }
+                                elseif($mov->resolution==3){
+                                    $text = 'Cam';
+                                }
+                                elseif($mov->resolution==4){
+                                    $text = 'FullHD';
+                                }else{
+                                    $text = 'Tralier';
+                                }
+        $output.='<div class="item">
+                            <a href="'.url('phim/'.$mov->slug).'" title="'.$mov->title.'">
+                                <div class="item-link">
+                                <img src="'.url('uploads/movie/'.$mov->image).'" class="lazy post-thumb" alt="'.$mov->title.'" title="'.$mov->title.'" />
+                                <span class="is_trailer">
+                                    '.$text.'
+                                </span>
+                                </div>
+                                <p class="title">'.$mov->title.'</p>
+                                <p class="original_title">'.$mov->name_eng.'</p>
+                            </a>
+                            
+                            <div style="float: left;">
+                                <span class="user-rate-image post-large-rate stars-large-vang" style="display: block;/* width: 100%; */">
+                                <span style="width: 0%"></span>
+                                </span>
+                            </div>
+                        </div>';
+    }
+    echo $output;
+    }
+        public function filter_default(Request $request){
+            $data = $request->all();
+            $movie = Movie::where('topview',0)->orderBy('update_day','DESC')->take(10)->get();
+            $output = '';
+            foreach($movie as $key => $mov){
+                
+                if($mov->resolution==0){
+                                        $text = 'HD';
+                                        }elseif($mov->resolution==1){
+                                        $text = 'SD';
+                                        }
+                                        elseif($mov->resolution==2){
+                                        $text = 'HDCam';
+                                        }
+                                        elseif($mov->resolution==3){
+                                        $text = 'Cam';
+                                        }
+                                        elseif($mov->resolution==4){
+                                        $text = 'FullHD';
+                                        }else{
+                                            $text = 'Tralier';
+                                        }
+                $output.='<div class="item">
+                                <a href="'.url('phim/'.$mov->slug).'" title="'.$mov->title.'">
+                                    <div class="item-link">
+                                        <img src="'.url('uploads/movie/'.$mov->image).'" class="lazy post-thumb" alt="'.$mov->title.'" title="'.$mov->title.'" />
+                                        <span class="is_trailer">
+                                            '.$text.'
+                                        </span>
+                                    </div>
+                                    <p class="title">'.$mov->title.'</p>
+                                    <p class="original_title">'.$mov->name_eng.'</p>
+                                </a>
+                                
+                                <div style="float: left;">
+                                    <span class="user-rate-image post-large-rate stars-large-vang" style="display: block;/* width: 100%; */">
+                                    <span style="width: 0%"></span>
+                                    </span>
+                                </div>
+                            </div>';
+            }
+            echo $output;
+    }
     public function index()
     {
         $Movie_Json = Movie::with('category','movie_genre','country','genre')->orderBy('id', 'DESC')->get();
@@ -42,7 +134,7 @@ class MovieController extends Controller
 
         return view('admin.movie.list',[
             'lstMovie' => $lstMovie,
-            'title' => 'Danh sách phim'
+            'title' => 'Thêm phim mới'
         ]);
     }
 
@@ -107,8 +199,6 @@ class MovieController extends Controller
             {
                 $movie -> genre_id = $gen['0'];
             }
-
-
             $movie -> country_id = $data['country_id'];
             $movie -> status = $data['status'];
             $movie -> date_created = Carbon::now('Asia/Ho_Chi_Minh');
@@ -124,6 +214,26 @@ class MovieController extends Controller
                 $get_image -> move('uploads/movie/',$new_image);
                 $movie->image = $new_image;
             }
+            //* Nhật ký hoạt động
+            $user = Auth::user();
+            Session()->put('user', $user);
+            $user = Session()->get('user');
+            $dt = Carbon::now('Asia/Ho_Chi_Minh');
+            $todayDate = $dt->toDayDateTimeString();
+            // dd($todayDate);
+            $name = $user->name;
+            $email = $user->email;
+            $address = $user->address;
+            // $date_time = $user->date_time;
+            $activity = [
+                'name' => $name,
+                'email' => $email,
+                'address' => $address,
+                'date_time' => $dt,
+                'modify_user' => $name.' tạo phim mới '.$movie -> title.' '
+            ];
+            DB::table('userlog_activities')->insert($activity);
+
             //thêm nhiều thể loại cho phim
             $movie -> save();
             $movie -> movie_genre() -> attach($data['genre']);
@@ -134,7 +244,7 @@ class MovieController extends Controller
         }
         
         //$request -> Session()->flash('error','Email hoặc password không đúng vui lòng đăng nhập lại!');// luu y!
-        return redirect()->route('movie.index');
+        return redirect()->back();
     }
 
     /**
@@ -195,6 +305,7 @@ class MovieController extends Controller
     {
         try{
             $data = $request->all();
+            
             // return response()->json($data['genre']);
             $movie =  Movie::find($id);
             $movie -> title = $data['title'];
@@ -222,7 +333,7 @@ class MovieController extends Controller
     
             $movie -> date_created = Carbon::now('Asia/Ho_Chi_Minh');
             $movie -> update_day = Carbon::now('Asia/Ho_Chi_Minh');
-            
+            // $movie -> image = $data['image'];
             // Thêm hình ảnh
             $get_image = $request->file('image');
             // $path = 'public/uploads/movie/';
@@ -232,7 +343,6 @@ class MovieController extends Controller
                 if(file_exists('uploads/movie/' . $movie->image))
                 {
                     unlink('uploads/movie/' . $movie->image);
-                }else{
                     $get_name_image = $get_image -> getClientOriginalName(); // hinhDaLat.jpg
                     $name_image = current(explode('.',$get_name_image)); //current để lấy phần trước dấu . là lấy hinhDaLat còn để là end thì ngược lại
                     $new_image = $name_image.rand(0,9999) .'.' . $get_image->getClientOriginalExtension(); // hinhDaLat789.jpg

@@ -48,6 +48,7 @@
                                 <th scope="col" class="text-white">Phim hot</th>
                                 <th scope="col" class="text-white">Số tập phim</th>
                                 <th scope="col" class="text-white">Năm</th>
+                                <th scope="col">Top views</th>
                                 <th scope="col" class="text-white">Trailer</th>
                                 <th scope="col" class="text-white">Session</th>
                                 <th scope="col" class="text-white">Trạng thái</th>
@@ -132,7 +133,6 @@
                                         </td>
                                         <td class="text-white" value= "{{$movie->episode_film}}">
                                             @if($movie->episode_film > 0)
-
                                                 {{$movie->episode_film}}
                                             @else
                                                 Phim lẻ
@@ -142,6 +142,9 @@
                                             {!! Form::selectYear('year', 1995, 2025,
                                                     isset($movie) ? $movie->year :'', ['class' => 'select-year', 'id'=>$movie->id]) !!}
                                     
+                                        </td>
+                                        <td>
+                                            {!! Form::select('topview', ['0'=>'Ngày','1'=>'Tuần','2'=>'Tháng'], isset($movie->topview) ? $movie->topview : '', ['class'=>'select-topview','id'=>$movie->id]) !!}
                                         </td>
                                         <td class="text-white">
                                             @if ($movie->trailer)
@@ -164,21 +167,24 @@
                                                 Không hiển thị
                                             @endif
                                         </td>
-                                        <td>
-                                            {!! Form::open(['method'=>'delete','route' => ['movie.destroy', $movie->id], 'onsubmit' => 'return confirm("Bạn có muốn xóa?")']) !!}
-                                                {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-dark btn-sm', 'style' => 'height:40px; width:40px'] )  }}
-                                            {!! Form::close() !!}                                
-                                        </td>
-                                        <td>
-                                            <a href="{{route('movie.edit', $movie->id)}}" class="btn btn-warning" style = "height:40px; width:40px"><i class="fa-solid fa-pen"></i></a>
-                                        </td>
-                                        <td>
-                                            <a href="{{route('movie.show',[ $movie->id])}}" class="btn btn-primary ">Xem chi tiet</a>
-                                        </td>
+                                        @if(Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin' || Auth::user()->role == 'manage' && Auth::user()->status == '1')
+                                            <td>
+                                                {!! Form::open(['method'=>'delete','route' => ['movie.destroy', $movie->id], 'onsubmit' => 'return confirm("Bạn có muốn xóa?")']) !!}
+                                                    {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-dark btn-sm', 'style' => 'height:40px; width:40px'] )  }}
+                                                {!! Form::close() !!}                                
+                                            </td>
+                                            <td>
+                                                <a href="{{route('movie.edit', $movie->id)}}" class="btn btn-warning" style = "height:40px; width:40px"><i class="fa-solid fa-pen"></i></a>
+                                            </td>
+                                            <td>
+                                                <a href="{{route('movie.show',[ $movie->id])}}" class="btn btn-primary ">Xem chi tiet</a>
+                                            </td>
+                                        @endif
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>           
+                    <div>{{$lstMovie->links('pagination::bootstrap-4')}}</div>
                 </div>
             </div>   
     </div>     
