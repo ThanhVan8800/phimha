@@ -15,6 +15,10 @@ return new class extends Migration
     {
         Schema::create('episodes', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('movie_id');
+            $table->string('linkfilm',255);
+            $table->string('episode',11)->nullable();
+            $table->integer('views')->default(1);
             $table->timestamps();
         });
     }

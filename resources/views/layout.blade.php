@@ -167,7 +167,6 @@
                                     @endfor
                                  </ul>
                               </li>
-                              <li class="mega"><a title="" href="">Phim VIP</a></li>
                               @foreach ( $category as $key => $cate)
                                     <li class="mega"><a title="{{$cate->title}}" href="{{route('cate',$cate->slug)}}">{{$cate->title}}</a></li>
                               @endforeach
@@ -222,20 +221,19 @@
                <div class="row fullwith-slider"></div>
          </div>
          <div class="container">
+         
                @yield('content')
          </div>
          </div>
          
          <div class="clearfix"></div>
+         
          <footer id="footer" class="clearfix">
             <div class="container footer-columns">
                <div class="row container">
                   <div class="widget about col-xs-12 col-sm-4 col-md-4">
-                     <div class="footer-logo">
-                        <img class="img-responsive" src="https://img.favpng.com/9/23/19/movie-logo-png-favpng-nRr1DmYq3SNYSLN8571CHQTEG.jpg" alt="Phim hay 2021- Xem phim hay nhất" />
-                     </div>
-                     Liên hệ QC: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e5958d8c888d849ccb868aa58288848c89cb868a88">[email&#160;protected]</a>
                      
+                     @include('footer')
                   </div>
                </div>
             </div>
@@ -324,7 +322,14 @@
                })
             })
          </script>
-      
+      <script>
+         var myModal = document.getElementById('myModal')
+         var myInput = document.getElementById('myInput')
+
+         myModal.addEventListener('shown.bs.modal', function () {
+         myInput.focus()
+         })
+      </script>
       
          <style>#overlay_mb{position:fixed;display:none;width:100%;height:100%;top:0;left:0;right:0;bottom:0;background-color:rgba(0, 0, 0, 0.7);z-index:99999;cursor:pointer}#overlay_mb .overlay_mb_content{position:relative;height:100%}.overlay_mb_block{display:inline-block;position:relative}#overlay_mb .overlay_mb_content .overlay_mb_wrapper{width:600px;height:auto;position:relative;left:50%;top:50%;transform:translate(-50%, -50%);text-align:center}#overlay_mb .overlay_mb_content .cls_ov{color:#fff;text-align:center;cursor:pointer;position:absolute;top:5px;right:5px;z-index:999999;font-size:14px;padding:4px 10px;border:1px solid #aeaeae;background-color:rgba(0, 0, 0, 0.7)}#overlay_mb img{position:relative;z-index:999}@media only screen and (max-width: 768px){#overlay_mb .overlay_mb_content .overlay_mb_wrapper{width:400px;top:3%;transform:translate(-50%, 3%)}}@media only screen and (max-width: 400px){#overlay_mb .overlay_mb_content .overlay_mb_wrapper{width:310px;top:3%;transform:translate(-50%, 3%)}}</style>
       

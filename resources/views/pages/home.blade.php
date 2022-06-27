@@ -1,4 +1,12 @@
 @extends('layout')
+@section('head')
+<style>
+    .halim-item{
+        width: 222.5px ;
+    }
+</style>
+
+@endsection
 @section('content')
 
 <div class="row container" id="wrapper">
@@ -120,4 +128,5 @@
                 
                 </main>
                 @include('pages.includes.sidebar')
+            
 @endsection

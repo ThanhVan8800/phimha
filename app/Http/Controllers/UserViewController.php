@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use App\Models\User;
+use App\Models\VNPay;
+use DB;
+use Illuminate\Support\Facades\Session;
+use Carbon\Carbon;
 class UserViewController extends Controller
 {
     /**
@@ -36,7 +40,7 @@ class UserViewController extends Controller
     {
         \Auth::logout();
 
-        return redirect()->route('loginUser');
+        return redirect()->route('homepage');
     }
 
     public function create(Request $request)
@@ -45,7 +49,40 @@ class UserViewController extends Controller
     }
     public function show()
     {
-    
+        $created = Carbon::now('Asia/Ho_Chi_Minh');
+        if(isset($_GET['vnp_Amount'])){
+            $vnp_Amount = $_GET['vnp_Amount'];
+            $vnp_BankCode = $_GET['vnp_BankCode'];
+            $vnp_BankTranNo = $_GET['vnp_BankTranNo'];
+            $vnp_CardType = $_GET['vnp_CardType'];
+            $vnp_OrderInfo = $_GET['vnp_OrderInfo'];
+            $vnp_PayDate = $_GET['vnp_PayDate'];
+            $vnp_TmnCode = $_GET['vnp_TmnCode'];
+            $vnp_TransactionNo = $_GET['vnp_TransactionNo'];
+            $query = DB::table('v_n_pays')->insert(
+                array(
+                    'Amount'     =>   $vnp_Amount, 
+                    'BankCode' => $vnp_BankCode,
+                    'BankTranNo' => $vnp_BankTranNo,
+                    'CardType' => $vnp_CardType,
+                    'OrderInfo' => $vnp_OrderInfo,
+                    'PayDate' => $vnp_PayDate,
+                    'TmnCode' => $vnp_TmnCode,
+                    'TransactionNo' => $vnp_TransactionNo,
+                    'user_id' => Auth::user()->id,
+                )
+            );
+            if($query){
+                echo '<h3>'.$query.'</h3>';
+                
+            }else{
+                echo '<h3>Thất bại</h3>';
+            }
+        }
+            
+        return view('user_viewer.thank_you',[
+            'title' => 'Cảm ơn',
+        ]);
     }
     public function index()
     {

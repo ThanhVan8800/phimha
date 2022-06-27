@@ -172,24 +172,24 @@ class CountryController extends Controller
     {
         try{
             $country = Country::find($id);
-            $user = Auth::user();
-                Session()->put('user', $user);
-                $user = Session()->get('user');
-                $dt = Carbon::now('Asia/Ho_Chi_Minh');
-                $todayDate = $dt->toDayDateTimeString();
-                // dd($todayDate);
-                $name = $user->name;
-                $email = $user->email;
-                $address = $user->address;
-                // $date_time = $user->date_time;
-                $activity = [
-                    'name' => $name,
-                    'email' => $email,
-                    'address' => $address,
-                    'date_time' => $dt,
-                    'modify_user' => $name.' đã xóa phim thuộc quốc gia '.$country -> title.''
-                ];
-                DB::table('userlog_activities')->insert($activity);
+                $user = Auth::user();
+                    Session()->put('user', $user);
+                    $user = Session()->get('user');
+                    $dt = Carbon::now('Asia/Ho_Chi_Minh');
+                    $todayDate = $dt->toDayDateTimeString();
+                    // dd($todayDate);
+                    $name = $user->name;
+                    $email = $user->email;
+                    $address = $user->address;
+                    // $date_time = $user->date_time;
+                    $activity = [
+                        'name' => $name,
+                        'email' => $email,
+                        'address' => $address,
+                        'date_time' => $dt,
+                        'modify_user' => $name.' đã xóa phim thuộc quốc gia '.$country -> title.''
+                    ];
+                    DB::table('userlog_activities')->insert($activity);
                 Country::find($id)->delete();
                 Session()->flash('success','Bạn đã xóa  phim thuộc quốc gia thành công!');
                 return redirect()->back();

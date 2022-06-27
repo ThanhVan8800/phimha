@@ -1,3 +1,17 @@
+<!-- Quảng cáo -->
+
+<!-- <aside id="sidebar" class="col-xs-12 col-sm-12 col-md-4">
+<div id="halim_tab_popular_videos-widget-7" class="widget halim_tab_popular_videos-widget">
+    <a href="https://wpadvancedads.com">
+        <video width="100%" autoplay playsinline controls muted loop>
+            <source src="/ads/quang_cao.mp4" type="video/mp4">
+            <p>If you are reading this, your browser does not support the HTML5 video element.</p>
+        </video>
+    </a>
+</div>
+</aside> -->
+
+
 <aside id="sidebar" class="col-xs-12 col-sm-12 col-md-4">
                 <div id="halim_tab_popular_videos-widget-7" class="widget halim_tab_popular_videos-widget">
                     <div class="section-bar clearfix">
@@ -45,6 +59,7 @@
                     <div class="clearfix"></div>
                 </div>
 </aside>
+
     <aside id="sidebar" class="col-xs-12 col-sm-12 col-md-4">
                 <div id="halim_tab_popular_videos-widget-7" class="widget halim_tab_popular_videos-widget">
                     <div class="section-bar clearfix">

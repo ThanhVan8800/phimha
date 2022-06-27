@@ -10,6 +10,7 @@ use App\Models\Movie;
 use App\Models\Movie_Genre;
 use App\Models\Episode;
 use App\Models\Rating;
+use App\Models\VNPay;
 use DB;
 
 class IndexController extends Controller
@@ -167,13 +168,13 @@ class IndexController extends Controller
         //tạo url slug cho tập phim mặc định là tập 1 khi click vào film,
 
         $episode_numfilm = Episode::with('movie')->where('movie_id',$movie->id)->orderBy('episode','ASC')->take(1)->first();
-
+        $vnPay = VNPay::all();
         //hiện tổng số tập đã có
         $episode_current = Episode::with('movie')->where('movie_id',$movie->id)->get();
 
         $episode_count = $episode_current->count();
 
-        return view('pages.movie',compact('category','genre','country','movie','related','filmhot_trailer','film_hot','episode','episode_numfilm','episode_count'));
+        return view('pages.movie',compact('category','genre','country','movie','related','filmhot_trailer','film_hot','episode','episode_numfilm','episode_count','vnPay'));
     }
     public function watch($slug,$tap)
     {

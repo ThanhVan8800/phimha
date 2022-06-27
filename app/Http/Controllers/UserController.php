@@ -145,7 +145,7 @@ class UserController extends Controller
                 'email' => $data['email'],
                 'address' => $data['address'],
                 'date_time' => $todayDate,
-                'modify_user' => 'Update'
+                'modify_user' => 'Cập nhật tài khoản'
             ];
             // dd($activity);
             DB::table('userlog_activities')->insert($activity);

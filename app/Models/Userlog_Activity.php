@@ -8,6 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Userlog_Activity extends Model
 {
     use HasFactory;
-    public $timestamps = false;
     protected $table = 'userlog_activities';
 }

@@ -39,6 +39,7 @@ class MovieFormRequest extends FormRequest
             'image' => 'required|mimes:jpeg,bmp,png,jpg',
             'status' => 'required',
             'year' => 'required',
+            'film_vip' => 'required'
         ];
     }
     public function messages() : array
@@ -58,7 +59,8 @@ class MovieFormRequest extends FormRequest
             'country_id.required'    => 'Chọn quốc gia phim',
             'status.required'        => 'Trạng thái hiển thị phim',
             'image.required'         =>  'Vui lòng nhập hình ảnh!',
-            'year.required'         =>  'Vui lòng nhập năm phát hành phim!'
+            'year.required'          =>  'Vui lòng nhập năm phát hành phim!',
+            'film_vip.required'      => 'Chọn phân loại phim'
         ];
     }
 }

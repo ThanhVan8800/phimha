@@ -19,4 +19,9 @@ class Rating extends Model
     {
         return $this->belongsTo(User::class,'user_id');
     }
+    public function episode()
+    {
+        return $this->belongsTo(Episode::class,'episode_id');
+    }
+    //đảo 1 tập 1 người dc 1 lần
 }

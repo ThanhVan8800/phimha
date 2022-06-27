@@ -48,7 +48,7 @@
                                     Trang chủ
                                 </a>
                                 <!--  Thống kê -->
-                                <a href="" class="nav-link">
+                                <a href="{{route('dashboard')}}" class="nav-link">
                                     <i class="nav-icon fa-solid fa-bars-staggered"></i>
                                     Thống kê
                                 </a>
@@ -77,6 +77,10 @@
                                 <a href="{{route('user.index')}}" class="nav-link">
                                     <i class="nav-icon fa-solid fa-users"></i>
                                         Quản lí tài khoản
+                                </a>
+                                <a href="{{route('film_package')}}" class="nav-link">
+                                    <i class="nav-icon fa-solid fa-users"></i>
+                                        Danh sách người dùng đã mua gói phim Vip
                                 </a>
                                 <a href="/admin/userlog-activities" class="nav-link">
                                     <i class="nav-icon fa-solid fa-book-medical"></i>

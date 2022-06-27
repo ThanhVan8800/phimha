@@ -24,15 +24,15 @@ class UserFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'username' => 'required',
-            'email' => 'required',
-            'password' => 'required',
-            'password_confirmation' => 'required',
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6|confirmed',
         ];
     }
     public function messages() : array
     {
         return[
+            'name' => 'cccc'
         ];
     }
 }

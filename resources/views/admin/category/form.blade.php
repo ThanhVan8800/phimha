@@ -126,7 +126,7 @@
                             <tbody class="order_position" id="lst">
                                 @foreach($lstCate as $key => $cate)
                                     <tr id="{{$cate->id}}">
-                                            <td scope="row" class="text-white">{{$key}} </td>
+                                            <td scope="row" class="text-white">{{$cate->id}} </td>
                                             <td class="text-white">{{ $cate->title }}</td>
                                             <td class="text-white">
                                                 <div class="comment more">

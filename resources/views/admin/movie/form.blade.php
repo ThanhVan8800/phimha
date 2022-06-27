@@ -90,11 +90,19 @@
                             @error('subtitle')
                                 <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
+                            
                         </div>
                         <div class="col-md-4">
                             {!! Form::label('Trailer', 'Trailer', []) !!}
                             {!! Form::text('trailer', isset($movie) ? $movie->trailer : '', ['class' => 'form-control col-md-8', 'placeholder' =>'Nhập Trailer','id' => 'trailer']) !!}
+                            {!! Form::label('', 'Phim Vip', []) !!}
+                            {!! Form::label('title', '*', ['class' => 'text-danger']) !!}
+                            {!! Form::select('film_vip',['1' => 'Phim thường', '2' => 'Phim Vip'], isset($movie) ? $movie->film_vip : '', ['class' => 'form-control col-md-8', 'placeholder' =>'Chọn dạng phim','id' => '']) !!}
+                            @error('film_vip')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
                         </div>
+                        
                     </div>
                     <div class="form-group">
                         <div class="row">

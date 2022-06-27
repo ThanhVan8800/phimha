@@ -51,12 +51,20 @@
                     </div>
                     
                 </div>
-                <button>Chỉnh sửa</button>
-                <a href="/admin/users/changePassword/{{Auth::user()->id}}">Đổi mật khẩu</a>
+                <div class="form-groupp" >
+                    <button class="btn btn-outline-info">
+                        Chỉnh sửa
+                    </button>
+                    <a href="/admin/users/changePassword/{{Auth::user()->id}}" class="btn__neon">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        Đổi mật khẩu
+                    </a>
+                </div>
+                
                 <!-- /.card-body -->
     </div>
 </form>
-
-
-
 @endsection

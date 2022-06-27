@@ -47,7 +47,7 @@ class EpisodeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(EpisodeFormRequest $request)
     {
         try{
             $data = $request->all();
@@ -212,7 +212,9 @@ class EpisodeController extends Controller
             }
         }else{
             $output .= '<option value="HD">HD</option>
-                        <option value="FullHD">FullHD</option>';
+                        <option value="FullHD">FullHD</option>
+                        <option value="Cam">Cam</option>
+                        <option value="HDCam">HDCam</option>';
         }
         
         echo $output;

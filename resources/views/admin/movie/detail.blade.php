@@ -11,7 +11,8 @@
                     <label for="name">Tên phim: {{$movie->title}}</label>
                 </div>
                 <div class="form-group col-md-8">
-                    <label for="name">Mô tả:{!!$movie->description!!}</label>
+                    <label for="name ">Mô tả:</label>
+                    <p>{!!$movie->description!!}</p>
                 </div>
                 <div class="form-group col-md-8">
                     <label for="name">Hình ảnh: </label><br/>

@@ -24,17 +24,17 @@ class EpisodeFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required',
-            'description' => 'required|min:30',
-            'status' => 'required',
+            'linkfilm' => 'required',
+            'episode' => 'required',
+            'movie_id' => 'required',
         ];
     }
     public function messages():array
     {
         return [
-            'title.required' => 'Bạn chưa nhập tên quốc gia phim thuộc',
-            'description.required' => 'Mô tả không dưới 30 ký tự',
-            'status.required' => 'Trạng thái hiển thị quốc gia của phim'
+            'linkfilm.required' => 'Bạn chưa nhập linkflim',
+            'episode.required' => 'Vui lòng chọn tập phim',
+            'movie_id.required' => 'Vui lòng chọn phim cần xem'
         ];
     }
 }

@@ -19,6 +19,12 @@
                     <div class="row justify-content-center">
                     <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
                         <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
+                        @include('pages.alert')
+                        @if(Session::has('success'))
+                            <div class="alert alert-success">
+                                {{Session::get('success')}}
+                            </div>
+                        @endif
                         <form class="mx-1 mx-md-4" action="{{ route('registerUser')}}" method="POST">
                                 
                                 <div class="d-flex flex-row align-items-center mb-4">
@@ -27,6 +33,9 @@
                                         <label class="form-label" for="form3Example1c">Your Name</label>
                                         <input type="text"  name="name" class="form-control" />
                                     </div>
+                                    @error('name')
+                                        <div class="alert-error">{{$message}}</div>
+                                    @enderror
                                 </div>
 
                                 <div class="d-flex flex-row align-items-center mb-4">
@@ -35,6 +44,20 @@
                                         <label class="form-label" >Your Email</label>
                                         <input type="email"  name="email" class="form-control" />
                                     </div>
+                                    @error('email')
+                                        <div class="alert-error">{{$message}}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="d-flex flex-row align-items-center mb-4">
+                                    <i class="fas fa-phone fa-lg me-3 fa-fw "></i>
+                                    <div class="form-outline flex-fill mb-0">
+                                        <label class="form-label" >Phone Number</label>
+                                        <input type="number"  name="phone_number" class="form-control" />
+                                    </div>
+                                    @error('phone_number')
+                                        <div class="alert-error">{{$message}}</div>
+                                    @enderror
                                 </div>
 
                                 <div class="d-flex flex-row align-items-center mb-4">
@@ -43,15 +66,19 @@
                                         <label class="form-label" >Password</label>
                                         <input type="password"  name="password" class="form-control" />
                                     </div>
+                                    @error('password')
+                                        <div class="alert-error">{{$message}}</div>
+                                    @enderror
                                 </div>
 
-                                <!-- <div class="d-flex flex-row align-items-center mb-4">
+
+                                <div class="d-flex flex-row align-items-center mb-4">
                                     <i class="fas fa-key fa-lg me-3 fa-fw"></i>
                                     <div class="form-outline flex-fill mb-0">
                                         <label class="form-label" >Repeat your password</label>
-                                        <input type="password"  name="comfirm_password" class="form-control" />
+                                        <input type="password"  name="password_confirmation" class="form-control" />
                                     </div>
-                                </div> -->
+                                </div>
 
                                 <div class="form-check d-flex justify-content-center mb-5">
                                     <input class="form-check-input me-2" type="checkbox" value=""  />

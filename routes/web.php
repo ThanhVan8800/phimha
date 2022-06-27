@@ -16,6 +16,9 @@ use App\Http\Controllers\ChatRealTimeController;
 use App\Http\Controllers\UserViewController;
 use App\Http\Controllers\RegisterUserController;
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\FilmPackageController;
 
 use App\Events\ChatEvent;
 
@@ -104,12 +107,21 @@ Route::middleware(['auth'])->group(function(){
             Route::get('index',[ChatRealTimeController::class,'index']);
             Route::post('store',[ChatRealTimeController::class,'store'])->name('chat.store');
         });
+        //* Danh sách tài khoản đăng ký gói phim
+        Route::prefix('film_package')->group(function(){
+            Route::get('film-package',[FilmPackageController::class,'film_package'])->name('film_package');
+            Route::get('film-package/{id}',[FilmPackageController::class,'edit'])->name('film_package.edit');
+            Route::post('film-package/{id}',[FilmPackageController::class,'update']);
+        });
         //* Nhật ký hoạt động
         Route::get('userlog-activities',[UserActivityController::class,'index']);
         Route::get('search-userlog',[UserActivityController::class,'searchUserlog'])->name('searchUserlog');
 
         //*Upload image
         Route::post('upload/services',[UploadController::class,'store']);
+
+        //* Thống kê
+        Route::get('dashboard',[DashboardController::class,'index'])->name('dashboard');
     });
     
 });
@@ -146,7 +158,15 @@ Route::get('search_ad', [CategoryController::class,'search'])->name('search_admi
     Route::get('/update-topview-phim', [MovieController::class, 'update_topview']);
     Route::get('/filter-topview-phim', [MovieController::class, 'filter_topview']);
     Route::get('/filter-topview-default', [MovieController::class, 'filter_default']);
-    
 
 
-Route::get('ui', [IndexController::class,'ui']);
+//* Đăng ký gói Vip
+Route::get('/planform',[RegisterUserController::class,'planform']);
+//PaymentController
+
+Route::post('/vnpay_payment',[PaymentController::class,'vnpay_payment']);
+
+//* Cảm ơn khi đăng ký
+Route::get('/thank-you',[UserViewController::class,'show']);
+
+Route::post('ui', [IndexController::class,'ui']);

@@ -46,6 +46,7 @@
                                 <th scope="col" class="text-white">Loại phim</th>
                                 <th scope="col" class="text-white">Quốc gia</th>
                                 <th scope="col" class="text-white">Phim hot</th>
+                                <th scope="col" class="text-white">Phim VIP</th>
                                 <th scope="col" class="text-white">Số tập phim</th>
                                 <th scope="col" class="text-white">Năm</th>
                                 <th scope="col">Top views</th>
@@ -129,6 +130,13 @@
                                                 Hot
                                             @else
                                                 No Hot
+                                            @endif
+                                        </td>
+                                        <td class="text-white">
+                                            @if($movie->film_vip == 2)
+                                                Phim VIP
+                                            @else
+                                                Phim thường
                                             @endif
                                         </td>
                                         <td class="text-white" value= "{{$movie->episode_film}}">

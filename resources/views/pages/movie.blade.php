@@ -40,23 +40,48 @@
                            <div id="bookmark" class="bookmark-img-animation primary_ribbon" data-id="38424">
                               <div class="halim-pulse-ring"></div>
                            </div>
-                           <div class="title-wrapper" style="font-weight: bold;">
-                              Bookmark
-                           </div>
+                           @if (Auth::check() )
+                                 <div class="title-wrapper" style="font-weight: bold;">
+                                    Chúc bạn xem phim vui vẻ! <a href="{{ url('/planform')}}">đăng ký gói VIP </a>
+                                 </div>
+                           @elseif(Auth::check() && $movie->film_vip == 1)
+                                 <div class="title-wrapper" style="font-weight: bold;">
+                                    Chúc bạn xem phim vui vẻ! <a href="{{ url('/planform')}}">đăng ký gói VIP </a>
+                                    {{$vnPay->BankCode}}
+                                 </div>
+                           @elseif(Auth::check() && $movie->film_vip == 2)
+                                 <div class="title-wrapper" style="font-weight: bold;">
+                                    Bạn cần <a href="{{ url('/planform')}}">đăng ký gói VIP </a>  để xem được phim này!
+                                    {{$vnPay->BankCode}}
+                                 </div>
+                           @endif
+                           
                         </div>
                         <div class="movie_info col-xs-12">
                            <div class="movie-poster col-md-3">
                               <img class="movie-thumb" src="{{asset('uploads/movie/'.$movie->image)}}" alt="{{$movie->title}}">
-                              @if($movie->resolution != 5 )
-                                    @if($episode_count>0)
-                                       <div class="bwa-content">
-                                          <div class="loader"></div>
-                                          <a href="{{url('xem-phim/'.$movie->slug.'/tap-'.$episode_numfilm->episode)}}" class="bwac-btn">
-                                             <i class="fa fa-play"></i>
-                                          </a>
-                                       </div>
+                              @if(Auth::check() && $movie->film_vip == 2)
+                                    @if($movie->resolution != 5 )
+                                          @if($episode_count>0)
+                                             <div class="bwa-content">
+                                                <div class="loader"></div>
+                                                <a href="{{url('xem-phim/'.$movie->slug.'/tap-'.$episode_numfilm->episode)}}" class="bwac-btn">
+                                                   <i class="fa fa-play"></i>
+                                                </a>
+                                             </div>
+                                          @endif
                                     @endif
-                              @else 
+                              @elseif($movie->film_vip == 1)
+                                    @if($movie->resolution != 5 )
+                                          @if($episode_count>0)
+                                             <div class="bwa-content">
+                                                <div class="loader"></div>
+                                                <a href="{{url('xem-phim/'.$movie->slug.'/tap-'.$episode_numfilm->episode)}}" class="bwac-btn">
+                                                   <i class="fa fa-play"></i>
+                                                </a>
+                                             </div>
+                                          @endif
+                                    @endif
                               @endif
                               <a href="#watch_trailer" class="btn btn-danger watch_trailer" style="display:block">Xem Trailer</a>
                            </div>
@@ -112,8 +137,8 @@
                                              @endforeach
                                     @endif
                                  </li>
-                                 <li class="list-info-group-item"><span>Thể loại</span> : <a href="" rel="category tag">Chiếu Rạp</a>, <a href="" rel="category tag">Hành động</a>, <a href="" rel="category tag">Phiêu Lưu</a>, <a href="" rel="category tag">Viễn Tưởng</a></li>
-                                 <li class="list-info-group-item"><span>Quốc gia</span> : <a href="" rel="tag">{{$movie->country->title}}</a></li>
+                                 <li class="list-info-group-item"><span>Thể loại</span> : <a href="{{route('genre',$movie->genre->slug)}}" rel="category tag">{{$movie->genre->title}}</a></li>
+                                 <li class="list-info-group-item"><span>Quốc gia</span> : <a href="{{route('country',$movie->country->slug)}}" rel="tag">{{$movie->country->title}}</a></li>
                                  <li class="list-info-group-item">
                                     <span>Tập phim mới nhất</span> :  
                                     @if($episode_count>0)
@@ -131,8 +156,8 @@
                                     @endif
                                     
                                  </li>
-                                 <li class="list-info-group-item"><span>Đạo diễn</span> : <a class="director" rel="nofollow" href="#" title="Cate Shortland">{{$movie->director}}</a></li>
-                                 <li class="list-info-group-item last-item" style="-overflow: hidden;-display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-flex: 1;-webkit-box-orient: vertical;"><span>Diễn viên</span> : <a href="" rel="nofollow" title="{{$movie->actor}}">{{$movie->actor}}</a></li>
+                                 <li class="list-info-group-item"><span>Đạo diễn</span> : <span class="director" rel="nofollow" href="#" title="Cate Shortland">{{$movie->director}}</span></li>
+                                 <li class="list-info-group-item last-item" style="-overflow: hidden;-display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-flex: 1;-webkit-box-orient: vertical;"><span>Diễn viên</span> : <span href="" rel="nofollow" title="{{$movie->actor}}">{{$movie->actor}}</span></li>
                               </ul>
                               <div class="movie-trailer hidden"></div>
                            </div>
@@ -263,4 +288,26 @@
             </main>
             <aside id="sidebar" class="col-xs-12 col-sm-12 col-md-4"></aside>
          </div>
+@endsection
+@section('footer')
+   <script>
+      $(function(){
+         $("#rateYo").rateYo({
+            rating:,
+            normalFill:"#AOAOAO",
+            ratedFill:"#ffff00"
+         }).on("rateyo.set", function(e, data){
+            $('#rating_star').val(data.rating);
+            $('#formRating').submit();
+         });
+
+         $("#rateYo1").rateYo({
+            rating:,
+            normalFill:"#AOAOAO",
+            ratedFill:"#ffff00"
+         }).on("rateyo.set", function(e, data){
+            alert('Bạn chưa đăng nhập')
+         })
+      })
+   </script> 
 @endsection

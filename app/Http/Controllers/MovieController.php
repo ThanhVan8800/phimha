@@ -192,6 +192,7 @@ class MovieController extends Controller
             $movie -> director = $data['director'];
             // thuộc phim
             $movie -> belonging_movie = $data['belonging_movie'];
+            $movie -> film_vip = $data['film_vip'];
 
             //Thêm nhiều thể loại phim
             // $movie -> genre_id = $data['genre_id'];
@@ -325,13 +326,13 @@ class MovieController extends Controller
             
             $movie -> category_id = $data['category_id'];
             $movie -> belonging_movie = $data['belonging_movie'];
+            $movie -> film_vip = $data['film_vip'];
             
             $movie -> country_id = $data['country_id'];
             $movie -> status = $data['status'];
             $movie -> episode_film = $data['episode_film'];
     
     
-            $movie -> date_created = Carbon::now('Asia/Ho_Chi_Minh');
             $movie -> update_day = Carbon::now('Asia/Ho_Chi_Minh');
             // $movie -> image = $data['image'];
             // Thêm hình ảnh
