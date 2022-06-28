@@ -51,4 +51,13 @@ class FilmPackageController extends Controller
         }
         return redirect()->back();
     }
+    public function show(Request $request)
+    {
+        $lstUserPay = VNPay::all();
+
+        return view('admin.package_film.show',[
+            'title' => 'Danh sách khách đã thanh toán',
+            'lstUserPay' => $lstUserPay
+        ]);
+    }
 }

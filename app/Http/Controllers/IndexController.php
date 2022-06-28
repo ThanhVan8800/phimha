@@ -12,6 +12,7 @@ use App\Models\Episode;
 use App\Models\Rating;
 use App\Models\VNPay;
 use DB;
+use Carbon;
 
 class IndexController extends Controller
 {
@@ -151,6 +152,8 @@ class IndexController extends Controller
     }
     public function movie($slug)
     {
+        //Lấy ngày hiện tại kiểm tra ngày hết hạn
+        // $current_time = Carbon\Carbon::now()->toDateTimeString();
         $category = Category::orderBy('position','ASC')->where('status', 1)->get();
         $genre = Genre::orderBy('id','desc')->get();
         $country = Country::orderBy('id','desc')->get();

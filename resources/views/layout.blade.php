@@ -88,9 +88,12 @@
                   <div class="col-md-4 hidden-xs">   
                      <div id="get-bookmark" class="box-shadow"><i class="fa-solid fa-user-check"></i>
                         @if(auth()->check())
-                           <span>
-                              Hi {{auth()->user()->name}}
-                           </span>||
+                           <a href="{{route('profile')}}">
+                              <span>
+                                 Hi {{auth()->user()->name}}
+                              </span>
+                           </a>
+                           ||
                            <a class="nav-link href="{{ route('logoutUser') }}" onclick="event.preventDefault(); document.getElementById('frm-logout').submit();">
                               <span class="menu-icon">
                                  <i class="mdi mdi-speedometer"></i>
@@ -131,10 +134,19 @@
                      
                      <button type="text" class="navbar-toggle collapsed pull-right get-bookmark-on-mobile">
                         @if(auth()->check())
+                           <a href="{{route('profile')}}"></a>
                               <span>
                                  Hi {{auth()->user()->name}}
                               </span>||
-                              <span>Đăng xuất</span>
+                                 <a class="nav-link href="{{ route('logoutUser') }}" onclick="event.preventDefault(); document.getElementById('frm-logout').submit();">
+                                 <span class="menu-icon">
+                                    <i class="mdi mdi-speedometer"></i>
+                                 </span>
+                                 <span class="menu-title">Đăng xuất</span>
+                                 </a>    
+                                 <form id="frm-logout" action="{{ route('logoutUser') }}" method="POST" style="display: none;">
+                                    {{ csrf_field() }}
+                                 </form>
                            @else
                               <span class="">
                                  <a href="/register-user">Đăng Ký</a>

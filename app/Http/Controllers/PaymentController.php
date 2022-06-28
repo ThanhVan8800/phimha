@@ -83,8 +83,6 @@ class PaymentController extends Controller
             , 'message' => 'success'
             , 'data' => $vnp_Url);
             if (isset($_POST['redirect'])) {
-                
-
                 header('Location: ' . $vnp_Url);
                 die();
             } else {

@@ -40,27 +40,31 @@
                            <div id="bookmark" class="bookmark-img-animation primary_ribbon" data-id="38424">
                               <div class="halim-pulse-ring"></div>
                            </div>
-                           @if (Auth::check() )
+                           @php
+                              $current_time = Carbon\Carbon::now()->toDateTimeString();
+                              $current = Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $current_time)->format('Y-m-d');
+                           @endphp
+                           @if (Auth::check() &&  $movie->film_vip == 1 )
                                  <div class="title-wrapper" style="font-weight: bold;">
-                                    Chúc bạn xem phim vui vẻ! <a href="{{ url('/planform')}}">đăng ký gói VIP </a>
+                                    Chúc bạn xem phim vui vẻ! 
                                  </div>
-                           @elseif(Auth::check() && $movie->film_vip == 1)
+                           @elseif(Auth::check() && $current < Auth::user() -> EndDate && $movie->film_vip == 2)
                                  <div class="title-wrapper" style="font-weight: bold;">
-                                    Chúc bạn xem phim vui vẻ! <a href="{{ url('/planform')}}">đăng ký gói VIP </a>
-                                    {{$vnPay->BankCode}}
+                                    Chúc bạn xem phim vui vẻ! 
                                  </div>
-                           @elseif(Auth::check() && $movie->film_vip == 2)
+                           @elseif(Auth::check() && $movie->film_vip == 2 && $current > Auth::user() -> EndDate)
                                  <div class="title-wrapper" style="font-weight: bold;">
-                                    Bạn cần <a href="{{ url('/planform')}}">đăng ký gói VIP </a>  để xem được phim này!
-                                    {{$vnPay->BankCode}}
+                                    Opps! Gói Vip của bạn đã hết <a href="{{ url('/planform')}}">đăng ký gói VIP </a>  để xem được phim này!
                                  </div>
+                           @else
+                                 Bạn cần có tài khoản để xem phim này!
                            @endif
                            
                         </div>
                         <div class="movie_info col-xs-12">
                            <div class="movie-poster col-md-3">
                               <img class="movie-thumb" src="{{asset('uploads/movie/'.$movie->image)}}" alt="{{$movie->title}}">
-                              @if(Auth::check() && $movie->film_vip == 2)
+                              @if(Auth::check() && $movie->film_vip == 2 && $current < Auth::user() -> EndDate)
                                     @if($movie->resolution != 5 )
                                           @if($episode_count>0)
                                              <div class="bwa-content">

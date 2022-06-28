@@ -112,6 +112,7 @@ Route::middleware(['auth'])->group(function(){
             Route::get('film-package',[FilmPackageController::class,'film_package'])->name('film_package');
             Route::get('film-package/{id}',[FilmPackageController::class,'edit'])->name('film_package.edit');
             Route::post('film-package/{id}',[FilmPackageController::class,'update']);
+            Route::get('vnpay-payment',[FilmPackageController::class,'show'])->name('vnpay');
         });
         //* Nhật ký hoạt động
         Route::get('userlog-activities',[UserActivityController::class,'index']);
@@ -168,5 +169,7 @@ Route::post('/vnpay_payment',[PaymentController::class,'vnpay_payment']);
 
 //* Cảm ơn khi đăng ký
 Route::get('/thank-you',[UserViewController::class,'show']);
+//Trang thông tin khách hàng
+Route::get('/profile',[UserViewController::class,'profile'])->name('profile');
 
 Route::post('ui', [IndexController::class,'ui']);

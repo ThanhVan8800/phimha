@@ -78,14 +78,37 @@
                                     <i class="nav-icon fa-solid fa-users"></i>
                                         Quản lí tài khoản
                                 </a>
-                                <a href="{{route('film_package')}}" class="nav-link">
-                                    <i class="nav-icon fa-solid fa-users"></i>
-                                        Danh sách người dùng đã mua gói phim Vip
-                                </a>
+                                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                                    <li class="nav-item menu-open">
+                                        <a href="{{route('film_package')}}" class="nav-link ">
+                                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                                        <p>
+                                            Danh sách gói phim Vip
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                        </a>
+                                        <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="{{route('vnpay')}}" class="nav-link">
+                                            <p>Khách hàng thanh toán</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{route('film_package')}}" class="nav-link">
+                                            <p>Hạn dùng</p>
+                                            </a>
+                                        </li>
+                                        </ul>
+                                    </li>
+                                </ul>
                                 <a href="/admin/userlog-activities" class="nav-link">
                                     <i class="nav-icon fa-solid fa-book-medical"></i>
                                         Nhật ký hoạt động
                                 </a>
+                                <li class="nav-item menu-open">
+        
+                                
+        
                                 @auth
                                     <label for="" class="nav-link text-white">{{Auth::user()->name}} |</label>    
                                     <form method="post" action="{{route('logout_ad')}}">

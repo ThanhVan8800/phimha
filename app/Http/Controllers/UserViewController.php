@@ -72,16 +72,19 @@ class UserViewController extends Controller
                     'user_id' => Auth::user()->id,
                 )
             );
-            if($query){
-                echo '<h3>'.$query.'</h3>';
-                
-            }else{
-                echo '<h3>Thất bại</h3>';
-            }
+            
         }
             
         return view('user_viewer.thank_you',[
             'title' => 'Cảm ơn',
+        ]);
+    }
+    public function profile()
+    {
+        $user = User::all();
+        return view('user_viewer.information',[
+            'title' => 'Thông tin khách hàng',
+            'user' => $user,
         ]);
     }
     public function index()
