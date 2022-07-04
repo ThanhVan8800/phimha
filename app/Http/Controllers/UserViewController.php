@@ -9,6 +9,8 @@ use App\Models\VNPay;
 use DB;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
+use App\Mail\ThankMail;
+use Illuminate\Support\Facades\Mail;
 class UserViewController extends Controller
 {
     /**
@@ -51,7 +53,7 @@ class UserViewController extends Controller
     {
         $created = Carbon::now('Asia/Ho_Chi_Minh');
         if(isset($_GET['vnp_Amount'])){
-            $vnp_Amount = $_GET['vnp_Amount'];
+            $vnp_Amount = $_GET['vnp_Amount']/100;
             $vnp_BankCode = $_GET['vnp_BankCode'];
             $vnp_BankTranNo = $_GET['vnp_BankTranNo'];
             $vnp_CardType = $_GET['vnp_CardType'];
@@ -59,6 +61,13 @@ class UserViewController extends Controller
             $vnp_PayDate = $_GET['vnp_PayDate'];
             $vnp_TmnCode = $_GET['vnp_TmnCode'];
             $vnp_TransactionNo = $_GET['vnp_TransactionNo'];
+            // dd($vnp_Amount);
+            $user = User::find(1);
+            $email = Auth::user()->email;
+            $mailable = new ThankMail($user);
+            Mail::to($email)
+            ->queue($mailable);
+
             $query = DB::table('v_n_pays')->insert(
                 array(
                     'Amount'     =>   $vnp_Amount, 

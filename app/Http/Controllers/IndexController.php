@@ -43,11 +43,20 @@ class IndexController extends Controller
     }
     public function index()
     {
-        
+        // $view_movie = DB::table('movies')
+        //         ->join('episodes', 'movies.id', '=', 'episodes.movie_id')
+        //         // ->join('orders', 'users.id', '=', 'orders.user_id')
+        //         ->select('movies.*', 'episodes.views')
+        //         ->select( DB::raw('views'))
+        //         ->groupBy('views')
+        // //         ->havingRaw('SUM(SL_Ton) > 0')
+
+        //         ->get();
+                // dd($view_movie);
         //film_hot cho slider
         $film_hot = Movie::where('film_hot',1)->where('status',1)->orderBy('update_day','DESC')->get();
         // film cho sidebar
-        $film_sidebar = Movie::where('film_hot',1)->where('status',1)->orderBy('update_day','DESC')->take(15)->get();
+        $film_sidebar = Movie::with('episode')->where('film_hot',1)->where('status',1)->orderBy('update_day','DESC')->take(15)->get();
         $filmhot_trailer = Movie::where('resolution',5)->where('status',1)->orderBy('update_day','DESC')->take(10)->get();
         $category = Category::orderBy('position','ASC')->where('status', 1)->get();
         $genre = Genre::orderBy('id','desc')->get();
@@ -61,6 +70,7 @@ class IndexController extends Controller
             'film_hot' => $film_hot,
             'film_sidebar' => $film_sidebar,
             'filmhot_trailer' => $filmhot_trailer,
+            // 'view_movie' => $view_movie,
             
         ]);
     }

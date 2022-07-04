@@ -19,6 +19,8 @@ use App\Http\Controllers\RatingController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\FilmPackageController;
+use App\Http\Controllers\SendMailController;
+
 
 use App\Events\ChatEvent;
 
@@ -123,6 +125,11 @@ Route::middleware(['auth'])->group(function(){
 
         //* Thống kê
         Route::get('dashboard',[DashboardController::class,'index'])->name('dashboard');
+        Route::post('/filter-by-date',[DashboardController::class,'filter'])->name('filter-by-date');
+        Route::post('/dashboard-filter',[DashboardController::class,'dashboard_filter'])->name('dashboard-filter');
+        Route::post('/chart30days',[DashboardController::class,'chart30days'])->name('chart30days');
+
+        Route::get('/send-mail', [SendMailController::class, 'sendMail'])->name('sendMail');
     });
     
 });
@@ -172,4 +179,4 @@ Route::get('/thank-you',[UserViewController::class,'show']);
 //Trang thông tin khách hàng
 Route::get('/profile',[UserViewController::class,'profile'])->name('profile');
 
-Route::post('ui', [IndexController::class,'ui']);
+Route::get('ui', [IndexController::class,'ui']);

@@ -1,7 +1,7 @@
 @extends('layout')
 @section('head')
 <style>
-    .halim-item{
+    .halim-itemm{
         width: 222.5px ;
     }
 </style>
@@ -17,7 +17,7 @@
                         <div id="halim_related_movies-2" class="owl-carousel owl-theme related-film">
                             @foreach($film_hot as $key=>$film)
                             <article class="thumb grid-item post-38498">
-                            <div class="halim-item">
+                            <div class="halim-itemm">
                                 <a class="halim-thumb" href="{{route('movie',$film->slug)}}" title="{{$film->title}}">
                                     <figure><img class="lazy img-responsive" src="{{asset('uploads/movie/'.$film->image)}}" alt="{{$film->title}}" title="{{$film->title}}"></figure>
                                     <span class="status">
@@ -84,7 +84,7 @@
                                     <a class="halim-thumb" href="{{route('movie',[$cate_movie->slug])}}">
                                         <figure><img class="lazy img-responsive" src="{{asset('uploads/movie/'.$cate_movie->image)}}" alt="{{$cate_movie->title}}" title="{{$cate_movie->title}}"></figure>
                                         <span class="status">
-                                        @if($cate_movie->resolution == 0)
+                                            @if($cate_movie->resolution == 0)
                                                 HD
                                             @elseif ($cate_movie->resolution == 1)
                                                 SD
@@ -100,14 +100,14 @@
                                             @if ($cate_movie->subtitle == 0)
                                                 Vietsub
                                                     @if ($cate_movie->session != 0)
-                                                        - Session-{{$cate_movie->session}}
+                                                            Session{{$cate_movie->session}}
                                                     @endif
                                                 @else
                                                 Thuyết minh
                                                     @if ($cate_movie->session != 0)
                                                             Session{{$cate_movie->session}}
-                                                        @endif
-                                                @endif
+                                                    @endif
+                                            @endif
                                         </span> 
                                         <div class="icon_overlay"></div>
                                         <div class="halim-post-title-box">

@@ -17,10 +17,11 @@
     <!-- Socketio -->
 
     <!-- <script src="/templates/admin/datatables/js/jquery.dataTables.min.js"></script> -->
+    
     <script type="text/javascript">
         $(document).ready( function () {
         $('#myTable').DataTable();
-    } );
+    });
     </script>
     @yield('footer')
     <script type="text/javascript">
@@ -53,8 +54,12 @@
                 dataType: 'JSON',
                 data: form,
                 url: '/admin/upload/services',
+                beforeSend: function() {
+                    $('#image_show').html('<br/><label class="text-primary">Loading...</label>');
+                },
                 success: function(results) {
                     if (results.error === false) {
+                        $('#image_show').html('<br/><label class="text-primary">Success...</label>');
                         $('#image_show').html('<a href="' + results.url + '" target="_blank">' +
                             '<img src="' + results.url + '" width="100px"></a>');
 

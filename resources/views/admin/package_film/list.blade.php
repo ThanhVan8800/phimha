@@ -87,6 +87,9 @@
                                             <td class="text-white">
                                                 <a href="{{route('film_package.edit', $user->id)}}" class="btn btn-warning" style = "height:40px; width:40px"><i class="fa-solid fa-pen"></i></a>
                                             </td>
+                                            <td class="text-white">
+                                                <a href="{{route('sendMail', $user->id)}}" class="btn btn-warning" style = "height:40px; width:40px">mail</a>
+                                            </td>
                                     </tr>
                                 @endforeach
                                     

@@ -14,7 +14,7 @@
                </div>
             </div>
             <main id="main-contents" class="col-xs-12 col-sm-12 col-md-8">
-               <section>
+               <section id="halim-advanced-widget-2">
                   <div class="section-bar clearfix">
                      <h1 class="section-title"><span>{{$cate_slug->title}}</span></h1>
                   </div>
@@ -24,7 +24,19 @@
                            <div class="halim-item">
                               <a class="halim-thumb" href="{{route('movie',$mov->slug)}}" title="{{$mov->title}}">
                                  <figure><img class="lazy img-responsive" src="{{asset('uploads/movie/'.$mov->image)}}" alt="{{$mov->title}}" title="{{$mov->title}}"></figure>
-                                 <span class="status">5/5</span><span class="episode"><i class="fa fa-play" aria-hidden="true"></i>
+                                 <span class="status">
+                                    @if($mov->resolution == 0)
+                                       HD
+                                    @elseif ($mov->resolution == 1)
+                                       SD
+                                    @elseif ($mov->resolution == 2)
+                                       HDCam
+                                    @elseif ($mov->resolution == 3)
+                                       Cam
+                                    @else 
+                                       FullHD
+                                    @endif
+                                 </span><span class="episode"><i class="fa fa-play" aria-hidden="true"></i>
                                     @if ($mov->subtitle == 0)
                                        Vietsub
                                           @if ($mov->session != 0)

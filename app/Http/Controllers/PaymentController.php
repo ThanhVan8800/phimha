@@ -7,6 +7,7 @@ use Auth;
 use App\Models\VNPay;
 use App\Models\User;
 use DB;
+
 class PaymentController extends Controller
 {
     public function vnpay_payment(Request $request)
@@ -15,6 +16,7 @@ class PaymentController extends Controller
         $code_cart = rand(00,9999);
         $id_khach = Auth::user()->id;
         $name = Auth::user()->name;
+        
         error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
         date_default_timezone_set('Asia/Ho_Chi_Minh');
 

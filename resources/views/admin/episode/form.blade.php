@@ -45,7 +45,7 @@
                         @if(isset($episode))
                             {!! Form::label('episode', 'Tập Phim', []) !!}
                             {!! Form::label('','*',['class' => 'text-danger'])!!}
-                            {!! Form::text('episode', isset($episode) ? $episode->episode : '', ['class' => 'form-control', 'placeholder' =>'điền đi', isset($episode) ? 'readonly':'']) !!}
+                            {!! Form::text('episode', isset($episode) ? $episode->episode : '', ['class' => 'form-control', 'placeholder' =>'điền đi']) !!}
                         @else 
                             <label for="">Tập Phim</label>
                             {!! Form::label('','*',['class' => 'text-danger'])!!}

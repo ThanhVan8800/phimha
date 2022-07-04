@@ -56,8 +56,10 @@
                                  <div class="title-wrapper" style="font-weight: bold;">
                                     Opps! Gói Vip của bạn đã hết <a href="{{ url('/planform')}}">đăng ký gói VIP </a>  để xem được phim này!
                                  </div>
-                           @else
+                           @elseif($movie->film_vip == 2)
                                  Bạn cần có tài khoản để xem phim này!
+                           @else
+                                 Chúc bạn xem phim vui vẻ!
                            @endif
                            
                         </div>

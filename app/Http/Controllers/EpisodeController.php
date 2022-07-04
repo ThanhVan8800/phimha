@@ -31,7 +31,7 @@ class EpisodeController extends Controller
      */
     public function create()
     {
-        $lstEpisode = Episode::with('movie')->orderBy('movie_id','desc')->paginate(5);
+        $lstEpisode = Episode::with('movie')->orderBy('movie_id','DESC')->paginate(5);
         $movie = Movie::orderBy('id','desc')->pluck('title', 'id');
         // return response()->json($lstEpisode);
         return view('admin.episode.form',[
@@ -130,7 +130,7 @@ class EpisodeController extends Controller
             $episode -> linkfilm = $data['linkfilm'];
             $episode -> episode = $data['episode'];
             $episode -> movie_id = $data['movie_id'];
-            $episode -> created_at = Carbon::now('Asia/Ho_Chi_Minh');
+            // $episode -> created_at = Carbon::now('Asia/Ho_Chi_Minh');
             $episode -> updated_at = Carbon::now('Asia/Ho_Chi_Minh');
             $episode->save();
             //* Nhật ký hoạt động

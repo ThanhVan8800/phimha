@@ -2,11 +2,13 @@
 @section('head')
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-
+    <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css"> -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <!-- Tempusdominus Bootstrap 4 -->
 @endsection
 @section('content')
@@ -76,6 +78,42 @@
             </div>
             <!-- /.row -->
 <!-- /.card-header -->
+<div class="container-fluid">
+                <p>Thống kê doanh thu</p>
+                <form action="" autocomplete="off">
+                    @csrf
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label for="">Từ ngày</label>
+                                <input type="text" id="datepicker" class="form-control" placeholder="">
+                                
+                            </div>
+                            <div class="col-md-2">
+                                <label for="">Đến ngày</label>
+                                <input type="text" id="datepicker2" class="form-control" placeholder="">
+                            </div>
+                        <div class="col-md-2">
+                            <label for="">Lọc theo</label>
+                            <select name="" id="" class="dashboard-filter form-control">
+                                <option value="7ngay">7 ngày</option>
+                                <option value="thangtruoc">Tháng trước </option>
+                                <option value="thangnay">Tháng này</option>
+                                <option value="365ngayqua">365 ngày qua</option>
+                                <option value="thang6">Từ tháng 6</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="">Tra cứu</label>
+                            <input type="button" id="btn-dashboard-filter" class="form-control btn btn-primary btn-sm" value="Lọc kết quả">
+                        </div>
+                    </div>
+                    
+                </form>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div id="myfirstchart" style="height: 250px;"></div>
+            </div>
             <div class="container">
                 <div class="row ">
                     <div class="col-6">
@@ -121,101 +159,38 @@
 
                         </div>
                     </div>
+                
                 </div>
+            
             </div>
+        
+            
                 <!-- /.card-body -->
                     
-                    <div class="canvass">
-                        <canvas id="canvas" width="250" height="250">
-                        </canvas>
-                    </div>
-<style>
-    .canvass{
-        display:flex; justify-content:right;
-    }
-    
-</style>
-<script>
-    var canvas = document.getElementById("canvas");
-    var ctx = canvas.getContext("2d");
-    var radius = canvas.height / 2;
-    ctx.translate(radius, radius);
-    radius = radius * 0.90
-    setInterval(drawClock, 1000);
-
-    function drawClock() {
-    drawFace(ctx, radius);
-    drawNumbers(ctx, radius);
-    drawTime(ctx, radius);
-    }
-
-    function drawFace(ctx, radius) {
-    var grad;
-    ctx.beginPath();
-    ctx.arc(0, 0, radius, 0, 2*Math.PI);
-    ctx.fillStyle = 'white';
-    ctx.fill();
-    grad = ctx.createRadialGradient(0,0,radius*0.95, 0,0,radius*1.05);
-    grad.addColorStop(0, '#333');
-    grad.addColorStop(0.5, 'white');
-    grad.addColorStop(1, '#333');
-    ctx.strokeStyle = grad;
-    ctx.lineWidth = radius*0.1;
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.arc(0, 0, radius*0.1, 0, 2*Math.PI);
-    ctx.fillStyle = '#333';
-    ctx.fill();
-    }
-
-    function drawNumbers(ctx, radius) {
-    var ang;
-    var num;
-    ctx.font = radius*0.15 + "px arial";
-    ctx.textBaseline="middle";
-    ctx.textAlign="center";
-    for(num = 1; num < 13; num++){
-        ang = num * Math.PI / 6;
-        ctx.rotate(ang);
-        ctx.translate(0, -radius*0.85);
-        ctx.rotate(-ang);
-        ctx.fillText(num.toString(), 0, 0);
-        ctx.rotate(ang);
-        ctx.translate(0, radius*0.85);
-        ctx.rotate(-ang);
-    }
-    }
-
-    function drawTime(ctx, radius){
-        var now = new Date();
-        var hour = now.getHours();
-        var minute = now.getMinutes();
-        var second = now.getSeconds();
-        //hour
-        hour=hour%12;
-        hour=(hour*Math.PI/6)+
-        (minute*Math.PI/(6*60))+
-        (second*Math.PI/(360*60));
-        drawHand(ctx, hour, radius*0.5, radius*0.07);
-        //minute
-        minute=(minute*Math.PI/30)+(second*Math.PI/(30*60));
-        drawHand(ctx, minute, radius*0.8, radius*0.07);
-        // second
-        second=(second*Math.PI/30);
-        drawHand(ctx, second, radius*0.9, radius*0.02);
-    }
-
-    function drawHand(ctx, pos, length, width) {
-        ctx.beginPath();
-        ctx.lineWidth = width;
-        ctx.lineCap = "round";
-        ctx.moveTo(0,0);
-        ctx.rotate(pos);
-        ctx.lineTo(0, -length);
-        ctx.stroke();
-        ctx.rotate(-pos);
-    }
+            
+@section('footer')
+<script type="text/javascript">
+    $(function(){
+        $("#datepicker").datepicker({
+            prevText:'Tháng trước',
+            nextText:'Tháng sau',
+            dateFormat: "yy-mm-dd",
+            dayNamesMin:["Thứ 2", "Thứ 3", "Thứ 4","Thứ 5","Thứ 6","Thứ 7","Chủ nhật"],
+            duration:"slow"
+        });
+        $("#datepicker2").datepicker({
+            prevText:'Tháng trước',
+            nextText:'Tháng sau',
+            dateFormat: "yy-mm-dd",
+            dayNamesMin:["Thứ 2", "Thứ 3", "Thứ 4","Thứ 5","Thứ 6","Thứ 7","Chủ nhật"],
+            duration:"slow"
+        });
+        
+    })
 </script>
+
+@endsection
+
 <script>
         $(document).ready(function() {
             var colorDanger = "#FF1744";
@@ -245,7 +220,84 @@
             });
         })
         
-
-    </script>          
+    </script>  
+<script>
+    $(document).ready(function() {
+        chart30days();
+        var chart = new Morris.Area({
+                // ID of the element in which to draw the chart.
+                element: 'myfirstchart',
+                // Chart data records -- each entry in this array corresponds to a point on
+                // the chart.
+                //option
+                lineColors:['#819C79','#FF6541','#FF6541','#FF6541'],
+                pointColors:['#ffffff'],
+                pointStrokeColor:['black'],
+                fillOpacity:0.6,
+                hideHover:'auto',
+                parseTime:false,
+                
+                // The name of the data record attribute that contains x-values.
+                xkey:'PayDate' ,
+                // A list of names of data record attributes that contain y-values.
+                ykeys: ['Amount','user_id'], 
             
+                behaveLikeLine: true,
+                // Labels for the ykeys -- will be displayed when you hover over the
+                // chart.
+                labels: ['Số tiền','IDUser']
+            });
+            $('#btn-dashboard-filter').click(function() {
+                    // alert('oke');
+                    // var _token = $('input[name="token"]').val();
+                    var from_date = $('#datepicker').val();
+                    var to_date = $('#datepicker2').val();
+                    $.ajax({
+                        headers: {
+                                        'X-CSRF-TOKEN': $('meta[name ="csrf-token"]').attr('content'),
+                                    },
+                        url:"{{route('filter-by-date')}}",
+                        method:"POST",
+                        dataType:"json",
+                        data:{from_date:from_date,to_date:to_date},
+                        success:function(data){
+                            chart.setData(data);
+                        }
+                    })
+                });
+                $('.dashboard-filter').change(function(){
+                    var dashboard_value = $(this).val();
+                    // var _token = $('input[name="_token"]').val();
+                    // alert(dashboard_value);
+                    $.ajax({
+                        headers: {
+                                    'X-CSRF-TOKEN': $('meta[name ="csrf-token"]').attr('content'),
+                                },
+                        url:"{{ route('dashboard-filter')}}",
+                        method:"POST",
+                        dataType:"JSON",
+                        data:{dashboard_value:dashboard_value},
+                        success:function(data){
+                            chart.setData(data);
+                        }
+                    })
+                });
+                function chart30days(){
+                    var _token = $('input[name="_token"]').val();
+                    $.ajax({
+                        url:"{{route('chart30days')}}",
+                        method:"POST",
+                        dataType:"json",
+                        data:{_token:_token},
+                        success:function(data){
+                            chart.setData(data);
+                        }
+                    })
+                }
+
+        })
+        
+    
+</script>
+    
 @endsection
