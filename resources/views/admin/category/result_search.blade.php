@@ -51,8 +51,7 @@
                     <div class="form-group">
                         <input type="text" name="keyword" id="keyword" class="form-control input-lg" placeholder="Tìm kiếm danh mục phim" />
                         <form action="{{route('filter')}}" method='GET'>
-                            <label for="" class="control-label text-danger">Mô tả</label>
-                            <input type="text" name="description">
+                            <label for="" class="control-label text-danger"></label>
                                 <select name="title" id="">
                                     <option value="">---Chọn danh mục---</option>
                                     @foreach ($lstCate as $cate )
@@ -63,8 +62,8 @@
                                     <option value="">---Chọn trạng thái---</option>
                                         <option value="1"> Hiển thị danh mục phim </option>
                                         <option value="2">  Không hiện danh mục phim </option>
-                                    <input type="submit">
-                                </select>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary sm">Lọc</button>
                         </form>
                         <h2>Kết quả tìm được</h2>
                     </div>
@@ -75,7 +74,9 @@
                                 <th scope="col" class="text-white">Tiêu đề phim</th>
                                 <th scope="col" class="text-white">Mô tả</th>
                                 <th scope="col" class="text-white">Slug</th>
+                                <th scope="col" class="text-white">Vị trí</th>
                                 <th scope="col" class="text-white">Trạng thái</th>
+                                <th scope="col" class="text-white">Ngày tạo</th>
                                 <th scope="col" class="text-white">Chức năng quản lý</th>
                                 </tr>
                             </thead>
@@ -90,6 +91,8 @@
                                             </td>
                                             <!-- !! để thực thi đọc html -->
                                             <td class="text-white">{{ $cate->slug }}</td>
+                                            <td class="text-white">{{ $cate->created_at }}</td>
+                                            <td class="text-white">{{ $cate->position }}</td>
                                             <td class="text-white">
                                                 @if($cate -> status == 1 )
                                                     Show

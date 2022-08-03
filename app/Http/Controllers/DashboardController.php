@@ -11,7 +11,7 @@ use App\Models\Episode;
 use App\Models\Movie_Genre;
 use App\Models\Rating;
 use App\Models\VNPay;
-
+use DB;
 use Carbon\Carbon;
 class DashboardController extends Controller
 {
@@ -28,9 +28,27 @@ class DashboardController extends Controller
         $lstCountGenres = Genre::count();
         $Episode_View = Episode::with('movie')->orderBy('views','desc')->take(15)->get();
         $Count_rating = Rating::with('episode')->orderBy('rating_star','desc')->take(15)->get();
+        $visitorTraffic = Movie::where('date_created', '>=', Carbon::now()->subMonth())
+                            ->groupBy('date')
+                            ->orderBy('date', 'DESC')
+                            ->get(array(
+                                DB::raw('Date(date_created) as date'),
+                                DB::raw('COUNT(*) as "account_num"')
+                            ));
+                            //Có thể dùng để đếm số lượt truy cập
+    $totals = DB::table('v_n_pays')
+    ->select(DB::raw('SUM(Amount) as total_amount, MONTH(PayDate) as pay_date' ))
+    ->groupBy(DB::raw('MONTH(PayDate) ASC'))->get();
+    $totals_money = DB::table('v_n_pays')
+    ->select(DB::raw('SUM(Amount) as total_amount' ))->get();
+        // dd($totals);
+        // $data = DB::table('movies')
+        // ->join('episodes', 'movies.id', '=', 'episodes.movie_id')
+        // ->select('episodes.views', 'movies.title')
+        // ->get();
         return view('admin.dashboard',[
             'title' => 'Dashboard'
-        ], compact('lstCountUser','lstCountMovie','lstCountCate','lstCountGenres','Episode_View','Count_rating'));
+        ], compact('lstCountUser','lstCountMovie','lstCountCate','lstCountGenres','Episode_View','Count_rating','visitorTraffic','totals','totals_money'));
     }
 
     /**
@@ -68,14 +86,15 @@ class DashboardController extends Controller
         $sub365days = Carbon::now('Asia/Ho_Chi_Minh')->subdays(365)->toDateString();
 
         $subtuthang6 = Carbon::now('Asia/Ho_Chi_Minh')->subMonth(2)->startOfMonth()->toDateString();
-        // dd($dauthangnay);
+        // dd($subtuthang6);
+        
         $now = Carbon::now('Asia/Ho_Chi_Minh')->toDateString();
         if($data['dashboard_value'] == '7ngay'){
             $get = VNPay::whereBetween('PayDate',[$sub7days,$now])->orderBy('PayDate','ASC')->get();
         }elseif($data['dashboard_value'] == 'thangtruoc'){
             $get = VNPay::whereBetween('PayDate',[$dau_thangtruoc,$cuoi_thangtruoc])->orderBy('PayDate','ASC')->get();
         }elseif($data['dashboard_value'] == 'thang6'){
-            $get = VNPay::where('PayDate',$subtuthang6)->orderBy('PayDate','ASC')->get();
+            $get = VNPay::whereBetween('PayDate',[$subtuthang6,$now])->orderBy('PayDate','ASC')->get();
         }else{
             $get = VNPay::whereBetween('PayDate',[$sub365days,$now])->orderBy('PayDate','ASC')->get();
         }

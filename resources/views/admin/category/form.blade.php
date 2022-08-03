@@ -4,23 +4,20 @@
 <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.3.1/dt-1.10.24/r-2.2.7/rr-1.2.7/datatables.min.css"/>
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.3.1/dt-1.10.24/r-2.2.7/rr-1.2.7/datatables.min.js"></script> -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <style type="text/css">
-    .read-more-show{
-        cursor:pointer;
-        color: #ed8323;
-        background-color: white;
-        border:2px solid #ed8323;
-    }
-    .read-more-hide{
-        cursor:pointer;
-        color: #ed8323;
-        background-color: white;
-        border:2px solid #ed8323;
-    }
+    
+<style type='text/css'>table {
+    counter-reset: rowNumber;
+}
+table tr {
+    counter-increment: rowNumber;
+}
 
-    .hide_content{
-        display: none;
-    }
+table tr td:first-child::before {
+    content: counter(rowNumber);
+    min-width: 1em;
+    margin-right: 0.5em;
+}
+
 </style>
 @endsection 
 @section('content')
@@ -40,6 +37,11 @@
                                 {{Session::get('success')}}
                             </div>
                         @endif
+                        @if(Session::has('error'))
+                            <div class="alert alert-error">
+                                {{Session::get('error')}}
+                            </div>
+                        @endif
                         <!-- kiểm tra nếu không tồn tại dùng form store -->
                         @if(!isset($category))
                             {!! Form::open(['route'=>'category.store','method'=>'POST']) !!}
@@ -48,6 +50,7 @@
                         @endif
                                 <div class="form-group text-white">
                                     {!! Form::label('title', 'Tên danh mục', []) !!}
+                                    {!! Form::label('','*',['class' => 'text-danger'])!!}
                                     {!! Form::text('title', isset($category) ? $category->title : '', 
                                         ['class' => 'form-control', 'placeholder' =>'điền đi','id' => 'slug','onkeyup' =>'ChangeToSlug()']) !!}
                                         @error('title')
@@ -60,6 +63,7 @@
                                 </div>
                                 <div class="form-group text-white">
                                     {!! Form::label('description','Mô tả', []) !!}
+                                    {!! Form::label('','*',['class' => 'text-danger'])!!}
                                     {!! Form::textarea('description', isset($category) ? $category->description : '', ['style' => 'resize:none','class' => 'form-control', 'placeholder' =>'Mô tả danh mục','id' => '']) !!}
                                     @error('description')
                                             <div class="alert alert-danger">{{ $message }}</div>
@@ -67,13 +71,22 @@
                                 </div>
                                 <div class="form-group text-white">
                                     {!! Form::label('Active','Trạng thái', []) !!}
+                                    {!! Form::label('','*',['class' => 'text-danger'])!!}
                                     {!! Form::select('status', ['1' => 'Hiển thị danh mục phim' , '2' => 'Không hiện'], isset($category) ? $category->status : '', ['class' => 'form-control', 'placeholder' =>'điền đi']) !!}
+                                    @error('status')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
-                                @if(Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin' || Auth::user()->role == 'manage' && Auth::user()->status == '1')
-                                    @if(!isset($category))
-                                            {!! Form::submit('Thêm dữ liệu', ['class' => 'btn btn-primary']) !!}
-                                    @else
-                                            {!! Form::submit('Cập nhật dữ liệu', ['class' => 'btn btn-primary']) !!}
+                                
+                                @if( Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin' || Auth::user()->role == 'manage' )
+                                    @if (Auth::user()->status == 1)
+                                        @if(!isset($category))
+                                                {!! Form::submit('Thêm dữ liệu', ['class' => 'btn btn-outline-info btn-sm']) !!}
+                                                <a href="" class="btn btn-outline-warning btn-sm">Hủy bỏ</a>
+                                        @else
+                                                {!! Form::submit('Cập nhật dữ liệu', ['class' => 'btn btn-outline-primary btn-sm']) !!}
+                                                <a href="" class="btn btn-outline-warning btn-sm">Hủy bỏ</a>
+                                        @endif
                                     @endif
                                 @endif
                             {!! Form::close() !!}
@@ -108,35 +121,44 @@
                                     
                                 </div>
                             </form>
+                            <div id='loader'></div>
                         </div>
-                            
+                            <div class="ml-3">
+                                <a href="" id="deleteAll" class="btn btn-primary">Xóa hết</a>
+                            </div>
                     </div>
-                        <table class="table img" id="myTable">
+                        <table class="table " id="myTable" border="5" cellpadding="0">
                             <thead>
                                 <tr>
-                                <th scope="col" class="text-white">ID</th>
-                                <th scope="col" class="text-white">Tiêu đề phim</th>
-                                <th scope="col" class="text-white" style="width:300px;">Mô tả</th>
-                                <th scope="col" class="text-white">Slug</th>
-                                <th scope="col" class="text-white">Vị trí hiển thị(mới nhất)</th>
-                                <th scope="col" class="text-white">Trạng thái</th>
-                                <th scope="col" class="text-white">Quản lý</th>
+                                    <th scope="col" class="text-white">STT</th>
+                                    <th scope="col" class="text-white"><input type="checkbox" id="chkCheckAll"></th>
+                                    <th scope="col" class="text-white">ID</th>
+                                    <th scope="col" class="text-white">Tiêu đề phim</th>
+                                    <th scope="col" class="text-white" style="width:300px;">Mô tả</th>
+                                    <th scope="col" class="text-white">Slug</th>
+                                    <th scope="col" class="text-white">Vị trí hiển thị(mới nhất)</th>
+                                    <th scope="col" class="text-white">Trạng thái</th>
+                                    <th scope="col" class="text-white">Ngày tạo </th>
+                                    <th scope="col" class="text-white">Quản lý</th>
                                 </tr>
                             </thead>
                             <tbody class="order_position" id="lst">
                                 @foreach($lstCate as $key => $cate)
+                                
                                     <tr id="{{$cate->id}}">
+                                        <td></td>
+                                        <td><input type="checkbox" name="ids" id="" value="{{$cate->id}}" class="checkBoxClass"></td>
                                             <td scope="row" class="text-white">{{$cate->id}} </td>
                                             <td class="text-white">{{ $cate->title }}</td>
                                             <td class="text-white">
                                                 <div class="comment more">
                                                     @if(strlen($cate->description) > 100)
-                                                    {{substr($cate->description,0,100)}}
-                                                    <span class="read-more-show hide_content">More<i class="fa fa-angle-down"></i></span>
-                                                    <span class="read-more-content"> {{substr($cate->description,100,strlen($cate->description))}} 
-                                                    <span class="read-more-hide hide_content">Less <i class="fa fa-angle-up"></i></span> </span>
+                                                        {{substr($cate->description,0,100)}}
+                                                        <span class="read-more-show hide_content">More<i class="fa fa-angle-down"></i></span>
+                                                        <span class="read-more-content"> {{substr($cate->description,100,strlen($cate->description))}} 
+                                                        <span class="read-more-hide hide_content">Less <i class="fa fa-angle-up"></i></span> </span>
                                                     @else
-                                                    {{$cate->description}}
+                                                        {{$cate->description}}
                                                     @endif
                                                 </div>
                                                 <!-- <a href="javascript:void()" class="readmore-btn">Read More</a> -->
@@ -151,15 +173,21 @@
                                                 @else  Không hiển thị
                                                 @endif
                                             </td>
-                                            @if(Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin' || Auth::user()->role == 'manage' && Auth::user()->status == '1')
-                                                <td>
-                                                    {!! Form::open(['method'=>'delete','route' => ['category.destroy', $cate->id], 'onsubmit' => 'return confirm("Bạn có muốn xóa?")']) !!}
-                                                        {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-dark btn-sm', 'style' => 'height:40px; width:40px'] )  }}
-                                                    {!! Form::close() !!}                                
-                                                </td>
-                                                <td>
-                                                    <a href="{{route('category.edit', $cate->id)}}" class="btn btn-warning" style = "height:40px; width:40px"><i class="fa-solid fa-pen"></i></a>
-                                                </td>
+                                            <td class="text-white">
+                                                {{$cate->created_at}} ||{{ \Carbon\Carbon::parse($cate->created_at)->diffForHumans()}}
+                                            </td>
+                                            @if(Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin' || Auth::user()->role == 'manage' )
+                                                @if ( Auth::user()->status == 1)
+                                                    <td>
+                                                        {!! Form::open(['method'=>'delete','route' => ['category.destroy', $cate->id], 'onsubmit' => 'return confirm("Bạn có muốn xóa danh mục phim này?")']) !!}
+                                                            {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-dark btn-sm', 'style' => 'height:40px; width:40px'] )  }}
+                                                        {!! Form::close() !!}                                
+                                                    </td>
+                                                    <td>
+                                                        <a href="{{route('category.edit', $cate->id)}}" class="btn btn-warning" style = "height:40px; width:40px"><i class="fa-solid fa-pen"></i></a>
+                                                    </td>
+                                                @endif
+                                                
                                             @endif
                                     </tr>
                                 @endforeach
@@ -172,12 +200,13 @@
                 
 @endsection
 @section('footer')
-
             <script>
                 // Replace the <textarea id="editor1"> with a CKEditor 4
                 // instance, using default configuration.
                 CKEDITOR.replace( 'content' );
+                
             </script>
+            
             <!-- <script>
                 $(".xemtoanbo").on('click', function() {
                     $(this).parent().parent('td').children('p');
@@ -215,5 +244,41 @@
                 p.prev('.read-more-show').removeClass('hide_content'); // Hide only the preceding "Read More"
                 e.preventDefault();
                 });
+    </script>
+    <script>
+        $(function(e){
+            $("#chkCheckAll").click(function(){
+                $(".checkBoxClass").prop('checked',$(this).prop('checked'));
+            })
+
+            $("#deleteAll").click(function(e){
+                e.preventDefault();
+                var allids = [];
+                $("input:checkbox[name=ids]:checked").each(function(){
+                    allids.push($(this).val());
+                });
+
+                $.ajax({
+                    url:"{{url('/admin/categories/selected-category')}}",
+                    type:"DELETE",
+                    data:{
+                        _token:$("input[name=_token]").val(),
+                        ids:allids
+                    },
+                    success:function(response){
+                        $.each(allids,function(key,val){
+                            $("#sid" + val).remove();//sid ở tbody tr id="sid"
+                        })
+                    }
+                })
+            })
+        })
+    </script>
+    <script>
+        $(function() {
+            $( "form" ).submit(function() {
+                $('#loader').show();
+            });
+        });
     </script>
 @endsection

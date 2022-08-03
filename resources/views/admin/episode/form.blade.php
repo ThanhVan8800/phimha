@@ -13,6 +13,11 @@
                                 {{Session::get('success')}}
                             </div>
                         @endif
+                        @if(Session::has('error'))
+                            <div class="alert alert-success">
+                                {{Session::get('error')}}
+                            </div>
+                        @endif
                     @if(!isset($episode))
                         {!! Form::open(['route' => 'episode.store','method'=>'POST']) !!}
                     @else
@@ -46,31 +51,41 @@
                             {!! Form::label('episode', 'Tập Phim', []) !!}
                             {!! Form::label('','*',['class' => 'text-danger'])!!}
                             {!! Form::text('episode', isset($episode) ? $episode->episode : '', ['class' => 'form-control', 'placeholder' =>'điền đi']) !!}
+                                    @error('episode')
+                                            <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
                         @else 
                             <label for="">Tập Phim</label>
                             {!! Form::label('','*',['class' => 'text-danger'])!!}
                             <select name="episode" class="form-control " id="show_movie"> </select>
+                                    @error('episode')
+                                            <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
                         @endif
                     </div>
                     {!! Form::label('','*',['class' => 'text-danger'])!!}
                     {!! Form::label('','Là các trường bắt buộc điền',['class' => 'text-white'])!!}<br/>
-                    @if(Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin' || Auth::user()->role == 'manage' && Auth::user()->status == '1')
-                        @if(!isset($episode))
-                                {!! Form::submit('Thêm phim', ['class' => 'btn btn-outline-primary']) !!}
-                        @else
-                                {!! Form::submit('Cập nhật phim', ['class' => 'btn btn-primary']) !!}
+                    @if( Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin' || Auth::user()->role == 'manage' )
+                        @if (Auth::user()->status == 1)
+                            @if(!isset($episode))
+                                    {!! Form::submit('Thêm phim', ['class' => 'btn btn-outline-primary btn-sm']) !!}
+                                    <a href="" class="btn btn-outline-warning btn-sm">Hủy bỏ</a>
+                            @else
+                                    {!! Form::submit('Cập nhật phim', ['class' => 'btn btn-primary']) !!}
+                                    <a href="" class="btn btn-outline-warning btn-sm">Hủy bỏ</a>
+                            @endif
                         @endif
-                        
-                        {!! Form::close() !!}
+                            
                     @endif
+                {!! Form::close() !!}
                     </div>
                     <div class="form-group">
                         <!-- <form action="{{route('search-episode')}}" method="GET"> -->
                             <div class="card-body">
                                 
-                            <div class="mb-3">
+                            <!-- <div class="mb-3">
                                 <input type="text" name="keyword" id="keyword" class="form-control input-lg" placeholder="Tìm kiếm danh mục phim" />
-                            </div>
+                            </div> -->
                             </div>  
                         <!-- </form> -->
                         
@@ -79,18 +94,20 @@
     <div class="col-12">
             <div class="card">
                 <div class="card-body table-responsive p-0">
-                    <table class="table img" >
+                    <table class="table img" id="myTable" >
                             <thead>
                                 <tr>
-                                <th scope="col" class="text-white">ID</th>
-                                <th scope="col" class="text-white">Tên phim</th>
-                                <th scope="col" class="text-white">Hình ảnh</th>
-                                <th scope="col" class="text-white" >Link Film</th>
-                                <!-- <th scope="col" class="text-white">Phim</th> -->
-                                <th scope="col" class="text-white">Tập Phim</th>
-                                <th scope="col" class="text-white">Lượt xem</th>
-                                <th scope="col" class="text-white">Ngày thêm tập phim</th>
-                                <th scope="col" class="text-white">Ngày cập nhật Phim</th>
+                                    <th scope="col" class="text-white">ID</th>
+                                    <th scope="col" class="text-white">Tên phim</th>
+                                    <th scope="col" class="text-white">Hình ảnh</th>
+                                    <th scope="col" class="text-white" >Link Film</th>
+                                    <!-- <th scope="col" class="text-white">Phim</th> -->
+                                    <th scope="col" class="text-white">Tập Phim</th>
+                                    <th scope="col" class="text-white">Lượt xem</th>
+                                    <th scope="col" class="text-white">Ngày thêm tập phim</th>
+                                    <th scope="col" class="text-white">Ngày cập nhật Phim</th>
+                                    <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody id="lst">
@@ -115,12 +132,17 @@
                                             <td>{{$movi->views}}</td>
                                             <td>{{$movi->created_at}}</td>
                                             <td>{{$movi->updated_at}}</td>
-                                            @if(Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin' || Auth::user()->role == 'manage' && Auth::user()->status == '1')
-                                                <td>
-                                                    {!! Form::open(['method'=>'delete','route' => ['episode.destroy', $movi->id], 'onsubmit' => 'return confirm("Bạn có muốn xóa?")']) !!}
-                                                        {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-dark btn-sm', 'style' => 'height:40px; width:40px'] )  }}
-                                                    {!! Form::close() !!}                                
-                                                </td>
+                                            @if(Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin' )
+                                                @if (Auth::user()->status == '1')
+                                                    <td>
+                                                        {!! Form::open(['method'=>'delete','route' => ['episode.destroy', $movi->id], 'onsubmit' => 'return confirm("Bạn có muốn xóa tập phim này?")']) !!}
+                                                            {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-dark btn-sm', 'style' => 'height:40px; width:40px'] )  }}
+                                                        {!! Form::close() !!}                                
+                                                    </td>
+                                                @else
+                                                    <td></td>
+                                                @endif
+                                                
                                                 <td>
                                                     <a href="{{route('episode.edit', $movi->id)}}" class="btn btn-warning" style = "height:40px; width:40px"><i class="fa-solid fa-pen"></i></a>
                                                 </td>
@@ -129,9 +151,7 @@
                                 @endforeach
                             </tbody>
                     </table>
-                    <div>
-                        {!!$lstEpisode->links("pagination::bootstrap-5")!!}
-                    </div>
+                
 </div>
 </div>
 </div>

@@ -7,11 +7,16 @@
     <div class="card-body">
                 <div class="row">
                     <div class="col-md-4 margin-top-img ">
-                        @if(Auth::user()->thumb)
-                            <img src="{{$user->thumb}}" alt="" class="avatar-user" >
-                        @else
-                            <img src="http://127.0.0.1:8000/storage/user_none.jpg" alt="" class="avatar-user">
-                        @endif
+                        <div class="boxed">
+                            @if(Auth::user()->thumb)
+                                <img src="{{$user->thumb}}" alt="" class=" avatar-user" >
+                            @else
+                                <img src="http://127.0.0.1:8000/storage/user_none.jpg" alt="" class=" avatar-user">
+                            @endif
+                        </div>
+                        <div class="loader">
+                            <div class="loader1"></div>
+                        </div>
                         <!-- <div class="avatar-input">
                             <i class="fa fa-solid fa-camera">
                                 <input type="file" class="avatar-input">
@@ -41,8 +46,8 @@
                             <input type="name" name="address" id="name" class="form-control" value="{{$user->address}}" disabled>
                         </div>
                         <div class="form-group col-md-8">
-                            <label for="name">Mật khẩu</label>
-                            <input type="text" name="name" id="name" class="form-control" value="{{$user->password}}" disabled>
+                            <label for="name">Trạng thái</label>
+                            <input type="text" name="status" class="form-control" value="@if($user->status == 1) Hoạt động @else Ngưng hoạt động @endif" disabled>
                         </div>
                         <div class="form-group col-md-8">
                             <label for="name">Vai trò</label>
@@ -53,7 +58,7 @@
                 </div>
                 <div class="form-groupp" >
                     <button class="btn btn-outline-info">
-                        Chỉnh sửa
+                        Thay đổi thông tin
                     </button>
                     <a href="/admin/users/changePassword/{{Auth::user()->id}}" class="btn__neon">
                         <span></span>

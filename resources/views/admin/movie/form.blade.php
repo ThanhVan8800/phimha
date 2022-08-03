@@ -5,7 +5,16 @@
 @endsection 
 @section('content')
     <div class="card-body ">
-            <a href="{{route('movie.index')}}"><button>Danh sách phim</button></a>
+            <div class="d-grid gap-2  mx-auto ">
+                <a href="{{route('movie.index')}}"><button class="btn__neon btn-primary btn-fluid text-white">
+                                                        <span></span>
+                                                        <span></span>
+                                                        <span></span>
+                                                        <span></span>
+                                                        Danh sách phim
+                                                    </button>
+                </a>
+            </div>
             @if (session('status'))
                 <div class="alert alert-success" role="alert">
                     {{ session('status') }}
@@ -209,14 +218,16 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        
                         {!! Form::label('title', '* Là trường bắt buộc phải nhập', ['class' => 'text-danger']) !!}
                     </div>
                     @if(Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin' || Auth::user()->role == 'manage' && Auth::user()->status == '1')
                         @if(!isset($movie))
-                                {!! Form::submit('Thêm phim', ['class' => 'btn btn-primary']) !!}
+                                {!! Form::submit('Thêm dữ liệu', ['class' => 'btn btn-outline-info btn-sm']) !!}
+                                <a href="" class="btn btn-outline-warning btn-sm">Hủy bỏ</a>
                         @else
-                        
-                                {!! Form::submit('Cập nhật phim', ['class' => 'btn btn-primary']) !!}
+                                {!! Form::submit('Cập nhật dữ liệu', ['class' => 'btn btn-outline-primary btn-sm']) !!}
+                                <a href="" class="btn btn-outline-warning btn-sm">Hủy bỏ</a>
                         @endif
                     @endif
                 {!! Form::close() !!}
