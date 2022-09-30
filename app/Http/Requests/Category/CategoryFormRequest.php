@@ -24,7 +24,7 @@ class CategoryFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required',
+            'title' => 'required|unique:categories,title,except,id',
             'description' => 'required|min:30',
             'status' => 'required',
         ];
@@ -33,6 +33,7 @@ class CategoryFormRequest extends FormRequest
     {
         return [
             'title.required' => 'Bạn chưa nhập tên danh mục phim',
+            'title.unique' => 'Tên danh mục này đã tồn tại. Vui lòng kiểm tra lại!',
             'description.required' => 'Mô tả không dưới 30 ký tự',
             'status.required' => 'Trạng thái hiển thị danh mục'
         ];

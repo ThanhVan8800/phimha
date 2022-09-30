@@ -211,7 +211,7 @@
                 data:{topview:topview, id_phim:id_phim},
                 success:function()
                     {
-                        alert('Thay đổi phim theo topview '+text+' thành công');
+                        alert('Thay đổi phim theo topview '+ text +' thành công');
                     }   
             });  
         })

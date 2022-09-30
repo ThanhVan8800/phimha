@@ -67,21 +67,21 @@
                         <tr>
                             <th scope="col" class="text-white">ID</th>
                             <th scope="col" class="text-white" style="width:161px">Tiêu đề phim</th>
-                            <th scope="col" class="text-white" style="width:508px">Mô tả</th>
+                            <!-- <th scope="col" class="text-white" style="width:508px">Mô tả</th> -->
                             <th scope="col" class="text-white">Slug</th>
                             <th scope="col" class="text-white">Trạng thái</th>
-                            <th></th>
+                            <th>Active</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody id="lst" class="order_position">
                         @foreach($lstGenre as $key => $gen)
                         <tr>
-                            <th scope="row" class="text-white">{{ $gen->id }}</th>
+                            <td scope="row" class="text-white">{{ $gen->id }}</td>
                             <td class="text-white">{{ $gen->title }}</td>
-                            <td class="text-white">
+                            <!-- <td class="text-white">
                                 {!!Illuminate\Support\Str::of($gen->description)->words(15)!!}
-                            </td>
+                            </td> -->
                             <td class="text-white">{{ $gen->slug }}</td>
                             <td class="text-white">
                                 @if($gen -> status )
@@ -95,7 +95,7 @@
                                 @if ( Auth::user()->status == 1)
                                     <td>
                                         {!! Form::open(['method'=>'delete','route' => ['genre.destroy', $gen->id], 'onsubmit' =>'return confirm("Bạn có muốn xóa thể loại này?")']) !!}
-                                        {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-dark btn-sm', 'style' => 'height:40px; width:40px'] )  }}
+                                        {!! Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-dark btn-sm', 'style' => 'height:40px; width:40px'] )  !!}
                                         {!! Form::close() !!}
                                     </td>
                                     <td>

@@ -78,8 +78,8 @@
                                     <i class="nav-icon fa-solid fa-users"></i>
                                         Quản lí tài khoản
                                 </a>
-                                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                                    <li class="nav-item menu-open">
+                                <!-- <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                                    <li class="nav-item ">
                                         <a href="{{route('film_package')}}" class="nav-link ">
                                         <i class="nav-icon fas fa-tachometer-alt"></i>
                                         <p>
@@ -100,7 +100,7 @@
                                         </li>
                                         </ul>
                                     </li>
-                                </ul>
+                                </ul> -->
                                 <a href="/admin/userlog-activities" class="nav-link">
                                     <i class="nav-icon fa-solid fa-book-medical"></i>
                                         Nhật ký hoạt động

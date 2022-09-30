@@ -32,6 +32,8 @@
                             <th scope="col" class="text-white">STT</th>
                             <th scope="col" class="text-white">ID</th>
                             <th scope="col" class="text-white">Tên phim</th>
+                            <th scope="col" class="text-white">Thêm tập phim</th>
+                            <th scope="col" class="text-white">Số tập</th>
                             <th scope="col" class="text-white">Tên phim English</th>
                             <th scope="col" class="text-white">Slug</th>
                             <th scope="col" class="text-white">Đạo diễn</th>
@@ -62,59 +64,67 @@
                         @foreach($lstMovie as $key => $movie)
                         <tr>
                             <td>
-
                                 @if ($key == 0)
-                                1
+                                    1
                                 @else
-                                {{$key+1}}
+                                    {{$key+1}}
                                 @endif
                             </td>
                             <th scope="row" class="text-white">{{ $movie->id }}</th>
                             <td class="text-white">{{ $movie->title }}</td>
+                            <td class="text-white"><a href="{{route('episode.show',[$movie->id])}}" class="btn btn-primary btn-sm">Thêm tập phim</a></td>
+                            <!-- Thêm _count để nó đếm số tập  -->
+                            <td class="text-white">
+                                @if($movie->episode_film > 0)
+                                    {{$movie->episode_count}}/{{$movie->episode_film}}
+                                @else
+                                    Hoàn Thành
+                                @endif
+                            </td>
                             <td class="text-white">{{ $movie->name_eng }}</td>
                             <td class="text-white">{{ $movie->slug }}</td>
                             <td class="text-white">
                                 @if($movie->director)
-                                {{ $movie->director }}
+                                    {{ $movie->director }}
                                 @else
-                                Đang cập nhật
+                                    Đang cập nhật
                                 @endif
                             </td>
                             <td class="text-white">
                                 @if($movie->actor)
-                                {{ $movie->actor }}
+                                    {{ $movie->actor }}
                                 @else
-                                Đang cập nhật
+                                    Đang cập nhật
                                 @endif
                             </td>
                             <td class="text-white ">
                                 @if ($movie->tags != NULL)
-                                {{substr($movie->tags, 0,50)}}...
+                                    {{substr($movie->tags, 0,50)}}...
                                 @else
-                                Chưa có từ khóa của phim
+                                    Chưa có từ khóa của phim
                                 @endif
                             </td>
                             <td class="text-white">{{ $movie->movie_duration }}</td>
                             <td class="text-white">
                                 @if ($movie->subtitle == 0)
-                                Vietsub
+                                    Vietsub
                                 @else
-                                Thuyết minh
+                                    Thuyết minh
                                 @endif
                             </td>
                             <td class="text-white">
                                 @if($movie->resolution == 0)
-                                HD
+                                    HD
                                 @elseif ($movie->resolution == 1)
-                                SD
+                                    SD
                                 @elseif ($movie->resolution == 2)
-                                HDCam
+                                    HDCam
                                 @elseif ($movie->resolution == 3)
-                                Cam
+                                    Cam
                                 @elseif($movie->resolution == 4)
-                                FullHD
+                                    FullHD
                                 @else
-                                Trailer
+                                    Trailer
                                 @endif
                             </td>
                             <!-- <td>{!! $movie->description !!}</td> -->
@@ -133,7 +143,7 @@
                             <td class="text-white">{{ $movie->category->title }}</td>
                             <td class="text-white">
                                 @foreach($movie -> movie_genre as $key => $mov)
-                                <label class="btn btn-block btn-outline-warning btn-flat"> {{$mov  -> title }} </label>
+                                    <label class="btn btn-block btn-outline-warning btn-flat"> {{$mov  -> title }} </label>
                                 @endforeach
                             </td>
                             <td class="text-white">{{ $movie->country->title }}</td>
@@ -153,9 +163,9 @@
                             </td>
                             <td class="text-white" value="{{$movie->episode_film}}">
                                 @if($movie->episode_film > 0)
-                                {{$movie->episode_film}}
+                                    {{$movie->episode_film}}
                                 @else
-                                Phim lẻ
+                                    Phim lẻ
                                 @endif
                             </td>
                             <td>

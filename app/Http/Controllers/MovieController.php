@@ -39,23 +39,23 @@ class MovieController extends Controller
         // dd($data);
         $movie = Movie::where('topview',$data['value'])->orderBy('update_day','DESC')->take(10)->get();
         $output = '';
-        foreach($movie as $key => $mov){
-            if($mov->resolution==0){
-                                    $text = 'HD';
-                                }elseif($mov->resolution==1){
-                                    $text = 'SD';
-                                }
-                                elseif($mov->resolution==2){
-                                    $text = 'HDCam';
-                                }
-                                elseif($mov->resolution==3){
-                                    $text = 'Cam';
-                                }
-                                elseif($mov->resolution==4){
-                                    $text = 'FullHD';
-                                }else{
-                                    $text = 'Tralier';
-                                }
+            foreach($movie as $key => $mov){
+                if($mov->resolution==0){
+                    $text = 'HD';
+                }elseif($mov->resolution==1){
+                    $text = 'SD';
+                }
+                elseif($mov->resolution==2){
+                    $text = 'HDCam';
+                }
+                elseif($mov->resolution==3){
+                    $text = 'Cam';
+                }
+                elseif($mov->resolution==4){
+                    $text = 'FullHD';
+                }else{
+                    $text = 'Tralier';
+                }
         $output.='<div class="item">
                             <a href="'.url('phim/'.$mov->slug).'" title="'.$mov->title.'">
                                 <div class="item-link">
@@ -83,19 +83,19 @@ class MovieController extends Controller
             $output = '';
             foreach($movie as $key => $mov){
                 
-                if($mov->resolution==0){
-                                        $text = 'HD';
+                                    if($mov->resolution==0){
+                                            $text = 'HD';
                                         }elseif($mov->resolution==1){
-                                        $text = 'SD';
+                                            $text = 'SD';
                                         }
                                         elseif($mov->resolution==2){
-                                        $text = 'HDCam';
+                                            $text = 'HDCam';
                                         }
                                         elseif($mov->resolution==3){
-                                        $text = 'Cam';
+                                            $text = 'Cam';
                                         }
                                         elseif($mov->resolution==4){
-                                        $text = 'FullHD';
+                                            $text = 'FullHD';
                                         }else{
                                             $text = 'Tralier';
                                         }
@@ -123,7 +123,12 @@ class MovieController extends Controller
     public function index()
     {
         $Movie_Json = Movie::with('category','movie_genre','country','genre')->orderBy('id', 'DESC')->get();
-        $lstMovie = Movie::with('category','movie_genre','country','genre')->orderBy('id', 'DESC')->paginate(8);
+        // $lstMovie = Movie::with('category','movie_genre','country','genre')->orderBy('id', 'DESC')->paginate(8);
+
+        //* đếm số tập
+
+        $lstMovie = Movie::with('category','movie_genre','country','genre')->withCount('episode')->orderBy('id', 'DESC')->get();
+        // dd($lstCount);
        // return response()->json($lstMovie);
         // tạo file movie_json để load tìm kiếm cho nhẹ trang
         $path = public_path()."/json/";
@@ -134,7 +139,7 @@ class MovieController extends Controller
 
         return view('admin.movie.list',[
             'lstMovie' => $lstMovie,
-            'title' => 'Thêm phim mới'
+            'title' => 'Thêm phim mới',
         ]);
     }
 
@@ -198,8 +203,9 @@ class MovieController extends Controller
             // $movie -> genre_id = $data['genre_id'];
             foreach($data['genre'] as $key => $gen)
             {
-                $movie -> genre_id = $gen['0'];
+                $movie -> genre_id = $gen[0];
             }
+            // dd($movie->genre_id);
             $movie -> country_id = $data['country_id'];
             $movie -> status = $data['status'];
             $movie -> date_created = Carbon::now('Asia/Ho_Chi_Minh');
@@ -248,6 +254,9 @@ class MovieController extends Controller
         return redirect()->back();
     }
 
+    public function addEpisode(Request $request, $id){
+        
+    }
     /**
      * Display the specified resource.
      *

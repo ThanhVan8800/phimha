@@ -104,7 +104,7 @@ class IndexController extends Controller
             $many_genre[] = $movie -> movie_id;
         }  
         //return response()->json($many_genre);   
-        $movie = Movie::whereIn('id',$many_genre)->orderBy('update_day','DESC')->paginate(25);
+        $movie = Movie::whereIn('id',$many_genre)->withCount('episode')->orderBy('update_day','DESC')->paginate(25);
 
         // film cho sidebar
         $film_sidebar = Movie::where('film_hot',1)->where('status',1)->orderBy('update_day','DESC')->take(15)->get();

@@ -46,7 +46,13 @@
             width: 100%;
             }
          </style>
-         <style>#header .site-title {background: url(https://www.pngkey.com/png/detail/360-3601772_your-logo-here-your-company-logo-here-png.png) no-repeat top left;background-size: contain;text-indent: -9999px;}</style>
+         <style>#header .site-title {  background: url('./img/bg_tree.jpg') no-repeat top left;
+                                       background-size: contain;
+                                       text-indent: -9999px;
+                                       border: 1px solid #ccc;
+                                       border-radius: 25px 25px;
+                                    }
+         </style>
       </head>
       <body class="home blog halimthemes halimmovies" data-masonry="">
          <header id="header">
@@ -285,7 +291,7 @@
                            $.getJSON('/json/movies.json', function(data){
                                     $.each(data, function(key, value){
                                        if(value.title.search(expression) != -1){
-                                          $('#result').append('<li class="list-group-item" style="cursor:pointer;"><img style=" width:80px; max-height:100px" src="/uploads/movie/' + value.image + '">' + value.title + '</li>');
+                                          $('#result').append('<li class="list-group-item" style="cursor:pointer;"><img style=" width:80px; height:80px; border-radius:50%;" src="/uploads/movie/' + value.image + '">' + '<span style="margin-left:5px;">'+value.title+'</span>'   + '</li>');
                                  }
                               });
                            })
@@ -307,10 +313,9 @@
                $.ajax({
                   url:"{{url('/filter-topview-default')}}",
                   method:"GET",
-                  
                   success:function(data)
                      {
-                           $('#show0').html(data);
+                           $('#show_default').html(data);
                      }   
                }); 
                $('.filter-sidebar').click(function(){
@@ -324,11 +329,15 @@
                   }
                   $.ajax({
                      url:"{{url('/filter-topview-phim')}}",
-                     method:"GET",
+                     method:"POST",
+                     headers: {
+                              'X-CSRF-TOKEN': $('meta[name ="csrf-token"]').attr('content'),
+                           },
                      data:{value:value},
                      success:function(data)
                         {
-                              $('#show'+value).html(data);
+                              $('#halim-ajax-popular-post-default').css('display','none');
+                              $('#show_data').html(data);
                         }   
                   }); 
                })

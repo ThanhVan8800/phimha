@@ -50,34 +50,42 @@ class EpisodeController extends Controller
     public function store(EpisodeFormRequest $request)
     {
         try{
+
             $data = $request->all();
-            $episode = new Episode();
-            $episode -> linkfilm = $data['linkfilm'];
-            $episode -> episode = $data['episode'];
-            $episode -> movie_id = $data['movie_id'];
-            $episode -> created_at = Carbon::now('Asia/Ho_Chi_Minh');
-            $episode -> updated_at = Carbon::now('Asia/Ho_Chi_Minh');
-            //* Nhật ký hoạt động
-            $user = Auth::user();
-            Session()->put('user', $user);
-            $user = Session()->get('user');
-            $dt = Carbon::now('Asia/Ho_Chi_Minh');
-            $todayDate = $dt->toDayDateTimeString();
-            // dd($todayDate);
-            $name = $user->name;
-            $email = $user->email;
-            $address = $user->address;
-            // $date_time = $user->date_time;
-            $activity = [
-                'name' => $name,
-                'email' => $email,
-                'address' => $address,
-                'date_time' => $dt,
-                'modify_user' => $name.' tạo tập phim '.$episode -> episode.' '
-            ];
-            DB::table('userlog_activities')->insert($activity);
-            $episode->save();
-            Session::flash('success','Tạo tập phim thành công');
+            // TODO: Kiểm tra số tập thêm có trùng hay không
+            $episode_check = Episode::where('episode',$data['episode'])->where('movie_id',$data['movie_id'])->count();
+            if($episode_check)
+            {
+                return redirect()->back();
+            }else{
+                $episode = new Episode();
+                $episode -> linkfilm = $data['linkfilm'];
+                $episode -> episode = $data['episode'];
+                $episode -> movie_id = $data['movie_id'];
+                $episode -> created_at = Carbon::now('Asia/Ho_Chi_Minh');
+                $episode -> updated_at = Carbon::now('Asia/Ho_Chi_Minh');
+                //* Nhật ký hoạt động
+                $user = Auth::user();
+                Session()->put('user', $user);
+                $user = Session()->get('user');
+                $dt = Carbon::now('Asia/Ho_Chi_Minh');
+                $todayDate = $dt->toDayDateTimeString();
+                // dd($todayDate);
+                $name = $user->name;
+                $email = $user->email;
+                $address = $user->address;
+                // $date_time = $user->date_time;
+                $activity = [
+                    'name' => $name,
+                    'email' => $email,
+                    'address' => $address,
+                    'date_time' => $dt,
+                    'modify_user' => $name.' tạo tập phim '.$episode -> episode.' '
+                ];
+                DB::table('userlog_activities')->insert($activity);
+                $episode->save();
+                Session::flash('success','Tạo tập phim thành công');
+            }
         }catch(Exception $err){
             Session::flash('error',$err->getMessage());
             return false;
@@ -87,6 +95,11 @@ class EpisodeController extends Controller
 
     }
 
+    public function addEpisode(Request $request, $id){
+
+
+        
+    }
     /**
      * Display the specified resource.
      *
@@ -95,7 +108,14 @@ class EpisodeController extends Controller
      */
     public function show($id)
     {
-        //
+
+        $movie = Movie::find($id);
+        $lstEpisode = Episode::with('movie')->where('movie_id',$id)->orderBy('episode','DESC')->get();
+        return view('admin.episode.add_episode',[
+            'title' => 'Thêm tập phim',
+            'lstEpisode' => $lstEpisode,
+            'movie' => $movie,
+        ]);
     }
 
     /**

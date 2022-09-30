@@ -44,13 +44,12 @@
                                  </span>
                                     
                                  <span class="episode"><i class="fa fa-play" aria-hidden="true"></i>
-                                                @if ($mov->subtitle == 0)
-                                                   
-                                                         Vietsub-Tập 1/{{$mov->episode_film}}
+                                                @if ($mov->subtitle == 0 && $mov->belonging_movie == 1)
+                                                         Vietsub-{{$mov->episode_count}}/{{$mov->episode_film}}
+                                                         <!-- //* episode_count là phần đếm withCount episode thêm count -->
                                                 @else
-                                                      Thuyết minh-Tập 1/{{$mov->episode_film}}
+                                                      Thuyết minh
                                                 @endif
-                                                
                                  </span> 
                                  <div class="icon_overlay"></div>
                                  <div class="halim-post-title-box">

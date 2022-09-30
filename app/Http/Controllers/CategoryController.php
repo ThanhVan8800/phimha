@@ -296,29 +296,29 @@ class CategoryController extends Controller
                                             </td>
                                 </tr>';
             }
-        foreach($cate_searchh as $movi){
-                $output .= '
-                    <tr>
-                    <th scope="row" class="text-white">'. $movi->id .'</th>
-                    
-                    <td class="text-white">
-                        '.$movi->movie->title.'
-                    </td>
-                    <td class="text-white">
-                        <img src="'.asset('uploads/movie/'.$movi->movie->image).'" style="width:150px;max-height:300px;object-fit:contain" alt="">
-                    </td>
-                    <td class="text-white">
-                            '.$movi->linkfilm.'
-                    </td>
-                    <td value="'.$movi->episode.'" class="text-white">
-                            '.$movi->episode.'
-                    </td>
-                    
-            </tr>';
-            }
+                foreach($cate_searchh as $movi){
+                        $output .= '
+                            <tr>
+                                    <th scope="row" class="text-white">'. $movi->id .'</th>
+                                    
+                                    <td class="text-white">
+                                        '.$movi->movie->title.'
+                                    </td>
+                                    <td class="text-white">
+                                        <img src="'.asset('uploads/movie/'.$movi->movie->image).'" style="width:150px;max-height:300px;object-fit:contain" alt="">
+                                    </td>
+                                    <td class="text-white">
+                                            '.$movi->linkfilm.'
+                                    </td>
+                                    <td value="'.$movi->episode.'" class="text-white">
+                                            '.$movi->episode.'
+                                    </td>
+                                    
+                            </tr>';
+                    }
             
             
-                return response()->json($output);
+            return response()->json($output);
                                             
                                             // '. Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-dark btn-sm', 'style' => 'height:40px; width:40px'] )  .'
     }

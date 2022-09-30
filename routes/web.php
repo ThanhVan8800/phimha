@@ -82,6 +82,7 @@ Route::middleware(['auth'])->group(function(){
         //*Phim
         Route::prefix('movies')->group(function(){
             Route::resource('movie', MovieController::class);
+            Route::get('addEpisode',[MovieController::class,'addEpisode'])->name('addEpisode');
             //* Tìm kiếm cho phim theo Ngày
             Route::get('search-movie', [MovieController::class,'searchMovie'])->name('searchMovie');
         });
@@ -135,8 +136,6 @@ Route::middleware(['auth'])->group(function(){
 });
 
 
-
-
 Route::post('resorting',[CategoryController::class,'resorting'])->name('resorting');
 Route::resource('genre', GenreController::class);
 
@@ -152,6 +151,9 @@ Route::resource('watch', WatchController::class);
 
 // thêm tập phim
 Route::resource('episode', App\Http\Controllers\EpisodeController::class);
+//thêm tập phim ở ds phim
+Route::get('/add-episode/{$id}',[App\Http\Controllers\EpisodeController::class,'add_episode'])->name('addEpisode');
+
 Route::get('episode-option',[App\Http\Controllers\EpisodeController::class,'select_movie'])->name('select-movie');
 //*Tìm kiếm cho tập phim
 Route::get('filter-search-episode',[App\Http\Controllers\EpisodeController::class,'search_episode'])->name('search-episode');
@@ -164,7 +166,7 @@ Route::get('search_ad', [CategoryController::class,'search'])->name('search_admi
 
     Route::get('/update-year-phim', [MovieController::class, 'update_year']);
     Route::get('/update-topview-phim', [MovieController::class, 'update_topview']);
-    Route::get('/filter-topview-phim', [MovieController::class, 'filter_topview']);
+    Route::post('/filter-topview-phim', [MovieController::class, 'filter_topview']);
     Route::get('/filter-topview-default', [MovieController::class, 'filter_default']);
 
 
