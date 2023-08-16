@@ -21,6 +21,9 @@
         <li class="nav-item">
           <a class="nav-link" href="{{route('episode.create')}}">Tập phim</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{route('link.create')}}">Link phim</a>
+        </li>
         
         </ul>
         <!-- <form class="d-flex">

@@ -32,6 +32,14 @@
                         @enderror
                     </div>
                     <div class="form-group text-white">
+                        {!! Form::label('LinkMovie', ' LinkMovie', []) !!}
+                        {!! Form::label('','*',['class' => 'text-danger'])!!}
+                        {!! Form::select('server',['0'=> 'Chọn Server phim', '1' =>$linkservename],isset($episode) ? $episode->server  : '', ['class' =>'form-control  select-episode']) !!}
+                        @error('movie_id')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group text-white">
                         {!! Form::label('linkfilm', 'Link Phim', []) !!}
                         {!! Form::label('','*',['class' => 'text-danger'])!!}
                         {!! Form::text('linkfilm', isset($episode) ? $episode->linkfilm : '', ['class' => 'form-control', 'placeholder' =>'Nhập link film vào...']) !!}
@@ -65,6 +73,11 @@
                     </div>
                     {!! Form::label('','*',['class' => 'text-danger'])!!}
                     {!! Form::label('','Là các trường bắt buộc điền',['class' => 'text-white'])!!}<br/>
+                    {!! Form::label('','<iframe allowfullscreen frameborder="0" height="360" scrolling="0" src="https://short.ink/1cX0REvDv" width="100%"></iframe>',['class' => 'text-white'])!!}<br />
+                    {!! Form::label('','<iframe allowfullscreen frameborder="0" height="360" scrolling="0" 
+                        src="https://1080.opstream4.com/share/96e957e52b63f78cbf48bf04a85e413d" width="100%"></iframe>',
+                        ['class' => 'text-white'])!!}<br />
+    
                     @if( Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin' || Auth::user()->role == 'manage' )
                         @if (Auth::user()->status == 1)
                             @if(!isset($episode))
@@ -101,6 +114,7 @@
                                     <th scope="col" class="text-white">Tên phim</th>
                                     <th scope="col" class="text-white">Hình ảnh</th>
                                     <th scope="col" class="text-white" >Link Film</th>
+                                    <th scope="col" class="text-white" >Link Serve</th>
                                     <!-- <th scope="col" class="text-white">Phim</th> -->
                                     <th scope="col" class="text-white">Tập Phim</th>
                                     <th scope="col" class="text-white">Lượt xem</th>
@@ -125,7 +139,13 @@
                                                     <!-- {{Illuminate\Support\Str::of($movi->linkfilm)->words(5)}} -->
                                                     {{$movi->linkfilm}}
                                             </td>
-                                            
+                                            <td class="text-white" style="width:10px;">
+                                                @foreach($linkserve as $key => $value)
+                                                    @if ($value->id == $movi->server)
+                                                        {{$value->title}} 
+                                                    @endif
+                                                @endforeach
+                                            </td>
                                             <td value="{{$movi->episode}}" class="text-white">
                                                     {{$movi->episode}}
                                             </td>
@@ -151,7 +171,6 @@
                                 @endforeach
                             </tbody>
                     </table>
-                
 </div>
 </div>
 </div>

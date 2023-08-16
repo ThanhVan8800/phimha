@@ -36,17 +36,20 @@
                      <!-- @foreach ($movie->episode as $epi)
                            @endforeach -->
                      <ul class="halim-social-plugin col-xs-4 hidden-xs">
-                        <li class="fb-like" data-href=""  data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></li>
+                              @php
+                                 $current_url = Request::url();
+                              @endphp
+                        <div class="fb-like" data-href="https://developers.facebook.com/docs/plugins/" data-width="200" data-layout="button_count" data-action="like" data-size="large" data-share="true"></div>
                      </ul>
                      
                      <ul class="col-xs-12 col-md-8">
-                        <div id="autonext" class="btn-cs autonext">
+                        <!-- <div id="autonext" class="btn-cs autonext">
                            <i class="icon-autonext-sm"></i>
                            <span><i class="hl-next"></i> Autonext: <span id="autonext-status">On</span></span>
-                        </div>
-                        <div id="explayer" class="hidden-xs"><i class="hl-resize-full"></i>
+                        </div> -->
+                        <!-- <div id="explayer" class="hidden-xs"><i class="hl-resize-full"></i>
                            Expand 
-                        </div>
+                        </div> -->
                         <div id="toggle-light"><i class="hl-adjust"></i>
                            Light Off 
                         </div>
@@ -202,6 +205,52 @@
                                           </li>
                                     @endforeach
                                  @endif
+                                 
+                              </ul>
+                              <div class="clearfix"></div>
+                           </div>
+                           //* Server film
+                           <div class="halim-server">
+                              <ul class="halim-list-eps">
+                                 <!-- 0 là phim lẻ -->
+                                    @foreach ($server  as  $key => $serv)
+                                          @foreach ($episode_movie as $list )
+                                             @if ($list->server == $serv->id)
+                                                <li class="halim-episode">
+                                                      <span class="halim-btn halim-btn-2 halim-info-1-1 box-shadow" data-post-id="37976">{{$serv->title}}</span>
+                                                </li>
+                                                <ul class="halim-list-eps">
+                                                @foreach ($episode_list as $epi )
+                                                   @if ($epi->server  == $serv->id)
+                                                      <li class="halim-episode">
+                                                            <!-- Để  chữ tập trong url vì có truyền tham số tap substr để lấy số tập -->
+                                                            <a href="{{url('xem-phim/'.$movie->slug.'/tap-'.$epi->episode.'/server-'.$epi->server)}}">
+                                                               <span class="halim-btn halim-btn-2 {{$tapphim == $epi->episode && $server_active == 'server-'.$serv->id ? 'active':''}} halim-info-1-1 box-shadow" data-post-id="37976" 
+                                                               data-server="1" data-episode="1" data-position="first" data-embed="0" 
+                                                               data-title="Xem phim {{$movie->title}} - {{$sotap->episode}} - {{$movie->name_eng}} Vietsub + Thuyết Minh" 
+                                                               data-h1=" - {{$movie->title}} tập {{$sotap->episode}}">{{$epi->episode}}
+                                                               </span>
+                                                            </a>
+                                                         </li>
+                                                         @endif
+                                                         @endforeach
+                                                      </ul>
+                                                
+                                             @endif
+                                          @endforeach
+                                       
+                                    @endforeach
+                                 
+                                             <!-- Để  chữ tập trong url vì có truyền tham số tap substr để lấy số tập -->
+                                             <!-- <a href="{{url('xem-phim/'.$movie->slug.'/tap-'.$sotap->episode)}}">
+                                                <span class="halim-btn halim-btn-2 {{$tapphim == $sotap->episode ? 'active':''}} halim-info-1-1 box-shadow" data-post-id="37976" 
+                                                data-server="1" data-episode="1" data-position="first" data-embed="0" 
+                                                data-title="Xem phim {{$movie->title}} - {{$sotap->episode}} - {{$movie->name_eng}} Vietsub + Thuyết Minh" 
+                                                data-h1=" - {{$movie->title}} tập {{$sotap->episode}}">{{$sotap->episode}}
+                                                </span>
+                                             </a>
+                                          </li> -->
+                                    
                                  
                               </ul>
                               <div class="clearfix"></div>

@@ -76,7 +76,12 @@
 
                 <div class="text-center text-lg-start mt-4 pt-2">
                     <button type="submit" class="btn btn-primary btn-lg"
-                    style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
+                        style="padding-left: 2.5rem; padding-right: 2.5rem;">
+                        Login
+                    </button>
+                    <a href="{{ url('auth/google') }}" style="margin-top: 0px !important;background: #C84130;color: #ffffff;padding: 8px;border-radius:6px;" class="ml-2">
+                        <strong>Login with Google</strong>
+                    </a> 
                     <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? 
                         <a href="{{ route('registerUser') }}" class="link-danger">Register</a>
                     </p>

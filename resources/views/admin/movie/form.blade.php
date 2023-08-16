@@ -144,6 +144,7 @@
                     <div class="form-group">
                         {!! Form::label('description','Mô tả', []) !!}
                         {!! Form::label('title', '*', ['class' => 'text-danger']) !!}
+                        <div id="editor"></div>
                         {!! Form::textarea('description', isset($movie) ? $movie->description : '', ['style' => 'resize:none','class' => 'form-control','id' => 'content']) !!}
                         @error('description')
                                 <div class="alert alert-danger">{{ $message }}</div>
@@ -157,7 +158,7 @@
                             <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                         @if(isset($movie))
-                        <img src="{{asset('uploads/movie/'.$movie->image)}}" style="width:100px;max-height:100px;object-fit:contain" alt="{{asset($movie->image)}}">
+                            <img src="{{asset('uploads/movie/'.$movie->image)}}" style="width:100px;max-height:100px;object-fit:contain" alt="{{asset($movie->image)}}">
                         @endif
                     </div>
                     <div class="form-group">
@@ -175,10 +176,33 @@
                                 {!! Form::label('title', '*', ['class' => 'text-danger']) !!}
                                 {!! Form::select('category_id', $category ,isset($movie) ? $movie->category_id : ''  , ['class' => 'form-control', 'placeholder' =>'--Chọn danh mục phim--']) !!}
                                 @error('category_id')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
+                    </div>
+                    <div class="form-group">
+                        {!! Form::label('Genre', 'Danh mục', []) !!}
+                        {!! Form::label('title', '*', ['class' => 'text-danger']) !!}<br>
+                        
+                        <!-- {!! Form::select('genre_id', $genre ,isset($movie) ? $movie->genre_id : ''   , ['class' => 'form-control', 'placeholder' =>'điền đi']) !!} -->
+                        @foreach ($lstCategory as $key => $cate)
+                            @if(isset($movie))
+                                {!! Form::checkbox('cate[]',$cate->id, isset($movie_category) && $movie_category -> contains($cate->id) ? true : false)!!}
+                                        <!-- contains dùng để cho check  phim chứa nhiều loại phim -->
+                                {!!Form::label('cate',$cate->title) !!}
+                                @error('category_id')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            @else
+                                {!! Form::checkbox('cate[]',$cate->id, '')!!}
+                                {!!Form::label('cate',$cate->title) !!}
+                                @error('category_id')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            @endif
+                        @endforeach
+                        
                     </div>
                     <div class="form-group">
                         {!! Form::label('Genre', 'Loại phim', []) !!}

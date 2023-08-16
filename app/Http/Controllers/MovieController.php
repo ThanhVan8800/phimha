@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\Movie;
 use App\Models\Movie_Genre;
+use App\Models\Movie_Category;
 use App\Models\Category;
 use App\Models\Genre;
 use App\Models\Country;
@@ -28,6 +29,7 @@ class MovieController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
     public function update_topview(Request $request){
         $data = $request->all();
         $movie = Movie::find($data['id_phim']);
@@ -82,23 +84,22 @@ class MovieController extends Controller
             $movie = Movie::where('topview',0)->orderBy('update_day','DESC')->take(10)->get();
             $output = '';
             foreach($movie as $key => $mov){
-                
-                                    if($mov->resolution==0){
-                                            $text = 'HD';
-                                        }elseif($mov->resolution==1){
-                                            $text = 'SD';
-                                        }
-                                        elseif($mov->resolution==2){
-                                            $text = 'HDCam';
-                                        }
-                                        elseif($mov->resolution==3){
-                                            $text = 'Cam';
-                                        }
-                                        elseif($mov->resolution==4){
-                                            $text = 'FullHD';
-                                        }else{
-                                            $text = 'Tralier';
-                                        }
+                if($mov->resolution==0){
+                        $text = 'HD';
+                    }elseif($mov->resolution==1){
+                        $text = 'SD';
+                    }
+                    elseif($mov->resolution==2){
+                        $text = 'HDCam';
+                    }
+                    elseif($mov->resolution==3){
+                        $text = 'Cam';
+                    }
+                    elseif($mov->resolution==4){
+                        $text = 'FullHD';
+                    }else{
+                        $text = 'Tralier';
+                    }
                 $output.='<div class="item">
                                 <a href="'.url('phim/'.$mov->slug).'" title="'.$mov->title.'">
                                     <div class="item-link">
@@ -156,6 +157,7 @@ class MovieController extends Controller
         $country = Country::pluck('title','id');
 
         $lstGenre = Genre::all();
+        $lstCategory = Category::all();
         $lstMovie = Movie::with('category','country','genre')->orderBy('id', 'desc')->get();
         return view('admin.movie.form',[
             'lstMovie' => $lstMovie,
@@ -163,6 +165,7 @@ class MovieController extends Controller
             'genre' => $genre,
             'country' => $country,
             'lstGenre' => $lstGenre,
+            'lstCategory' => $lstCategory,
             'title' => 'Danh sách phim'
         ]);
     }
@@ -176,8 +179,8 @@ class MovieController extends Controller
     public function store(MovieFormRequest $request)
     {
         try{
-            // dd($request->input());
             $data = $request->all();
+            // dd($data);
             $movie = new Movie();
             $movie -> title = $data['title'];
             $movie -> film_hot = $data['film_hot'];
@@ -190,7 +193,6 @@ class MovieController extends Controller
             $movie -> slug = $data['slug'];
             $movie -> tags = $data['tags'];
             $movie -> description = $data['description'];
-            $movie -> category_id = $data['category_id'];
             $movie -> episode_film = $data['episode_film'];
             //*Tác giả, đạo diễn
             $movie -> actor = $data['actor'];
@@ -205,8 +207,15 @@ class MovieController extends Controller
             {
                 $movie -> genre_id = $gen[0];
             }
+            // dd($data['cate']);
+            // foreach($data['cate'] as $key => $ca)
+            // {
+            //     $movie -> category_id = $ca[0];
+            // }
+            $movie -> category_id = $data['category_id'];
             // dd($movie->genre_id);
             $movie -> country_id = $data['country_id'];
+            // $movie -> category_id = $data['category_id'];
             $movie -> status = $data['status'];
             $movie -> date_created = Carbon::now('Asia/Ho_Chi_Minh');
             $movie -> update_day = Carbon::now('Asia/Ho_Chi_Minh');
@@ -221,6 +230,8 @@ class MovieController extends Controller
                 $get_image -> move('uploads/movie/',$new_image);
                 $movie->image = $new_image;
             }
+            
+
             //* Nhật ký hoạt động
             $user = Auth::user();
             Session()->put('user', $user);
@@ -229,6 +240,7 @@ class MovieController extends Controller
             $todayDate = $dt->toDayDateTimeString();
             // dd($todayDate);
             $name = $user->name;
+            // dd($movie -> title);
             $email = $user->email;
             $address = $user->address;
             // $date_time = $user->date_time;
@@ -240,11 +252,12 @@ class MovieController extends Controller
                 'modify_user' => $name.' tạo phim mới '.$movie -> title.' '
             ];
             DB::table('userlog_activities')->insert($activity);
-
             //thêm nhiều thể loại cho phim
             $movie -> save();
             $movie -> movie_genre() -> attach($data['genre']);
+            // $movie -> movie_category() -> attach($data['category']);
             Session::flash('success','Tạo phim thành công');
+            
         }catch(Exception $err){
             Session::flash('error',$err->getMessage());
             return false;
@@ -288,8 +301,10 @@ class MovieController extends Controller
         $country = Country::pluck('title','id');
         
         $lstGenre = Genre::all();
+        $lstCategory = Category::all();
         $movie = Movie::find($id);
         $movie_genre = $movie -> movie_genre;
+        $movie_category = $movie -> movie_category;
         $lstMovie = Movie::with('category','country','genre')->orderBy('id', 'desc')->get();
         return view('admin.movie.form',[
             'lstMovie' => $lstMovie,
@@ -298,7 +313,9 @@ class MovieController extends Controller
             'country' => $country,
             'movie' => $movie,
             'lstGenre' => $lstGenre,
+            'lstCategory' => $lstCategory,
             'movie_genre' => $movie_genre,
+            'movie_category' => $movie_category,
             'title' => 'Chỉnh sửa phim'
 
         ]);
@@ -333,7 +350,6 @@ class MovieController extends Controller
             $movie -> actor = $data['actor'];
             $movie -> director = $data['director'];
             
-            $movie -> category_id = $data['category_id'];
             $movie -> belonging_movie = $data['belonging_movie'];
             $movie -> film_vip = $data['film_vip'];
             
@@ -366,8 +382,12 @@ class MovieController extends Controller
             {
                 $movie -> genre_id = $gen['0'];
             }
+            foreach($data['cate'] as $key => $cate)
+            {
+                $movie -> category_id = $cate['0'];
+            }
             $movie -> save();
-            $movie -> movie_genre() -> sync($data['genre']);
+            $movie -> movie_category() -> sync($data['cate']);
             //* Nhật ký hoạt động
             $user = Auth::user();
             Session()->put('user', $user);
@@ -398,6 +418,30 @@ class MovieController extends Controller
         
 
         return redirect()->back();
+    }
+
+    public function update_image_movie_ajax(Request $request)
+    {
+        $get_image = $request->file('file');
+        $movie_id = $request->movie_id;
+        if($get_image)
+        {
+            // !empty tồn tại link thì xóa || isset
+            $movie = Movie::find($movie_id);
+            if(file_exists('uploads/movie/' . $movie->image))
+            {
+                
+                unlink('uploads/movie/'. $movie->image);
+                $get_name_image = $get_image->getClientOriginalName();
+                $name_image = current(explode('.', $get_name_image));
+                $new_image = $name_image.rand(0,9999).'.'.$get_image->getClientOriginalExtension();
+                $get_image->move('uploads/movie/', $new_image);
+                $movie->image = $new_image;
+                $movie->save();
+            }
+            
+
+        }
     }
 
     /**
@@ -485,5 +529,15 @@ class MovieController extends Controller
             'title' => 'Danh sách phim',
             'query' => $query
         ]);
+    }
+    public function watch_video(Request $request)
+    {
+        $data = $request->all();
+        $movie = Movie::find($data['movie_id']);
+        $video = Episode::where('movie_id',$data['movie_id'])->where('episode',$data['episode_id'])->first();
+        $output['video_title'] = $movie->title.'-tap'.$video->episode;
+        $output['video_description'] = $movie->description;
+        $output['video_link'] = $movie->linkfilm;
+        echo json_encode($output);
     }
 }

@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Category;
-use App\Models\Genre;
-use App\Models\Country;
-use App\Models\Movie;
-use App\Models\Movie_Genre;
-use App\Models\Episode;
-use App\Models\Rating;
-use App\Models\VNPay;
 use DB;
 use Carbon;
+use App\Models\Genre;
+use App\Models\Movie;
+use App\Models\VNPay;
+use App\Models\Rating;
+use App\Models\Country;
+use App\Models\Episode;
+use App\Models\Category;
+use App\Models\LinkMovie;
+use App\Models\InfoWebsite;
+use App\Models\Movie_Genre;
+use Illuminate\Http\Request;
 
 class IndexController extends Controller
 {
@@ -62,6 +64,7 @@ class IndexController extends Controller
         $genre = Genre::orderBy('id','desc')->get();
         $country = Country::orderBy('id','desc')->get();
         $category_home = Category::with('movie')->orderBy('id','desc')->where('status',1)->get();
+        $info = InfoWebsite::find(5);
         return view('pages.home',[
             'category' => $category, 
             'genre' => $genre,
@@ -189,19 +192,16 @@ class IndexController extends Controller
 
         return view('pages.movie',compact('category','genre','country','movie','related','filmhot_trailer','film_hot','episode','episode_numfilm','episode_count','vnPay'));
     }
-    public function watch($slug,$tap)
+    public function watch($slug,$tap,$server_active)
     {
         // if(isset($_GET['tap-phim']))
         //     {
         //         $tap_phim =$_GET['tap-phim'];
         //     }
         // else{
-
         //     $tap_phim = 1;
         // }
         //     $tap_phim = substr($tap_phim,0,9);
-        
-            
             // dd($tapphim);
         $category = Category::orderBy('position','ASC')->where('status', 1)->get();
         $genre = Genre::orderBy('id','desc')->get();
@@ -220,6 +220,7 @@ class IndexController extends Controller
         if(isset($tap)){
             $tapphim = $tap;
             $tapphim = substr($tap,4,20);
+            // dd($tapphim);
             $episode = Episode::where('movie_id',$movie->id)->where('episode',$tapphim)->first();
             $episode->increment('views');
             $ratingAvg = Rating::where('episode_id',$episode->id)->avg('rating_star');
@@ -236,16 +237,61 @@ class IndexController extends Controller
             $count = Rating::where('episode_id',$episode->id)->count();
         }
         // return response()->json($movie);
-
+        
+        //*Server film
+        $server = LinkMovie::orderBy('id','DESC')->get();
+        $episode_movie = Episode::where('movie_id',$movie->id)->get()->unique('server');
+        $episode_list = Episode::where('movie_id',$movie->id)->orderBy('episode','ASC')->get();
         //*Gợi ý phim 
         $related = Movie::with('category', 'movie_genre','country','genre')->where('category_id',$movie->category->id)->orderBy(DB::raw('RAND()'))->orderByDesc('status',1)->whereNotIn('slug',[$slug])->get();
         
         
-        return view('pages.watch',compact('category','genre','country','movie','film_sidebar','filmhot_trailer','film_hot','episode','tapphim','related','ratingAvg','count'));
+        return view('pages.watch',compact('category','genre','country','movie',
+                                        'film_sidebar','filmhot_trailer','film_hot','episode',
+                                        'tapphim','related','ratingAvg','count','server','episode_list','episode_movie',
+                                        'server_active'
+                                    ));
     }
     public function episode()
     {
         return view('pages.episode');
+    }
+    //* Lọc phim 
+    public function filter_film(Request $request)
+    {
+        $sapxep = $_GET['order'];
+        $genre_get = $_GET['genre'];
+        $country_get = $_GET['country'];
+        $year_get = $_GET['year'];
+        $category = Category::orderBy('position','ASC')->where('status', 1)->get();
+        $genre = Genre::orderBy('id','desc')->get();
+        $country = Country::orderBy('id','desc')->get();
+        $category_home = Category::with('movie')->orderBy('id','desc')->where('status',1)->get();
+        $info = InfoWebsite::find(5);
+        if($sapxep == '' && $genre_get == '' && $country_get == '' && $year_get == ''){
+            return redirect()->back()->with('Error', 'Please select a country');
+        }else{
+            $movie = Movie::withCount('episode');
+            if($genre_get){
+                $movie = $movie->where('genre_id',$genre_get);
+            }elseif($country_get){
+                $movie = $movie->where('country_id',$country_get);
+            }elseif($year){
+                $movie = $movie->where('year',$year_get);
+            }elseif($sapxep){
+                $movie = $movie->orderBy('title','ASC');
+            }
+            $movie = $movie->orderBy('update_day','DESC')->paginate(50);
+            return view('pages.includes.filler_researcher_episode',[
+                'movie' => $movie,
+                'category' => $category,
+                'genre' => $genre,
+                'country' => $country,
+                'category_home' => $category_home,
+                'info' => $info
+            ]);
+        }
+
     }
 
 }

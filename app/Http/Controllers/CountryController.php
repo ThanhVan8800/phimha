@@ -23,6 +23,19 @@ class CountryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function resorting(Request  $request)
+    {
+        $data = $request->all();//[1,2,3,3]
+        foreach($data['array_id'] as $key => $stt){
+            //[0=>1]
+            //[1=>2]
+            //[2=>3]
+            //[3=>3]
+            $category = Country::find($stt);
+            $category->position = $key;
+            $category->save();
+        }
+    }
     public function index()
     {
         //

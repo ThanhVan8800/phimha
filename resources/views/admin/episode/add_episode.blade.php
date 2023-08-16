@@ -67,6 +67,8 @@
     </div>
     {!! Form::label('','*',['class' => 'text-danger'])!!}
     {!! Form::label('','Là các trường bắt buộc điền',['class' => 'text-white'])!!}<br />
+    
+
     @if( Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin' || Auth::user()->role == 'manage' )
         @if (Auth::user()->status == 1)
             @if(!isset($episode))

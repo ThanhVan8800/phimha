@@ -14,6 +14,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
     <script type="text/javascript" src="//cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+
+    
     <!-- Socketio -->
 
     <!-- <script src="/templates/admin/datatables/js/jquery.dataTables.min.js"></script> -->
@@ -23,7 +25,34 @@
         $('#myTable').DataTable();
     });
     </script>
+    
     @yield('footer')
+    <!-- show video from episode  -->
+    <script type="text/javascript">
+        $('.show_video').click(function(){
+            var movie_id = $(this).data('movie_video_id');
+            var episode_id = $(this).data('video_episode');
+            // alert(movie_id);
+            // alert(episode_id);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                });
+            $.ajax({
+                url:"{{route('watch-videoo')}}",
+                method:'POST',
+                dataType:'JSON',
+                data:{movie_id:movie_id,episode_id:episode_id},
+                success:function(data){
+                    $('#video_title').html(data.video_title);
+                    $('#video_link').html(data.video_link);
+                    $('#video_description').html(data.video_description);
+                    $('#videoModal').modal('show');
+                }
+            })
+        })
+    </script>
     <script type="text/javascript">
         $('.select-year').change(function() {
             var year = $(this).find(':selected').val();
@@ -105,6 +134,7 @@
                     })
                 })
     </script> -->
+    <!-- Season phim -->
     <script type="text/javascript">
         $('.select-session').change(function() {
             var session = $(this).find(':selected').val();
@@ -120,7 +150,7 @@
         })
     </script>
     
-        
+        <!-- ChangeToSlug -->
         <script type="text/javascript">
             function ChangeToSlug()
                 {
@@ -153,6 +183,7 @@
                     document.getElementById('convert_slug').value = slug;
                 }
         </script>
+        <!-- Position flim -->
     <script type="text/javascript">
             $('.order_position').sortable({
                     placeholder:'ui-state-highlight',
@@ -162,11 +193,12 @@
                             array_id.push($(this).attr('id'));
                         })
                         // alert(array_id);
+                        
                         $.ajax({
                             headers: {
-                                'X-CSRF-TOKEN': $('meta[name ="csrf-token"]').attr('content'),
+                                'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
                             },
-                            url:"{{route('resorting')}}",
+                            url:'{{route('resortingcategory')}}',
                             method: "POST",
                             data:{array_id: array_id},
                             success: function(data) {
@@ -175,6 +207,34 @@
                         })
                     }
             })
+    </script>
+    <!--  Ajax update image -->
+    <script>
+        $(document).on('change','.file-image',function(){
+            var movie_id = $(this).data('movie_id');
+            var files = $("#file-"+movie_id)[0].files;
+            // console.log(files);
+
+            var image = document.getElementById('file-'+movie_id).files[0];
+            var form_data = new FormData();
+            form_data.append('file', document.getElementById('file-'+movie_id).files[0]);
+            form_data.append('movie_id', movie_id);
+                $.ajax({
+                    url:"{{route('update-image-movie-ajax')}}",
+                    method:"POST",
+                    headers:{
+                        'X-CSRF-TOKEN': $('meta[name ="csrf-token"]').attr('content'),
+                    },
+                    data:form_data,
+                    contentType:false,
+                    cache:false,
+                    processData:false,
+                    success:function(data){
+                        location.reload()
+                        $('#success_image').html('<span  class="text-success">Cập nhật hình ảnh thành công</span>')
+                    }
+                })
+        })
     </script>
     <script type="text/javascript">
     $('.select-movie').change(function(){

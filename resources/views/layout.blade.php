@@ -15,12 +15,12 @@
          <meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
          <title>Phim hay CKC - Xem phim hay nhất</title>
          <meta name="description" content="Phim hay 2021 - Xem phim hay nhất, xem phim online miễn phí, phim hot , phim nhanh" />
-         <link rel="canonical" href="">
+         <link rel="canonical" href="{{Request::url()}}">
          <link rel="next" href="" />
          <meta property="og:locale" content="vi_VN" />
          <meta property="og:title" content="Phim hay 2020 - Xem phim hay nhất" />
          <meta property="og:description" content="Phim hay 2020 - Xem phim hay nhất, phim hay trung quốc, hàn quốc, việt nam, mỹ, hong kong , chiếu rạp" />
-         <meta property="og:url" content="" />
+         <meta property="og:url" content="{{Request::url()}}" />
          <meta property="og:site_name" content="Phim hay 2021- Xem phim hay nhất" />
          <meta property="og:image" content="" />
          <meta property="og:image:width" content="300" />
@@ -46,12 +46,20 @@
             width: 100%;
             }
          </style>
-         <style>#header .site-title {  background: url('./img/bg_tree.jpg') no-repeat top left;
+         <style>#header .site-title {  background: url('/img/bg_tree.jpg') no-repeat top left;
                                        background-size: contain;
                                        text-indent: -9999px;
                                        border: 1px solid #ccc;
                                        border-radius: 25px 25px;
                                     }
+               #header .site-logo{
+                  border: 1px solid #ccc;
+                  border-radius: 25px 25px;
+                  text-indent: -9999px;
+                  height:50px;
+                  width: 100px;
+                  background-size: contain;
+               }
          </style>
       </head>
       <body class="home blog halimthemes halimmovies" data-masonry="">
@@ -59,8 +67,12 @@
             <div class="container">
                <div class="row" id="headwrap">
                   <div class="col-md-3 col-sm-6 slogan">
-                     <p class="site-title"><a class="logo" href="" title="phim hay ">Phim Hay</p>
-                     </a>
+                     <p class="">
+                        <a class="logo" href="" title="phim hay ">
+                           
+                           <img src="{{asset('uploads/info/'.$info->image)}}" class="site-logo" alt="">
+                        </a>
+                     </p>
                   </div>
                   <div class="col-md-5 col-sm-6 halim-search-form hidden-xs">
                      <div class="header-nav">
@@ -80,7 +92,7 @@
                                     <form action="{{route('tim-kiem')}}" method="GET">
                                        <input id="timkiem" type="text" name="search" class="form-control" placeholder="Tìm kiếm..." autocomplete="off" >
                                        <div class="search-i">
-                                          <button class="btn btn-warning btn__warning"  ><i class="fa-solid fa-magnifying-glass" ></i></button>
+                                          <button class="btn btn-warning btn__warning"><i class="fa-solid fa-magnifying-glass"></i></button>
                                        </div>
                                     </form>
                               </div>
@@ -204,6 +216,7 @@
                      </div>
                      <ul class="nav navbar-nav navbar-left" style="background:#000;">
                            <li><a href="#" onclick="locphim()" style="color: #ffed4d;">Lọc Phim <i class="fas fa-filter"></i></a></li>
+
                      </ul>
                      
                   </div>
@@ -270,43 +283,49 @@
          
          <!-- animate có trailer phim khi click xem  -->
          <!-- xem trailer k load lai trang -->
-            <script type="text/javascript">
-               $(".watch_trailer").click(function(event){
-                     event.preventDefault();
-                     var aid = $(this).attr("href");
-                     $('html, body').animate({scrollTop: $(aid).offset().top},'slow');
-               });
-            </script>
+         <script type="text/javascript">
+            $(".watch_trailer").click(function(event){
+                  event.preventDefault();
+                  var aid = $(this).attr("href");
+                  $('html, body').animate({scrollTop: $(aid).offset().top},'slow');
+            });
+         </script>
+         <!-- popup PR -->
+         <script>
+               $(window).on('load', function() {
+                  $('#banner_pr').modal('show');
+               })
+         </script>
             
          <!-- // tìm kiếm phim -->
          <script type='text/javascript'>
             $(document).ready(function() {
-               $('#timkiem').keyup(function() {
-                   //alert('ss')
-                  $('#result').html('');
-                  var search = $('#timkiem').val();
-                  if(search!=''){
-                           $('#result').css('display', 'inherit');
-                           var expression = new RegExp(search,"i");
-                           $.getJSON('/json/movies.json', function(data){
-                                    $.each(data, function(key, value){
-                                       if(value.title.search(expression) != -1){
-                                          $('#result').append('<li class="list-group-item" style="cursor:pointer;"><img style=" width:80px; height:80px; border-radius:50%;" src="/uploads/movie/' + value.image + '">' + '<span style="margin-left:5px;">'+value.title+'</span>'   + '</li>');
-                                 }
-                              });
-                           })
-                     }else{
-                           $('#result').css('display', 'none');
-                     }
-               })
-            
-                  $('#result').on('click','li',function(){
-                     var click_text = $(this).text().split('|'); //ngắt ra title vs description [0] && [1]
-                     $('#timkiem').val($.trim(click_text[0]));
+                  $('#timkiem').keyup(function() {
+                     //alert('ss')
                      $('#result').html('');
-                     $('#result').css('display', 'none');
-                  });
-         })
+                     var search = $('#timkiem').val();
+                     if(search!=''){
+                              $('#result').css('display', 'inherit');
+                              var expression = new RegExp(search,"i");
+                              $.getJSON('/json/movies.json', function(data){
+                                       $.each(data, function(key, value){
+                                          if(value.title.search(expression) != -1){
+                                             $('#result').append('<li class="list-group-item" style="cursor:pointer;"><img style=" width:80px; height:80px; border-radius:50%;" src="/uploads/movie/' + value.image + '">' + '<span style="margin-left:5px;">'+value.title+'</span>'   + '</li>');
+                                    }
+                                 });
+                              })
+                        }else{
+                              $('#result').css('display', 'none');
+                        }
+                  })
+               
+                     $('#result').on('click','li',function(){
+                        var click_text = $(this).text().split('|'); //ngắt ra title vs description [0] && [1]
+                        $('#timkiem').val($.trim(click_text[0]));
+                        $('#result').html('');
+                        $('#result').css('display', 'none');
+                     });
+               })
          </script>
          <script type="text/javascript">
             $(document).ready(function(){

@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Episode;
-use App\Models\Movie;
-use Carbon\Carbon;
 use DB;
-use Illuminate\Support\Facades\Session;
 use Auth;
+use Carbon\Carbon;
+use App\Models\Movie;
+use App\Models\Episode;
+use App\Models\LinkMovie;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 use App\Http\Requests\Episode\EpisodeFormRequest;
 
 class EpisodeController extends Controller
@@ -31,13 +32,17 @@ class EpisodeController extends Controller
      */
     public function create()
     {
-        $lstEpisode = Episode::with('movie')->orderBy('movie_id','DESC')->paginate(5);
+        $lstEpisode = Episode::with('movie')->orderBy('id','ASC')->get();
+        // ->latest()->paginate(2);
         $movie = Movie::orderBy('id','desc')->pluck('title', 'id');
-        // return response()->json($lstEpisode);
+        $lstLinkMovi = LinkMovie::orderBy('id','desc')->pluck('title', 'id');
+        $linkserve = LinkMovie::orderBy('id','desc')->get();
         return view('admin.episode.form',[
             'lstEpisode' => $lstEpisode,
             'movie' => $movie,
-            'title' => 'Tập phim'
+            'title' => 'Tập phim',
+            'lstLinkMovi' => $lstLinkMovi,
+            'linkserve' => $linkserve,
         ]);
     }
 
@@ -62,6 +67,7 @@ class EpisodeController extends Controller
                 $episode -> linkfilm = $data['linkfilm'];
                 $episode -> episode = $data['episode'];
                 $episode -> movie_id = $data['movie_id'];
+                $episode -> server = $data['server'];
                 $episode -> created_at = Carbon::now('Asia/Ho_Chi_Minh');
                 $episode -> updated_at = Carbon::now('Asia/Ho_Chi_Minh');
                 //* Nhật ký hoạt động
@@ -128,9 +134,15 @@ class EpisodeController extends Controller
     {
         $episode = Episode::find($id);
         $movie = Movie::pluck('title','id');
-        $lstEpisode = Episode::paginate(5);
+        $linkservename = LinkMovie::orderBy('id','desc')->pluck('title', 'id');
+        $lstLinkMovi = LinkMovie::orderBy('id','desc')->pluck('title', 'id');
+        $lstEpisode = Episode::get();
+        $linkserve = LinkMovie::orderBy('id','desc')->get();
         return view('admin.episode.form',compact('movie','lstEpisode','episode'),[
-            'title' => 'Chỉnh sửa tập phim'
+            'title' => 'Chỉnh sửa tập phim',
+            'lstLinkMovi' => $lstLinkMovi,
+            'linkserve' => $linkserve,
+            'linkservename' => $linkservename,
 
         ]);
     }
@@ -150,6 +162,7 @@ class EpisodeController extends Controller
             $episode -> linkfilm = $data['linkfilm'];
             $episode -> episode = $data['episode'];
             $episode -> movie_id = $data['movie_id'];
+            $episode -> server = $data['server'];
             // $episode -> created_at = Carbon::now('Asia/Ho_Chi_Minh');
             $episode -> updated_at = Carbon::now('Asia/Ho_Chi_Minh');
             $episode->save();

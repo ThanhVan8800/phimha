@@ -79,9 +79,9 @@
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody class="order_position">
+                    <tbody class="order_position22" id="lst">
                         @foreach($lstCountry as $key => $gen)
-                        <tr>
+                        <tr id="sid{{$gen->id}}">
                             <td scope="row" class="text-white">{{ $gen->id }}</td>
                             <td class="text-white">{{ $gen->title }}</td>
                             <td class="text-white">{!! $gen->description !!}</td>
@@ -130,5 +130,28 @@
 // instance, using default configuration.
 CKEDITOR.replace('content');
 </script>
-
+<script type="text/javascript">
+            $('.order_position22').sortable({
+                    placeholder:'ui-state-highlight',
+                    update: function(event, ui) {
+                        var array_id = [];
+                        $('.order_position22 tr').each(function(){
+                            array_id.push($(this).attr('id'));
+                        })
+                        // alert(array_id);
+                        
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
+                            },
+                            url:'{{route('resortingcategory')}}',
+                            method: "POST",
+                            data:{array_id: array_id},
+                            success: function(data) {
+                                alert('Sắp xếp thứ tự thành công');
+                            }
+                        })
+                    }
+            })
+    </script>
 @endsection

@@ -78,7 +78,7 @@
                         </div>
                         <div id="halim-advanced-widget-2-ajax-box" class="halim_box">
                             <!-- take lấy số lượng phimh -->
-                            @foreach($cate_home->movie->take(10) as $key => $cate_movie)
+                            @foreach($cate_home->movie->sortBy('position')->take(10) as $key => $cate_movie)
                                 <article class="col-md-3 col-sm-3 col-xs-6 thumb grid-item post-37606">
                                     <div class="halim-item">
                                     <a class="halim-thumb" href="{{route('movie',[$cate_movie->slug])}}">

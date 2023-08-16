@@ -32,6 +32,7 @@ table tr td:first-child::before {
                                 {{ session('status') }}
                             </div>
                         @endif
+                        
                         @if(Session::has('success'))
                             <div class="alert alert-success">
                                 {{Session::get('success')}}
@@ -77,7 +78,6 @@ table tr td:first-child::before {
                                         <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                
                                 @if( Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin' || Auth::user()->role == 'manage' )
                                     @if (Auth::user()->status == 1)
                                         @if(!isset($category))
@@ -91,7 +91,6 @@ table tr td:first-child::before {
                                 @endif
                             {!! Form::close() !!}
                     </div>
-                    
                     <div class="card-body table-responsive p-0">
                     <div class="form-group">
                         <div class="card-body">
@@ -126,6 +125,9 @@ table tr td:first-child::before {
                             <div class="ml-3">
                                 <a href="" id="deleteAll" class="btn btn-primary">Xóa hết</a>
                             </div>
+                            <div class=" ajax-success">
+                                
+                            </div>
                     </div>
                         <table class="table " id="myTable" border="5" cellpadding="0">
                             <thead>
@@ -145,7 +147,8 @@ table tr td:first-child::before {
                             <tbody class="order_position" id="lst">
                                 @foreach($lstCate as $key => $cate)
                                 
-                                    <tr id="{{$cate->id}}">
+                                    <tr id="sid{{$cate->id}}"> 
+                                        <!-- sid đặt để xóa tất cả, muốn thay đổi vị trí phải bỏ đi -->
                                         <td></td>
                                         <td><input type="checkbox" name="ids" id="" value="{{$cate->id}}" class="checkBoxClass"></td>
                                             <td scope="row" class="text-white">{{$cate->id}} </td>
@@ -200,22 +203,22 @@ table tr td:first-child::before {
                 
 @endsection
 @section('footer')
-            <script>
-                // Replace the <textarea id="editor1"> with a CKEditor 4
-                // instance, using default configuration.
-                CKEDITOR.replace( 'content' );
-                
-            </script>
-            
-            <!-- <script>
-                $(".xemtoanbo").on('click', function() {
-                    $(this).parent().parent('td').children('p');
+    <script>
+        // Replace the <textarea id="editor1"> with a CKEditor 4
+        // instance, using default configuration.
+        CKEDITOR.replace( 'content' );
+        
+    </script>
+    
+    <!-- <script>
+        $(".xemtoanbo").on('click', function() {
+            $(this).parent().parent('td').children('p');
 
-                    // var  replaceText = $(this).parent().hasClass("showContent") ? "Read less" : "Read more";
-                    // $(this).text(replaceText);
-                });
-            </script> -->
-            <!-- <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script> -->
+            // var  replaceText = $(this).parent().hasClass("showContent") ? "Read less" : "Read more";
+            // $(this).text(replaceText);
+        });
+    </script> -->
+    <!-- <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script> -->
     <script>
         $(".xemtoanbo").click(function(e) {
             e.preventDefault()
@@ -259,7 +262,7 @@ table tr td:first-child::before {
                 });
 
                 $.ajax({
-                    url:"{{url('/admin/categories/selected-category')}}",
+                    url:"{{route('deleteCategoryAll')}}",
                     type:"DELETE",
                     data:{
                         _token:$("input[name=_token]").val(),
@@ -267,7 +270,10 @@ table tr td:first-child::before {
                     },
                     success:function(response){
                         $.each(allids,function(key,val){
-                            $("#sid" + val).remove();//sid ở tbody tr id="sid"
+                            $(".ajax-success").html(`<div class="ajax-success text-danger">
+                            XÓa thành công danh mục
+                            </div>`);
+                            $("#sid" + val).remove();//sid ở tbody tr id="sid{{}}"
                         })
                     }
                 })
@@ -281,4 +287,5 @@ table tr td:first-child::before {
             });
         });
     </script>
+    
 @endsection

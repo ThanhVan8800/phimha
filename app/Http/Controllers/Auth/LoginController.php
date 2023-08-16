@@ -49,4 +49,10 @@ class LoginController extends Controller
     
         return redirect('/login');
     }
+    //Đăng xuất thiết bị khác
+    protected function authenticated()
+    {
+        Auth::logoutOtherDevices(request('password'));
+    }
+    
 }

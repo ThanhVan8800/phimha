@@ -29,7 +29,7 @@ class UserViewController extends Controller
         if (Auth::attempt($credentials, $request->has('remember_token'))) {
             $request->session()->regenerate();
 
-            return redirect()->intended('/');// để đến trang khi login vào
+            return redirect('/');// để đến trang khi login vào
         }
 
         return back()->withErrors([

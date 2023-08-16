@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use DB;
+use Laravolt\Avatar\Facade as Avatar;
 
 class UserController extends Controller
 {
@@ -27,9 +28,10 @@ class UserController extends Controller
     {
         $this->user = $user;
     }
-    public function index()
+    public function index(Request $request)
     {
         $lstUser = User::paginate(8);
+        
         return view('admin.users.index',[
             'title' => 'Quản lí tài khoản',
             'lstUser' => $lstUser

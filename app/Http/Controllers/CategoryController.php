@@ -24,6 +24,13 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function deleteAll(Request $request)
+    {
+        $ids = $request->ids;
+        // dd($ids);
+        Category::whereIn('id', $ids)->delete();
+        return response()->json(["success" => "Xoá thành công"]);
+    }
     public function index()
     {
         //
@@ -83,7 +90,7 @@ class CategoryController extends Controller
             ];
             DB::table('userlog_activities')->insert($activity);
             $category -> save();
-            Session::flash('success','Thêm danh mục phim thành công');
+            toastr()->info('info','Thêm danh mục phim thành công');
         }catch(Exception $err){
             Session::flash('error',$err->getMessage());
             return false;
@@ -128,33 +135,45 @@ class CategoryController extends Controller
     {
         try{
             $data = $request->all();
-            $category =  Category::find($id);
-            $category -> title = $data['title'];
-            $category -> slug = $data['slug'];
-            $category -> description = $data['description'];
-            $category -> status = $data['status'];
-            $category -> save();
-
-            $user = Auth::user();
-            Session()->put('user', $user);
-            $user = Session()->get('user');
-            $dt = Carbon::now('Asia/Ho_Chi_Minh');
-            $todayDate = $dt->toDayDateTimeString();
-            // dd($todayDate);
-            $name = $user->name;
-            $email = $user->email;
-            $address = $user->address;
-            // $date_time = $user->date_time;
-            $activity = [
-                'name' => $name,
-                'email' => $email,
-                'address' => $address,
-                'date_time' => $dt,
-                'modify_user' => $name.' cập nhật danh mục'.$category -> title.''
-            ];
-            DB::table('userlog_activities')->insert($activity);
+            $category_uni = Category::where('title','=',$request->input('title'))->exists();
+            if(!$category_uni){
+                $this->validate($request,[
+                    'title' => 'required|unique:categories,title',
+                ],[
+                    'title.unique' => 'Tên danh mục này trùng'
+                ]);
+                $category =  Category::find($id);
+                $category -> title = $data['title'];
+                $category -> slug = $data['slug'];
+                $category -> description = $data['description'];
+                $category -> status = $data['status'];
+                $category -> save();
+    
+                $user = Auth::user();
+                Session()->put('user', $user);
+                $user = Session()->get('user');
+                $dt = Carbon::now('Asia/Ho_Chi_Minh');
+                $todayDate = $dt->toDayDateTimeString();
+                // dd($todayDate);
+                $name = $user->name;
+                $email = $user->email;
+                $address = $user->address;
+                // $date_time = $user->date_time;
+                $activity = [
+                    'name' => $name,
+                    'email' => $email,
+                    'address' => $address,
+                    'date_time' => $dt,
+                    'modify_user' => $name.' cập nhật danh mục'.$category -> title.''
+                ];
+                DB::table('userlog_activities')->insert($activity);
+                
+                Session::flash('success','Cập nhật danh mục phim thành công');
+            }else{
+                Session::flash('error','Error');
+                return redirect()->back();
+            }
             
-            Session::flash('success','Cập nhật danh mục phim thành công');
         }catch(Exception $err){
             Session::flash('error',$err->getMessage());
             return false;
@@ -208,12 +227,13 @@ class CategoryController extends Controller
     public function resorting(Request  $request)
     {
         $data = $request->all();//[1,2,3,3]
-        foreach($data['array_id'] as $key => $value){
+        // dd($data);  
+        foreach($data['array_id'] as $key => $stt){
             //[0=>1]
             //[1=>2]
             //[2=>3]
             //[3=>3]
-            $category = Category::find($value);
+            $category = Category::find($stt);
             $category->position = $key;
             $category->save();
         }

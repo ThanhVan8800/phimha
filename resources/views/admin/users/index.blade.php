@@ -12,7 +12,13 @@
                             <a href="{{route('user.create')}}" class="btn btn-primary">Thêm tài khoản</a>
                         @endif
                     </div>
-                    
+                    <a href="{{route('excel_export')}}" class="btn btn-info float-right">Export Excel</a>
+                    <form action="{{route('excel_import')}}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <label for="">Import</label>
+                        <input type="file" name="file" class="form-control btn btn-info float-right">
+                        <button type="submit" class="btn btn-info float-right">Import Excel</button>
+                    </form>
                     <table class="table-dark " id="">
                             <thead>
                                 <tr>
@@ -24,6 +30,7 @@
                                     <th scope="col" class="text-white">Address</th>
                                     <th scope="col" class="text-white">Phone Number</th>
                                     <th scope="col" class="text-white">Trạng thái </th>
+                                    <th scope="col" class="text-white">Hoạt động </th>
                                     <th scope="col" class="text-white">Ngày tạo</th>
                                     <th></th>
                                     <th></th>
@@ -64,6 +71,18 @@
                                                     Ngưng hoạt động
                                                 @endif
                                             </td>
+                                            <td>
+                                                @if($user->isOnline())
+                                                <li class="text-success">
+                                                    online
+
+                                                </li>     
+                                                @else 
+                                                <li class="text-muted">
+                                                    off
+                                                </li>
+                                                @endif
+                                            </td>
                                             <td class="text-white">{{$user->created_at}}</td>
                                             <td>
                                                 @if(Auth::user()->role == 'admin' || Auth::user()->role == 'superadmin' && Auth::user()->status == '1')
@@ -80,7 +99,6 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                
                                             </td>
                                             
                                     </tr>

@@ -18,6 +18,60 @@
                   <div class="section-bar clearfix">
                      <h1 class="section-title"><span>{{$cate_slug->title}}</span></h1>
                   </div>
+                  <div class="section-bar clearfix">
+
+                  <style>
+                     .pg{
+                           padding: 10px;
+                     }
+                     .mt{
+                           margin-top: 10px;
+                     }
+                     .dis{
+                           display: flex;
+                           justify-content: space-around;
+                     }
+                  </style>  
+                  <div class="dis">
+                  <form action="{{route('filter_film')}}" method="GET">
+
+                     <select class="form-select pg" name="order" aria-label="Default select example" style="width:170px">
+                           <option value="" selected>-- Sắp xếp --</option>
+                           <option value="date">Ngày đăng</option>
+                           <option value="year_release">Năm sản xuất</option>
+                           <option value="name_a_z">Tên phim</option>
+                           <option value="watch_views">Lượt xem</option>
+                     </select>
+                     <select class="form-select pg" name="genre" aria-label="Default select example" style="width:170px">
+                           <option value="" selected>-- Thể loại --</option>
+                           @foreach ( $genre as $key => $genre_filter)
+                              <option value="{{$genre_filter->id}}">{{$genre_filter->title}}</option>
+                           @endforeach  
+                           
+                     </select>
+                     <select class="form-select pg" name="country" aria-label="Default select example" style="width:170px">
+                           <option value="" selected>-- Quốc gia --</option>
+                           @foreach ( $country as $key => $country_filter)
+                              <option {{isset($_GET['country']) && $_GET['country'] == $country_filter->id ? 'selected':''}} value="{{$country_filter->id}}">{{$country_filter->title}}</option>
+                           @endforeach 
+                     </select>
+                     <select class="form-select pg" name="year" aria-label="Default select example" style="width:170px">
+                           <option value="" selected>-- Năm phim --</option>
+                           @for($year = 1995 ; $year <= 2025 ; $year++)
+                              <option value="{{$year}}">{{$year}}</option>
+                           @endfor
+                     </select>
+                     
+                  </div>
+                  
+                  <div class="mt">
+                     
+                     <button class="btn btn-primary mx-auto">Lọc phim</button>
+                     
+                  </div>
+               </form>      
+                  </div>
+
                   <div class="halim_box">
                      @foreach($movie as $key => $mov)
                         <article class="col-md-3 col-sm-3 col-xs-6 thumb grid-item post-27021">

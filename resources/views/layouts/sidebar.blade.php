@@ -74,6 +74,15 @@
                                     <i class="nav-icon fa-solid fa-video"></i>
                                         Tập phim
                                 </a>
+                                <a class="nav-link" href="{{route('linkmovie.create')}}">
+                                <i class="nav-icon fa-regular fa-file-video"></i>
+                                    Link phim
+                                </a>
+                                <a class="nav-link" href="{{route('sort-film')}}">
+                                <i class="nav-icon fa-regular fa-file-video"></i>
+                                    Sắp xếp phim
+                                </a>
+                                
                                 <a href="{{route('user.index')}}" class="nav-link">
                                     <i class="nav-icon fa-solid fa-users"></i>
                                         Quản lí tài khoản
@@ -105,10 +114,10 @@
                                     <i class="nav-icon fa-solid fa-book-medical"></i>
                                         Nhật ký hoạt động
                                 </a>
-                                <li class="nav-item menu-open">
-        
-                                
-        
+                                <a href="{{route('infoWeb.create')}}" class="nav-link">
+                                    <i class="nav-icon fa-solid fa-book-medical"></i>
+                                        Giao diện Web
+                                </a>
                                 @auth
                                     <label for="" class="nav-link text-white">{{Auth::user()->name}} |</label>    
                                     <form method="post" action="{{route('logout_ad')}}">

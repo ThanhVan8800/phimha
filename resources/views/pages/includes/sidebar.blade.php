@@ -95,11 +95,8 @@
                         </div>
                         
                         <div class="tab-pane fade" id="tuan" role="tabpanel" aria-labelledby="pills-profile-tab">
-                            <div id="halim-ajax-popular-post" class="popular-post">
-
+                            <div id="" class="popular-post">
                                 <span id="show_data"></span>
-                                
-                                
                                 
                             </div>
                         </div>

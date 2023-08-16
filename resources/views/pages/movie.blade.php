@@ -71,7 +71,7 @@
                                           @if($episode_count>0)
                                              <div class="bwa-content">
                                                 <div class="loader"></div>
-                                                <a href="{{url('xem-phim/'.$movie->slug.'/tap-'.$episode_numfilm->episode)}}" class="bwac-btn">
+                                                <a href="{{url('xem-phim/'.$movie->slug.'/tap-'.$episode_numfilm->episode.'/server-'.$episode_numfilm->server)}}" class="bwac-btn">
                                                    <i class="fa fa-play"></i>
                                                 </a>
                                              </div>
@@ -82,7 +82,7 @@
                                           @if($episode_count>0)
                                              <div class="bwa-content">
                                                 <div class="loader"></div>
-                                                <a href="{{url('xem-phim/'.$movie->slug.'/tap-'.$episode_numfilm->episode)}}" class="bwac-btn">
+                                                <a href="{{url('xem-phim/'.$movie->slug.'/tap-'.$episode_numfilm->episode.'/server-'.$episode_numfilm->server)}}" class="bwac-btn">
                                                    <i class="fa fa-play"></i>
                                                 </a>
                                              </div>
@@ -169,8 +169,14 @@
                            </div>
                         </div>
                      </div>
+                     <div class="clearfix wrap-content">
+                  
+               
+                     
                      <div class="clearfix"></div>
-                     <div id="halim_trailer"></div>
+                     <div id="halim_trailer">
+                     
+                     </div>
                      <div class="clearfix"></div>
                      <div class="section-bar clearfix">
                         <h2 class="section-title"><span style="color:#ffed4d">Nội dung phim</span></h2>
@@ -183,8 +189,11 @@
                            </article>
                         </div>
                      </div>
+
+                     <div id="halim_related_movies-2xx" class="wrap-slider">
+                  
                      <!-- Tags Phim -->
-                     <div class="section-bar clearfix">
+                     <div class="section-bar s">
                         <h2 class="section-title"><span style="color:#ffed4d">Tags phim</span></h2>
                      </div>
                      <div class="entry-content htmlwrap clearfix">
@@ -213,12 +222,16 @@
                      <div class="entry-content htmlwrap clearfix " style="background: lightyellow !important;" >
                         @php
                            $current_url = Request::url();
+                           echo $current_url;
                         @endphp
                         <div class="video-item halim-entry-box">
                            <article id="post-38424" class="item-content cmt_fb" >
                               <div class="fb-comments" data-href="{{$current_url}}" data-width="100%" data-numposts="9" data-colorscheme="dark"></div>
                            </article>
                         </div>
+                     </div>
+                     <div class="fb-comments" data-href="http://localhost:8000/phim/kung-fu-panda-hiep-si-rong-phan-2"
+                                 data-width="" data-numposts="5">
                      </div>
                      @if ($movie->trailer != null)
                         <!-- Trailer Phim -->

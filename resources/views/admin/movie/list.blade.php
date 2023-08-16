@@ -30,20 +30,22 @@
                     <thead>
                         <tr>
                             <th scope="col" class="text-white">STT</th>
+                            <!-- Button trigger modal -->
                             <th scope="col" class="text-white">ID</th>
                             <th scope="col" class="text-white">Tên phim</th>
+                            <th scope="col" class="text-white">Thư viện</th>
                             <th scope="col" class="text-white">Thêm tập phim</th>
+                            <th scope="col" class="text-white">Hình ảnh</th>
                             <th scope="col" class="text-white">Số tập</th>
                             <th scope="col" class="text-white">Tên phim English</th>
                             <th scope="col" class="text-white">Slug</th>
-                            <th scope="col" class="text-white">Đạo diễn</th>
-                            <th scope="col" class="text-white">Diễn viên</th>
-                            <th scope="col" class="text-white">Tags Phim</th>
+                            <!-- <th scope="col" class="text-white">Đạo diễn</th>
+                            <th scope="col" class="text-white">Diễn viên</th> -->
+                            <!-- <th scope="col" class="text-white">Tags Phim</th> -->
                             <th scope="col" class="text-white">Thời lượng phim</th>
                             <th scope="col" class="text-white">Phụ đề</th>
                             <th scope="col" class="text-white">Định dạng</th>
                             <!-- <th scope="col">Mô tả</th> -->
-                            <th scope="col" class="text-white">Hình ảnh</th>
                             <th scope="col" class="text-white">Phim thuộc</th>
                             <th scope="col" class="text-white">Danh mục</th>
                             <th scope="col" class="text-white">Loại phim</th>
@@ -72,18 +74,39 @@
                             </td>
                             <th scope="row" class="text-white">{{ $movie->id }}</th>
                             <td class="text-white">{{ $movie->title }}</td>
-                            <td class="text-white"><a href="{{route('episode.show',[$movie->id])}}" class="btn btn-primary btn-sm">Thêm tập phim</a></td>
+                            <td><a href="{{route('gallery.edit',[$movie->id])}}"  class="btn btn-primary btn-sm">Thêm ảnh
+                                    
+                                </a>
+                            </td>
+                            <td class="text-white"><a href="{{route('episode.show',[$movie->id])}}" class="btn btn-primary btn-sm">Thêm tập phim</a><br>
+                                    @foreach ($movie->episode as $count_epi)
+                                        <a href="" class="show_video" 
+                                            data-movie_video_id="{{$count_epi->id}}" 
+                                            data-video_episode="{{$count_epi->episode}}">
+                                            <span class="badge badge-yellow">{{$count_epi->episode}}</span>
+                                        </a>
+                                    @endforeach
+                            </td>
+                            <td>
+                                <img src="{{asset('uploads/movie/'.$movie->image)}}"
+                                    style="width:100px;max-height:200px;object-fit:contain"
+                                    alt="{{asset($movie->image)}}">
+                                <input type="file" class="form-control-file file-image" data-movie_id="{{$movie->id}}" accept="image/*" id="file-{{$movie->id}}">
+                                <span id="success_image"></span>
+                                
+                            </td>
                             <!-- Thêm _count để nó đếm số tập  -->
                             <td class="text-white">
                                 @if($movie->episode_film > 0)
                                     {{$movie->episode_count}}/{{$movie->episode_film}}
+                                    
                                 @else
                                     Hoàn Thành
                                 @endif
                             </td>
                             <td class="text-white">{{ $movie->name_eng }}</td>
                             <td class="text-white">{{ $movie->slug }}</td>
-                            <td class="text-white">
+                            <!-- <td class="text-white">
                                 @if($movie->director)
                                     {{ $movie->director }}
                                 @else
@@ -96,14 +119,14 @@
                                 @else
                                     Đang cập nhật
                                 @endif
-                            </td>
-                            <td class="text-white ">
+                            </td> -->
+                            <!-- <td class="text-white ">
                                 @if ($movie->tags != NULL)
                                     {{substr($movie->tags, 0,50)}}...
                                 @else
                                     Chưa có từ khóa của phim
                                 @endif
-                            </td>
+                            </td> -->
                             <td class="text-white">{{ $movie->movie_duration }}</td>
                             <td class="text-white">
                                 @if ($movie->subtitle == 0)
@@ -128,11 +151,7 @@
                                 @endif
                             </td>
                             <!-- <td>{!! $movie->description !!}</td> -->
-                            <td>
-                                <img src="{{asset('uploads/movie/'.$movie->image)}}"
-                                    style="width:100px;max-height:200px;object-fit:contain"
-                                    alt="{{asset($movie->image)}}">
-                            </td>
+                            
                             <td class="text-white">
                                 @if ($movie->belonging_movie == 0)
                                 Phim lẻ
@@ -228,6 +247,31 @@
         </div>
     </div>
 </div>
+    <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#videoModal">
+                                    Thêm nhanh danh mục
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="videoModal" tabindex="-1" >
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="video_title">Modal title</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                    <p id="video_title"></p>
+                                    <p id="video_description"></p>
+                                    
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
 @endsection
 @section('footer')
 <script>
@@ -241,5 +285,6 @@ CKEDITOR.replace('content');
                     $('#myTable').DataTable();
                 } );
             </script> -->
+
 
 @endsection

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Cache;
 
 class User extends Authenticatable
 {
@@ -21,6 +22,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'gauth_id',
+        'gauth_type'
     ];
 
     /**
@@ -44,5 +47,9 @@ class User extends Authenticatable
     public function vnpay()
     {
         return $this->hasMany(VNPay::class,'id','Amount');
+    }
+    public function isOnline()
+    {
+        return Cache::has('use-is-online-'.$this->id);
     }
 }

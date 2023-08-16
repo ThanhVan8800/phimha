@@ -23,5 +23,8 @@ class Movie extends Model
     public function episode(){
         return $this->hasMany(Episode::class);
     }
+    public function movie_category(){
+        return $this->belongsToMany(Category::class,'movie_categories','movie_id','category_id','id');
+    }
     //phim thuộc nhiều thể loại
 }

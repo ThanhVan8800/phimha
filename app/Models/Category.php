@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    public $timestamps = false;
+    // public $timestamps = false;
+    protected $table = 'categories';
     use HasFactory;
     // 1 danh mục thì có nhiều phim
     public function movie(){

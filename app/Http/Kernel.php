@@ -37,6 +37,10 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\LastUserActivity::class, 
+            \App\Http\Middleware\UserUniqueFilesFolder::class, 
+            \Illuminate\Session\Middleware\AuthenticateSession::class, // đăng xuất thiết bị khác khi có người đăng nhập tk mới
+
         ],
 
         'api' => [
